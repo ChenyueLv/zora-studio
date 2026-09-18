@@ -19,30 +19,6 @@
   margin: auto;
   padding: 0 clamp(20px, 5vw, 72px) clamp(80px, 9vw, 130px);
 }
-.ft-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 0 0 20px;
-  border-bottom: 1px solid var(--ft-line);
-}
-.ft-heading h2 {
-  margin: 0;
-  font: 500 clamp(34px, 4.6vw, 64px)/1.25 var(--ft-display);
-}
-.ft-heading small {
-  margin-left: 16px;
-  color: var(--ft-muted);
-  font:
-    12px Arial,
-    sans-serif;
-  vertical-align: middle;
-}
-.ft-heading > span {
-  font-size: 12px;
-  color: var(--ft-muted);
-}
 .ft-intro {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -362,9 +338,6 @@
   }
 }
 @media (max-width: 600px) {
-  .ft-heading > span {
-    display: none;
-  }
   .ft-intro {
     gap: 30px;
     grid-template-columns: 1fr;

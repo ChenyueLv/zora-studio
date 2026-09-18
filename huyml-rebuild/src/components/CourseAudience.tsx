@@ -1,3 +1,4 @@
+import { CourseSectionHeading } from "./CourseSectionHeading";
 import "./course-audience.css";
 
 const audiences = [
@@ -31,10 +32,11 @@ export function CourseAudience() {
       id="audience"
     >
       <div className="ca-inner">
-        <header className="ca-heading">
-          <h2 id="audience-title">适合谁来学</h2>
-          <p>不限专业与岗位，零基础与进阶都能找到起点</p>
-        </header>
+        <CourseSectionHeading
+          id="audience-title"
+          title="适合谁来学"
+          description="不限专业与岗位，零基础与进阶都能找到起点"
+        />
         <div className="ca-people" aria-label="课程面向人群">
           <dl>
             <div>

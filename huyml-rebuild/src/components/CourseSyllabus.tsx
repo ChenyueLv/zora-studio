@@ -1,3 +1,4 @@
+import { CourseSectionHeading } from "./CourseSectionHeading";
 import { syllabus, frontier } from "./course-syllabus-data";
 import "./course-syllabus.css";
 
@@ -21,14 +22,11 @@ export function CourseSyllabus() {
       aria-labelledby="syllabus-title"
     >
       <div className="block">
-        <div className="sec-head">
-          <h2 id="syllabus-title">
-            课程大纲<small>SYLLABUS</small>
-          </h2>
-          <span className="label">
-            3 天 · 18 小时 · 上午 09:30–12:30 · 下午 14:00–17:00
-          </span>
-        </div>
+        <CourseSectionHeading
+          id="syllabus-title"
+          title="课程大纲"
+          description="3 天 · 18 小时 · 上午 09:30–12:30 · 下午 14:00–17:00"
+        />
         <div className="syl-stats">
           {stats.map(([value, suffix, label]) => (
             <div key={label}>

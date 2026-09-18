@@ -1,0 +1,270 @@
+/* Original publisher-supplied webfonts, self-hosted with their licenses. */
+@font-face {
+  font-family: "Smiley Sans";
+  src: url("/fonts/SmileySans-Oblique.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MiSans";
+  src: url("/fonts/MiSans-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* One identity across the introduction, curriculum, people and work. */
+.course-page {
+  --course-paper: #ececeb;
+  --course-ink: #20201f;
+  --course-muted: #666762;
+  --course-accent: #e85b50;
+  --course-line: #20201f26;
+  --course-panel: #e3e3e0;
+  --course-display: "Smiley Sans", "MiSans", sans-serif;
+  --course-text: "MiSans", "PingFang SC", sans-serif;
+  --course-gutter: clamp(24px, 5vw, 144px);
+  --course-space: clamp(64px, 7vw, 112px);
+  --course-title-size: clamp(36px, 3.5vw, 64px);
+  --ch-bg: var(--course-paper);
+  color: var(--course-ink);
+  font-family: var(--course-text);
+  font-synthesis: none;
+  background: var(--course-paper);
+}
+.course-page
+  > :is(
+    .course-hero,
+    .course-audience,
+    .course-syllabus,
+    .course-faculty,
+    .student-works,
+    .course-next-step
+  ) {
+  color: var(--course-ink);
+  font-family: var(--course-text);
+  font-weight: 400;
+  background: var(--course-paper);
+}
+.course-page :is(.ca-inner, .course-syllabus > .block, .ft-inner, .sw-inner) {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: var(--course-space) var(--course-gutter) 0;
+}
+.course-page .course-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px 40px;
+  padding: 0 0 28px;
+  margin: 0 0 40px;
+  border-bottom: 1px solid var(--course-line);
+}
+.course-page .course-section-heading h2 {
+  margin: 0;
+  font: 400 var(--course-title-size)/1.2 var(--course-display);
+  letter-spacing: 0.015em;
+}
+.course-page .course-section-heading p {
+  max-width: 42em;
+  margin: 0;
+  color: var(--course-muted);
+  font: 400 clamp(12px, 0.9vw, 15px)/1.7 var(--course-text);
+  text-wrap: pretty;
+}
+.course-page .ch-intro h1 {
+  font-family: var(--course-display);
+  font-size: clamp(38px, 4vw, 86px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  margin-bottom: 28px;
+}
+.course-page .ch-kicker strong {
+  font-size: clamp(14px, 1vw, 19px);
+  font-weight: 400;
+}
+.course-page .ch-subtitle {
+  font-size: clamp(19px, 1.45vw, 30px);
+  font-weight: 400;
+  line-height: 1.55;
+}
+.course-page .ch-for-whom {
+  color: var(--course-muted);
+  line-height: 1.9;
+}
+.course-page .ch-scene-caption h2 {
+  font-family: var(--course-text);
+  font-weight: 400;
+  font-size: clamp(17px, 1.2vw, 25px);
+  line-height: 1.65;
+}
+.course-page .ch-scene-caption > span {
+  color: var(--course-muted);
+}
+.course-page :is(.ch-primary, .ca-next > a, .cn-primary) {
+  min-height: 50px;
+  border-radius: 0;
+  background: var(--course-ink);
+  color: #fff;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: background 180ms ease;
+}
+.course-page :is(.ch-primary, .ca-next > a, .cn-primary):hover {
+  background: #393a36;
+}
+.course-page :is(.ca-group h3, .ca-subheading h3, .ft-identity h3) {
+  font-family: var(--course-display);
+  font-size: clamp(26px, 2.2vw, 36px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+.course-page
+  :is(.ca-group li, .ca-people dd, .ca-boundaries dd, .ca-takeaway-grid p) {
+  font-size: clamp(13px, 0.95vw, 16px);
+  line-height: 1.85;
+}
+.course-page
+  :is(
+    .ca-label,
+    .ca-people dd,
+    .ca-method span,
+    .ca-method-summary,
+    .ca-boundaries dt
+  ) {
+  color: var(--course-muted);
+}
+.course-page
+  :is(
+    .ca-group,
+    .ca-boundaries,
+    .ca-people dl > div,
+    .ca-takeaway-grid article,
+    .ca-method li
+  ) {
+  border-color: var(--course-line);
+}
+.course-page .ca-group li > span {
+  color: var(--course-accent);
+}
+.course-page .ca-takeaway-grid h4 {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.course-page .course-syllabus {
+  --ground: var(--course-paper);
+  --ground-2: var(--course-panel);
+  --paper: #f4f4f1;
+  --ink: var(--course-ink);
+  --muted: var(--course-muted);
+  --line: var(--course-line);
+  --accent: var(--course-accent);
+  --display: var(--course-display);
+  --text: var(--course-text);
+  --num: var(--course-text);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.course-page .course-syllabus :is(.syl-stats strong, .day h3 strong) {
+  font-family: var(--course-display);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.course-page .course-syllabus .slot .what {
+  font: 400 clamp(23px, 1.8vw, 30px)/1.35 var(--course-display);
+}
+.course-page .course-syllabus .topics li {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.course-page .course-syllabus .day .theme {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.course-page .course-syllabus .fr-head h3 {
+  font-weight: 400;
+}
+.course-page .course-faculty {
+  --ft-ink: var(--course-ink);
+  --ft-muted: var(--course-muted);
+  --ft-line: var(--course-line);
+  --ft-red: var(--course-accent);
+  --ft-display: var(--course-display);
+}
+.course-page .ft-statement {
+  max-width: 540px;
+  font: 400 clamp(30px, 3.2vw, 50px)/1.4 var(--course-display);
+  letter-spacing: 0.01em;
+}
+.course-page .ft-intro {
+  padding-top: 0;
+}
+.course-page .ft-letter {
+  font-family: var(--course-display);
+  font-weight: 400;
+}
+.course-page .sw-count strong {
+  font-family: var(--course-display);
+  letter-spacing: 0;
+}
+.course-page .sw-aside p {
+  max-width: 22em;
+  font-size: 14px;
+  color: var(--course-muted);
+}
+.course-page .course-next-step {
+  padding: var(--course-space) var(--course-gutter) 64px;
+  line-height: 1.85;
+}
+.course-page .cn-inner {
+  max-width: none;
+  margin: 0;
+  border-color: var(--course-line);
+  padding-top: 48px;
+}
+.course-page .cn-invitation h2 {
+  font: 400 clamp(34px, 3.5vw, 64px)/1.35 var(--course-display);
+  letter-spacing: 0.01em;
+}
+.course-page :is(.cn-invitation > span, .cn-invitation p, .cn-details dt) {
+  color: var(--course-muted);
+}
+@media (max-width: 1000px) {
+  .course-page .ch-intro {
+    padding-inline: var(--course-gutter);
+  }
+  .course-page .ch-intro h1 {
+    font-size: clamp(42px, 6.5vw, 64px);
+  }
+}
+@media (max-width: 600px) {
+  .course-page .course-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 22px;
+    margin-bottom: 28px;
+  }
+  .course-page .ch-intro h1 {
+    font-size: clamp(38px, 10vw, 52px);
+    margin-bottom: 24px;
+  }
+  .course-page .ch-subtitle {
+    font-size: 21px;
+  }
+  .course-page .ch-scene-caption h2 {
+    font-size: 18px;
+  }
+  .course-page .ft-statement {
+    font-size: 32px;
+  }
+  .course-page .cn-invitation h2 {
+    font-size: 34px;
+  }
+}

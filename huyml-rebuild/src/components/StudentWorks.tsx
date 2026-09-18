@@ -1,3 +1,4 @@
+import { CourseSectionHeading } from "./CourseSectionHeading";
 import { useState } from "react";
 import works from "../data/playground.json";
 import previews from "../data/student-work-previews.json";
@@ -20,10 +21,11 @@ export function StudentWorks() {
       aria-labelledby="student-works-title"
     >
       <div className="sw-inner">
-        <header className="sw-heading">
-          <h2 id="student-works-title">学员作品</h2>
-          <span>作品展示样例，供了解呈现方式。</span>
-        </header>
+        <CourseSectionHeading
+          id="student-works-title"
+          title="学员作品"
+          description="作品展示样例，供了解呈现方式。"
+        />
         <div className="sw-layout">
           <aside className="sw-aside">
             <div className="sw-count">

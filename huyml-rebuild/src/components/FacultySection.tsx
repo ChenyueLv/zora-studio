@@ -1,3 +1,4 @@
+import { CourseSectionHeading } from "./CourseSectionHeading";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { instructor, facultyModules, facultyKit } from "./faculty-data";
 import "./faculty-section.css";
@@ -228,12 +229,11 @@ export function FacultySection() {
       aria-labelledby="faculty-title"
     >
       <div className="ft-inner">
-        <header className="ft-heading">
-          <h2 id="faculty-title">
-            师资团队<small>Faculty</small>
-          </h2>
-          <span>Zora Studio</span>
-        </header>
+        <CourseSectionHeading
+          id="faculty-title"
+          title="师资团队"
+          description="Zora Studio"
+        />
         <div className="ft-intro">
           <div className="ft-identity">
             <span className="ft-eyebrow">{instructor.en}</span>

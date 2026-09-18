@@ -34,31 +34,6 @@
 .course-syllabus .block {
   padding: clamp(80px, 11vw, 150px) var(--gutter);
 }
-.course-syllabus .sec-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 14px;
-  margin-bottom: 28px;
-  gap: 8px 16px;
-}
-.course-syllabus .sec-head h2 {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(34px, 4.6vw, 64px);
-  line-height: 1.05;
-}
-.course-syllabus .sec-head h2 small {
-  font-family: var(--num);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  margin-left: 12px;
-  vertical-align: middle;
-}
 
 /* syllabus */
 .course-syllabus .syl-stats {
@@ -340,9 +315,6 @@
 
 .course-syllabus .block {
   padding-inline: clamp(20px, 5vw, 72px);
-}
-.course-syllabus .sec-head h2 {
-  line-height: 1.25;
 }
 
 .course-syllabus .slot .what {

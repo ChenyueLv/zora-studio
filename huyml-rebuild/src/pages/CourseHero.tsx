@@ -13,6 +13,7 @@ import { StudentWorks } from "../components/StudentWorks";
 import { CourseSyllabus } from "../components/CourseSyllabus";
 import { Modal } from "../components/Modal";
 import "./course-hero.css";
+import "./course-theme.css";
 const scenes = [
   {
     name: "把调研资料，做成有图表、有动画的 PPT。",

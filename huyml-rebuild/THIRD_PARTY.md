@@ -14,3 +14,10 @@ The images, fonts, audio, Rive artwork and gallery GLSL shader were publicly del
 The editable React layout, routing, input handling and data adapters were created for this reconstruction. Open-source runtime dependencies include React, Vite, TypeScript, React Router, Three.js and Rive. GSAP is distributed under its own standard license. Dependency license texts are included in their installed npm packages; the exact dependency graph is pinned in `package-lock.json`.
 
 The `frontend-design` skill used in the workflow was installed from https://github.com/anthropics/skills/tree/main/skills/frontend-design . It is an authoring aid, not a runtime dependency.
+
+## Course website Chinese typography
+
+The course website uses **MiSans** by Xiaomi for body and UI text, and **Smiley Sans / 得意黑** by atelierAnchor for display headings. Original publisher-supplied WOFF2 files are self-hosted, unmodified, in `public/fonts/`, together with the MiSans Font Intellectual Property License Agreement and the Smiley Sans SIL OFL 1.1 license. Sources and version information are documented in `public/fonts/README.md`.
+
+- MiSans: https://hyperos.mi.com/font/en/download/
+- Smiley Sans v2.0.1: https://github.com/atelier-anchor/smiley-sans/releases/tag/v2.0.1
