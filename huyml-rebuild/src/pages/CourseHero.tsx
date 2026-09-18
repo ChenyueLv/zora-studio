@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useGalleryMotion } from "../lib/useGalleryMotion";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
 import { VibeCodingCard } from "../components/VibeCodingCard";
 import { PptSkillCard } from "../components/PptSkillCard";
@@ -72,47 +73,30 @@ export function CourseHero() {
   const heroActivity = useVisibleActivity<HTMLDivElement>();
   const galleryRef = useRef<HTMLDivElement>(null);
   const descriptionsRef = useRef<HTMLElement>(null);
-  const [position, setPosition] = useState(
-      Math.max(
-        0,
-        scenes.findIndex(
-          (scene) =>
-            scene.kind ===
-            new URLSearchParams(window.location.search).get("scene"),
-        ),
+  const [panel, setPanel] = useState<"scene" | null>(null);
+  const initialPosition = useRef(
+    Math.max(
+      0,
+      scenes.findIndex(
+        (scene) =>
+          scene.kind ===
+          new URLSearchParams(window.location.search).get("scene"),
       ),
     ),
-    [panel, setPanel] = useState<"scene" | null>(null);
-  const drag = useRef<number | null>(null),
-    wheelAt = useRef(0);
+  );
+  const { position, moveBy, moveTo } = useGalleryMotion(
+    galleryRef,
+    descriptionsRef,
+    scenes.length,
+    initialPosition.current,
+    !panel && heroActivity.active,
+  );
+  const drag = useRef<number | null>(null);
   const active = ((position % scenes.length) + scenes.length) % scenes.length;
   const select = (i: number) => {
     const delta = ((i - active + 7) % scenes.length) - 2;
-    setPosition((value) => value + delta);
+    moveTo(position + delta);
   };
-  useEffect(() => {
-    const scrollScenes = (event: WheelEvent) => {
-      if (
-        panel ||
-        window.innerWidth <= 1000 ||
-        Math.abs(event.deltaY) <= Math.abs(event.deltaX)
-      )
-        return;
-      event.preventDefault();
-      if (Date.now() - wheelAt.current < 850 || Math.abs(event.deltaY) < 8)
-        return;
-      wheelAt.current = Date.now();
-      setPosition((value) => value + (event.deltaY > 0 ? 1 : -1));
-    };
-    const surfaces = [galleryRef.current, descriptionsRef.current];
-    surfaces.forEach((surface) =>
-      surface?.addEventListener("wheel", scrollScenes, { passive: false }),
-    );
-    return () =>
-      surfaces.forEach((surface) =>
-        surface?.removeEventListener("wheel", scrollScenes),
-      );
-  }, [panel]);
   useEffect(() => {
     document.title = "AI 应用体系实战课 · 3 天 18 小时 — 系统学会 AI";
     document.documentElement.lang = "zh-CN";
@@ -129,16 +113,16 @@ export function CourseHero() {
         return;
       if (e.key === "ArrowRight" && window.scrollY < window.innerHeight / 2) {
         e.preventDefault();
-        setPosition((v) => v + 1);
+        moveBy(1);
       }
       if (e.key === "ArrowLeft" && window.scrollY < window.innerHeight / 2) {
         e.preventDefault();
-        setPosition((v) => v - 1);
+        moveBy(-1);
       }
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [panel]);
+  }, [panel, moveBy]);
   return (
     <main className="course-page">
       <div
@@ -191,7 +175,7 @@ export function CourseHero() {
           aria-label="课程成果展厅"
           ref={galleryRef}
           onPointerDown={(e) => {
-            drag.current = e.clientY;
+            drag.current = e.target === e.currentTarget ? e.clientY : null;
           }}
           onPointerUp={(e) => {
             if (
@@ -259,10 +243,7 @@ export function CourseHero() {
             ) {
               e.preventDefault();
               e.stopPropagation();
-              setPosition(
-                (value) =>
-                  value + (["ArrowUp", "ArrowLeft"].includes(e.key) ? -1 : 1),
-              );
+              moveBy(["ArrowUp", "ArrowLeft"].includes(e.key) ? -1 : 1);
             }
           }}
         >
@@ -276,6 +257,7 @@ export function CourseHero() {
               <article
                 className="ch-scene-caption"
                 key={itemPosition}
+                data-position={itemPosition}
                 data-current={offset === 0}
                 aria-hidden={Math.abs(offset) > 1 ? true : undefined}
                 inert={Math.abs(offset) > 1 ? true : undefined}

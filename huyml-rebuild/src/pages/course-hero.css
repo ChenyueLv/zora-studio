@@ -1374,7 +1374,7 @@
     align-self: center;
   }
 }
-/* A spaced diagonal gallery: upper right, center, lower left. */
+/* A mirrored, overlapping arc; fractional offsets are driven by the scroll motion. */
 @media (min-width: 1001px) {
   .course-hero {
     grid-template-columns: 28% 1fr;
@@ -1400,11 +1400,11 @@
     overflow: visible;
   }
   .ch-stage {
-    left: 10%;
+    left: 4%;
     top: 50%;
-    width: 80%;
-    height: clamp(260px, 25vw, 420px);
-    max-height: 40svh;
+    width: 92%;
+    height: clamp(280px, 27vw, 460px);
+    max-height: 46svh;
     transform: translateY(-50%);
     perspective: none;
   }
@@ -1412,16 +1412,15 @@
   .ch-gallery .ch-art-card.selected,
   .ch-gallery .ch-art-card.selected:hover {
     transform: translate3d(
-      calc(var(--offset) * -12vw),
-      calc(var(--offset) * 57svh),
-      0
-    ) rotateY(calc(var(--offset) * 8deg))
-      rotateZ(calc(1deg + var(--offset) * 5deg));
-    box-shadow: none;
+        calc(var(--offset) * -5vw - var(--curve, 0) * 12px),
+        calc(var(--offset) * 28svh),
+        0
+      )
+      rotateY(calc(10deg - var(--offset) * 6deg))
+      rotateZ(calc(3deg - var(--offset) * 8deg))
+      scale(calc(1 - var(--depth) * 0.075));
+    box-shadow: 8px 24px 45px #24201814;
     filter: none;
-  }
-  .ch-gallery .ch-art-card:not(.selected) {
-    opacity: calc(.72 - (var(--depth) - 1) * .5);
   }
   .ch-gallery-grid,
   .ch-floating-note {
@@ -1568,4 +1567,13 @@
   .ch-scene-caption {
     transition: none;
   }
+}
+
+.ch-gallery .ch-art-card,
+.ch-gallery .ch-art-card:not(.selected) {
+  opacity: var(--card-opacity, 1);
+  transition: none;
+}
+.ch-scene-caption {
+  transition: none;
 }
