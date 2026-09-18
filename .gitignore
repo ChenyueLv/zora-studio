@@ -1,0 +1,14 @@
+.DS_Store
+.agents/
+.tools-venv/
+.venv/
+node_modules/
+dist/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+

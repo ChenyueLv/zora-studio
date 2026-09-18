@@ -1,0 +1,336 @@
+.education-card {
+  container-type: size;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    -45deg,
+    #aa91eb 0%,
+    #8fbef5 28%,
+    #e5edff 50%,
+    #b39aec 72%,
+    #8bbbf0 100%
+  );
+  background-size: 250% 250%;
+  animation: edu-gradient 8s ease-in-out infinite;
+  animation-play-state: paused;
+  color: #0f172a;
+  text-align: left;
+  font-family:
+    "DM Sans",
+    "Noto Sans SC",
+    -apple-system,
+    "PingFang SC",
+    sans-serif;
+  box-sizing: border-box;
+}
+.education-card[data-active="true"] {
+  animation-play-state: running;
+}
+@keyframes edu-gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .education-card {
+    animation: none;
+  }
+}
+.education-card * {
+  box-sizing: border-box;
+}
+.education-card h3,
+.education-card h4,
+.education-card p {
+  margin: 0;
+}
+.ch-art-card.vibe-art-card {
+  cursor: default;
+}
+.ch-art-card.vibe-art-card.selected,
+.ch-art-card.vibe-art-card.selected:hover {
+  transform: rotateZ(-3deg);
+}
+.edu-drag-coordinates {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  visibility: hidden;
+}
+.edu-brief {
+  position: absolute;
+  z-index: 2;
+  width: 38%;
+  height: 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6cqh;
+  padding: 0 1.5cqw 1.5cqw;
+  border: 0.5px solid #ffffff99;
+  border-radius: 0.9cqw;
+  background: #fafafcd6;
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow:
+    0 12px 32px -9px #32355636,
+    inset 0 1px 0 #fff;
+}
+.edu-chat-title {
+  position: relative;
+  margin: 0 -1.5cqw;
+  width: calc(100% + 3cqw);
+  flex: none;
+  height: 5.8cqh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font: inherit;
+  font-size: 1.4cqw;
+  font-weight: 500;
+  border: 0;
+  border-bottom: 1px solid #0f172a0c;
+  border-radius: 0.9cqw 0.9cqw 0 0;
+  background: transparent;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+.edu-chat-title svg {
+  position: absolute;
+  right: 1.4cqw;
+  width: 1.8cqw;
+  height: 1.8cqw;
+  fill: #94a3b8;
+}
+.edu-brief[data-dragging="true"] .edu-chat-title {
+  cursor: grabbing;
+}
+.edu-chat-title:focus {
+  outline: none;
+}
+.edu-chat-title:focus-visible {
+  background: #e2e8f070;
+}
+.edu-chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqh;
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.edu-brief-author {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqw;
+  color: #94a3b8;
+  font-size: 1.1cqw;
+}
+.edu-brief-author > span {
+  width: 2.3cqw;
+  height: 2.3cqw;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #475569;
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-weight: 700;
+}
+.edu-brief-message {
+  padding: 1.2cqw;
+  background: #f2f2f2dc;
+  color: #334155;
+  border-radius: 1.5cqw 1.5cqw 1.5cqw 0.3cqw;
+  font-size: 1.2cqw;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+.edu-chat-activity {
+  display: grid;
+  gap: 0.55cqh;
+  font-size: 0.95cqw;
+  color: #94a3b8;
+  padding: 0 0.4cqw;
+}
+.edu-chat-activity b {
+  color: #64748b;
+  font-weight: 400;
+  margin-left: 0.65cqw;
+}
+.edu-chat-activity p {
+  color: #475569;
+  line-height: 1.65;
+  padding-top: 0.4cqh;
+  font-size: 1.1cqw;
+}
+.edu-composer {
+  flex: none;
+  background: #fff;
+  border: 1px solid #0f172a14;
+  border-radius: 1.7cqw;
+  padding: 1cqw 1.2cqw;
+  box-shadow: 0 8px 20px -15px #0f172a40;
+  display: grid;
+  gap: 1cqh;
+}
+.edu-composer > span {
+  font-size: 1.05cqw;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.edu-composer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 2cqw;
+}
+.edu-composer-send {
+  width: 2.8cqw;
+  height: 2.8cqw;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #fff;
+}
+.edu-composer-send svg {
+  width: 1.7cqw;
+  height: 1.7cqw;
+}
+.edu-product-window {
+  position: absolute;
+  z-index: 1;
+  left: 13%;
+  top: 5%;
+  width: 83%;
+  height: 88%;
+  overflow: hidden;
+  background: #f4f6fa;
+  border: 0.5px solid #cbd5e166;
+  border-radius: 0.9cqw;
+  box-shadow: 0 12px 28px -12px #33415538;
+}
+.edu-product-canvas {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+/* Fit every section and all six courses into the rear window, without cropping it. */
+.edu-stacked .eh-content {
+  min-height: 0;
+  gap: 1cqw;
+  padding: 1.4cqw;
+}
+.edu-stacked .eh-banner {
+  min-height: 13cqw;
+  padding: 1.3cqw 1.7cqw;
+  gap: 0.8cqw;
+  flex: none;
+}
+.edu-stacked .eh-banner h3 {
+  font-size: 2.1cqw;
+}
+.edu-stacked .eh-banner-meta {
+  font-size: 0.95cqw;
+}
+.edu-stacked .eh-continue {
+  height: 3cqw;
+  font-size: 1.05cqw;
+}
+.edu-stacked .eh-continue > span {
+  width: 2.2cqw;
+  height: 2.2cqw;
+}
+.edu-stacked .eh-kpis {
+  gap: 1cqw;
+}
+.edu-stacked .eh-kpis > div {
+  padding: 0.7cqw;
+}
+.edu-stacked .eh-list {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.edu-stacked .eh-row {
+  min-height: 4.5cqw;
+  flex: 1;
+}
+.edu-stacked .eh-columns {
+  min-height: 2.6cqw;
+  flex: none;
+}
+.edu-stacked .eh-list > footer {
+  padding: 0.7cqw 1.9cqw;
+}
+@container (max-width: 380px) {
+  .edu-brief {
+    width: 43%;
+    height: 52%;
+  }
+  .edu-chat-title {
+    height: 18px;
+    font-size: 8px;
+  }
+  .edu-chat-title svg {
+    width: 10px;
+    height: 10px;
+  }
+  .edu-brief-author {
+    font-size: 6px;
+  }
+  .edu-brief-author > span {
+    width: 12px;
+    height: 12px;
+  }
+  .edu-brief-message {
+    font-size: 6.5px;
+  }
+  .edu-chat-activity {
+    font-size: 5.5px;
+  }
+  .edu-chat-activity p {
+    font-size: 6px;
+  }
+  .edu-composer > span {
+    font-size: 6px;
+  }
+  .edu-composer-send {
+    width: 14px;
+    height: 14px;
+  }
+  .edu-composer-send svg {
+    width: 9px;
+    height: 9px;
+  }
+}
+@media (max-width: 600px) {
+  .course-hero[data-scene="visual"] .ch-stage {
+    left: 7%;
+    width: 86%;
+    height: 73%;
+    top: 8%;
+  }
+}
+
+.edu-stacked .eh-section-title {
+  padding-top: 0.65cqw;
+  padding-bottom: 0.65cqw;
+}

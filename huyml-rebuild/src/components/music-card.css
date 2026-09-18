@@ -1,0 +1,306 @@
+.ch-music.music-player {
+  container-type: size;
+  padding: 0;
+  text-align: left;
+  isolation: isolate;
+}
+.music-player .ch-record,
+.music-lyrics,
+.music-eyebrow,
+.music-credit {
+  pointer-events: none;
+}
+.music-player .music-eyebrow {
+  font-size: min(1.5cqw, 2.55cqh);
+  position: absolute;
+  top: 9%;
+  left: 7%;
+}
+.music-layout {
+  position: absolute;
+  inset: 17% 5% 13% 7%;
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 53fr);
+  column-gap: 5%;
+}
+.music-listening {
+  display: flex;
+  flex-direction: column;
+  gap: min(2cqw, 3cqh);
+  min-width: 0;
+  min-height: 0;
+}
+.music-record-column {
+  position: relative;
+  margin: -17cqh -5cqw -13cqh 0;
+  container-type: size;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.music-player .ch-record {
+  /* Show the upper-left arc and centre label; crop the right and bottom edges.
+     Positioning stays separate from the playback rotation transform. */
+  position: absolute;
+  inset: auto;
+  left: 0;
+  top: 4%;
+  width: max(125cqw, 110cqh);
+  box-shadow: 4px 10px 20px #64292926;
+  will-change: transform;
+}
+.music-player .ch-record::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 25deg,
+    transparent 0 18%,
+    #ffffff09 24%,
+    transparent 30% 66%,
+    #ffffff08 74%,
+    transparent 82%
+  );
+}
+.music-player .ch-record i {
+  display: flex;
+  justify-content: center;
+  font-style: normal;
+}
+.music-player .ch-record i span {
+  position: absolute;
+  top: 17%;
+  max-width: 6em;
+  text-align: center;
+  font-size: min(2.7cqw, 3.05cqh);
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+}
+.music-player .ch-record i b {
+  position: absolute;
+  bottom: 17%;
+  font-size: min(1.7cqw, 1.95cqh);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+.music-lyrics {
+  --lyric-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lyric-duration: 480ms;
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  text-align: center;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 16%,
+    #000 84%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 16%,
+    #000 84%,
+    transparent
+  );
+}
+.music-lyric-rail {
+  position: absolute;
+  top: 33.333333%;
+  width: 100%;
+  height: 33.333333%;
+  transform: translate3d(0, calc(var(--lyric-index, 0) * -100%), 0);
+  transition: transform var(--lyric-duration) var(--lyric-ease);
+}
+.music-lyric-rail[data-jump="true"],
+.music-lyric-rail[data-jump="true"] .music-lyric-line > span {
+  transition: none;
+}
+.music-lyric-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  font-size: min(3cqw, 5.1cqh);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.035em;
+  color: #321e22;
+  text-wrap: balance;
+}
+.music-lyric-line > span {
+  display: block;
+  transform: scale(0.72);
+  opacity: 0.32;
+  transition:
+    transform var(--lyric-duration) var(--lyric-ease),
+    opacity var(--lyric-duration) var(--lyric-ease);
+}
+.music-lyric-current > span {
+  transform: scale(1);
+  opacity: 1;
+}
+.music-console {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: min(1.8cqw, 3.06cqh);
+  margin-bottom: min(2cqw, 3.4cqh);
+}
+.music-player .music-play {
+  --play-diameter: max(36px, min(6.4cqw, 10.88cqh));
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--play-diameter);
+  height: var(--play-diameter);
+  min-width: var(--play-diameter);
+  min-height: var(--play-diameter);
+  aspect-ratio: 1;
+  flex: 0 0 var(--play-diameter);
+  border: 1px solid #321e2270;
+  border-radius: 50%;
+  padding: 0;
+  color: #321e22;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.music-play:hover {
+  background: #ffffff25;
+  transform: scale(1.06);
+}
+.music-play:focus-visible {
+  outline: 2px solid #fff5e5;
+  outline-offset: 3px;
+}
+.music-play svg {
+  width: 40%;
+  height: 40%;
+  pointer-events: none;
+}
+.music-play:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.music-track-info {
+  display: flex;
+  flex-direction: column;
+  gap: min(0.6cqw, 1.02cqh);
+}
+.music-track-info b {
+  font-size: min(1.85cqw, 3.145cqh);
+  font-weight: 600;
+}
+.music-track-info span {
+  font-size: min(1.25cqw, 2.125cqh);
+  opacity: 0.7;
+}
+.music-waveform {
+  position: relative;
+  height: min(6.5cqw, 11.05cqh);
+}
+.music-waveform svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.music-wave-base {
+  fill: #321e22;
+  opacity: 0.28;
+}
+.music-wave-played {
+  fill: #fff3df;
+  clip-path: inset(0 calc(100% - var(--music-progress)) 0 0);
+}
+.music-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--music-progress);
+  width: 1px;
+  background: #fff3df;
+  pointer-events: none;
+}
+.music-waveform input {
+  position: absolute;
+  inset: -5px 0;
+  width: 100%;
+  height: calc(100% + 10px);
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+.music-waveform:has(input:focus-visible) {
+  outline: 1px solid #fff3df;
+  outline-offset: 5px;
+  border-radius: 2px;
+}
+.music-time {
+  display: flex;
+  justify-content: space-between;
+  font-size: min(1.25cqw, 2.125cqh);
+  margin-top: min(1cqw, 1.7cqh);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+.music-player .music-credit {
+  font-size: min(1.4cqw, 2.38cqh);
+  bottom: 5%;
+}
+.music-error {
+  position: absolute;
+  left: 7%;
+  bottom: 1%;
+  font-size: min(1.5cqw, 2.55cqh);
+}
+.ch-art-card.music-art-card {
+  cursor: default;
+}
+/* Keep the active player's controls circular in screen space as well as layout. */
+.ch-art-card.music-art-card.selected,
+.ch-art-card.music-art-card.selected:hover {
+  transform: rotateZ(-6deg);
+}
+@media (max-width: 1000px) {
+  .ch-art-card.music-art-card.selected,
+  .ch-art-card.music-art-card.selected:hover {
+    transform: rotateZ(-7deg);
+  }
+}
+@container (max-width: 380px) {
+  .music-lyric-line {
+    font-size: 10px;
+  }
+  .music-controls {
+    gap: 6px;
+  }
+  .music-track-info b {
+    font-size: 9px;
+  }
+  .music-track-info span {
+    font-size: 8px;
+  }
+  .music-time {
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .music-player * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

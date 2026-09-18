@@ -1,0 +1,429 @@
+.course-faculty {
+  --ft-ink: #171819;
+  --ft-muted: #737578;
+  --ft-line: #17181924;
+  --ft-red: #e34a43;
+  --ft-ease: cubic-bezier(0.7, 0, 0.2, 1);
+  --ft-display: "Marcellus", "Noto Serif SC", "Songti SC", serif;
+  background: var(--ch-bg, #ececeb);
+  color: var(--ft-ink);
+  font:
+    14px/1.5 Arial,
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  scroll-margin-top: 24px;
+}
+.ft-inner {
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 clamp(20px, 5vw, 72px) clamp(80px, 9vw, 130px);
+}
+.ft-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--ft-line);
+}
+.ft-heading h2 {
+  margin: 0;
+  font: 500 clamp(34px, 4.6vw, 64px)/1.25 var(--ft-display);
+}
+.ft-heading small {
+  margin-left: 16px;
+  color: var(--ft-muted);
+  font:
+    12px Arial,
+    sans-serif;
+  vertical-align: middle;
+}
+.ft-heading > span {
+  font-size: 12px;
+  color: var(--ft-muted);
+}
+.ft-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  padding-top: 36px;
+  gap: 40px;
+}
+.ft-eyebrow {
+  color: var(--ft-muted);
+  font-size: 12px;
+}
+.ft-identity h3 {
+  margin: 12px 0 8px;
+  font: 500 clamp(26px, 3vw, 40px)/1.25 var(--ft-display);
+}
+.ft-identity p {
+  margin: 0;
+  font-size: 13px;
+}
+.ft-statement {
+  justify-self: end;
+  width: 100%;
+  max-width: 470px;
+  margin: 0;
+  color: var(--ft-red);
+  font: 500 clamp(30px, 3.4vw, 48px)/1.3 var(--ft-display);
+  letter-spacing: -0.035em;
+}
+.ft-portrait {
+  position: relative;
+  height: 390px;
+  margin: -20px 0 34px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+.ft-letter {
+  position: absolute;
+  bottom: -8px;
+  color: #fff;
+  font:
+    500 clamp(250px, 29vw, 420px)/1 Arial,
+    sans-serif;
+  user-select: none;
+  pointer-events: none;
+  z-index: -1;
+}
+.ft-letter-a {
+  left: 3%;
+}
+.ft-letter-i {
+  right: 10%;
+}
+.ft-stage {
+  position: relative;
+  width: min(100%, 410px);
+  aspect-ratio: 1;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+.ft-portrait-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+  color: var(--ft-muted);
+}
+.ft-head {
+  position: absolute;
+  inset: 14% 7% 3%;
+  transition: transform 0.75s var(--ft-ease);
+}
+.ft-head-inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 80%;
+}
+.ft-head img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.75s var(--ft-ease);
+}
+.ft-head-top {
+  clip-path: inset(0 0 64% 0);
+}
+.ft-head-bottom {
+  /* Overlap the two image slices by one pixel to avoid a hairline at rest. */
+  clip-path: inset(calc(36% - 1px) 0 0 0);
+}
+.ft-stage[data-open="true"] .ft-head {
+  transform: translateY(-2%) scale(0.74);
+}
+.ft-stage[data-open="true"] .ft-head-top {
+  transform: translateY(-34%);
+}
+.ft-stage[data-open="true"] .ft-head-bottom {
+  transform: translateY(12%);
+}
+.ft-kit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+/* Use interruptible CSS transitions for the small collage. Avoid container-unit
+   WAAPI keyframes, reverse playback and filtered image compositing here. */
+.ft-kit img {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: var(--w);
+  height: auto;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--spin)) scale(0.2);
+  transition:
+    left 0.4s ease,
+    top 0.4s ease,
+    transform 0.4s ease,
+    opacity 0.2s ease;
+}
+.ft-stage[data-open="true"] .ft-kit img {
+  left: var(--x);
+  top: var(--y);
+  opacity: 1;
+  transform: translate(0, 0) rotate(var(--rotation)) scale(1);
+  transition-duration: var(--duration), var(--duration), var(--duration), 0.25s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--delay);
+}
+
+.ft-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: clamp(24px, 3.5vw, 54px);
+  padding-top: 28px;
+  border-top: 1px solid var(--ft-line);
+  align-items: start;
+}
+.ft-details h4 {
+  margin: 0 0 22px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ft-muted);
+}
+.ft-modules {
+  min-width: 0;
+}
+.ft-modules button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--ft-line);
+  text-align: left;
+  font-size: 16px;
+}
+.ft-modules svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.ft-modules button:hover,
+.ft-modules button[data-highlight="true"] {
+  color: var(--ft-red);
+}
+.ft-outcomes ul {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+}
+.ft-outcomes li {
+  padding: 9px 0;
+  font-size: 14px;
+}
+.ft-outcomes > a {
+  font-size: 12px;
+  border-bottom: 1px solid var(--ft-ink);
+  padding-bottom: 3px;
+}
+.ft-conversation {
+  min-width: 0;
+}
+.ft-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: -4px 0 20px;
+}
+.ft-suggestions button {
+  padding: 3px 0;
+  color: #535559;
+  font-size: 13px;
+  border-bottom: 1px solid transparent;
+}
+.ft-suggestions button:hover {
+  color: var(--ft-ink);
+  border-color: currentColor;
+}
+.ft-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--ft-line);
+  border-bottom: 1px solid var(--ft-ink);
+}
+.ft-input:focus-within {
+  border-bottom-color: var(--ft-red);
+}
+.ft-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ft-ink);
+  font: inherit;
+  padding: 8px 0;
+}
+.ft-input input::placeholder {
+  color: var(--ft-muted);
+}
+.ft-input button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+}
+.ft-input svg {
+  width: 18px;
+  height: 18px;
+}
+.ft-input button[type="submit"] {
+  background: var(--ft-ink);
+  color: white;
+}
+.ft-input button[aria-pressed="true"] {
+  color: var(--ft-red);
+}
+.course-faculty button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.course-faculty :is(button, a, [tabindex]):focus-visible {
+  outline: 2px solid var(--ft-ink);
+  outline-offset: 5px;
+}
+.ft-answer {
+  margin-top: 18px;
+  max-height: 190px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.ft-answer p {
+  margin: 0;
+}
+.ft-answer-actions {
+  display: flex;
+  gap: 16px;
+}
+.ft-answer-actions :is(a, button) {
+  margin-top: 10px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.ft-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--ft-red);
+  vertical-align: -2px;
+  margin-left: 2px;
+  animation: ft-blink 0.8s steps(1) infinite;
+}
+@keyframes ft-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (max-width: 980px) {
+  .ft-statement {
+    font-size: 34px;
+  }
+  .ft-portrait {
+    margin-top: 12px;
+    height: 340px;
+  }
+  .ft-stage {
+    width: 350px;
+  }
+  .ft-letter {
+    font-size: 300px;
+  }
+  .ft-letter-a {
+    left: 0;
+  }
+  .ft-letter-i {
+    right: 5%;
+  }
+  .ft-details {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ft-conversation {
+    grid-column: 1 / -1;
+    padding-top: 22px;
+    border-top: 1px solid var(--ft-line);
+  }
+}
+@media (max-width: 600px) {
+  .ft-heading > span {
+    display: none;
+  }
+  .ft-intro {
+    gap: 30px;
+    grid-template-columns: 1fr;
+    padding-top: 28px;
+  }
+  .ft-statement {
+    font-size: 32px;
+    justify-self: start;
+    max-width: none;
+  }
+  .ft-statement br:first-of-type {
+    display: none;
+  }
+  .ft-portrait {
+    height: 285px;
+    margin-top: 8px;
+    margin-bottom: 26px;
+  }
+  .ft-stage {
+    width: 290px;
+    max-width: 100%;
+  }
+  .ft-letter {
+    font-size: 235px;
+    bottom: 18px;
+  }
+  .ft-letter-a {
+    left: -6px;
+  }
+  .ft-letter-i {
+    right: -2px;
+  }
+  .ft-portrait-caption {
+    font-size: 11px;
+  }
+  .ft-details {
+    gap: 26px 20px;
+  }
+  .ft-details h4 {
+    margin-bottom: 14px;
+  }
+  .ft-modules button {
+    font-size: 14px;
+  }
+  .ft-outcomes li {
+    font-size: 12px;
+    line-height: 1.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .course-faculty *,
+  .course-faculty *::before,
+  .course-faculty *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.course-faculty[data-active="false"] *,
+.course-faculty[data-active="false"] *::before,
+.course-faculty[data-active="false"] *::after {
+  animation-play-state: paused !important;
+}

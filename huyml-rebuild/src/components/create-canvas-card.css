@@ -1,0 +1,288 @@
+/* The composition scales with the card, matching the reference at 1044 × 400. */
+@property --cc-radius {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.create-canvas-card {
+  --cc-flow-duration: 2.2s;
+  --cc-ripple-duration: 4.4s;
+  --cc-dot-hot: rgba(231, 249, 255, 0.86);
+  --mx: 50%;
+  --my: 50%;
+  --cc-line: #393939;
+  --cc-node-border: #3b3b3b;
+  --cc-grid: #ffffff12;
+  container-type: inline-size;
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 2.61;
+  overflow: clip;
+  isolation: isolate;
+  padding: 0;
+  border: 1px solid #494646;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #222 35%, #343434 100%);
+  color: #f5f5f5;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.create-canvas-card[data-theme="light"] {
+  --cc-line: #c9d2d5;
+  --cc-node-border: #d8dfe1;
+  --cc-grid: #3e68751c;
+  --cc-dot-hot: rgba(8, 182, 221, 0.84);
+  background: linear-gradient(180deg, #f8fbfc, #edf4f6);
+  border-color: #cddadd;
+  color: #25292b;
+}
+.create-canvas-card * {
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.create-canvas-card:focus-visible {
+  outline: 2px solid #a8c6d2;
+  outline-offset: 5px;
+}
+.create-canvas-card:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.cc-dot-grid,
+.cc-dot-grid > span,
+.cc-wires,
+.cc-corners {
+  position: absolute;
+  inset: 0;
+}
+.cc-dot-grid > span {
+  background-image: radial-gradient(
+    circle,
+    var(--cc-grid) 1.5px,
+    transparent 2.2px
+  );
+  background-size: 3.45cqw 3.45cqw;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, transparent 7%, #000 70%);
+}
+.cc-dot-grid .cc-dot-ripple {
+  background-image: radial-gradient(
+    circle,
+    var(--cc-dot-hot) 0.2cqw,
+    transparent 0.27cqw
+  );
+  mask-image: radial-gradient(
+    circle at 50% 40.7%,
+    transparent calc(var(--cc-radius) - 7.6cqw),
+    #000 calc(var(--cc-radius) - 3.2cqw),
+    #000 var(--cc-radius),
+    transparent calc(var(--cc-radius) + 4.8cqw)
+  );
+  animation: cc-ripple var(--cc-ripple-duration) linear infinite;
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+.cc-dot-grid .cc-dot-ripple-second {
+  animation-delay: -2.2s;
+}
+.cc-dot-grid .cc-dot-spotlight {
+  background-image: radial-gradient(
+    circle,
+    var(--cc-dot-hot) 0.24cqw,
+    transparent 0.32cqw
+  );
+  mask-image: radial-gradient(
+    circle 19cqw at var(--mx) var(--my),
+    #000,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cc-node-group {
+  position: absolute;
+  top: 8.5%;
+  width: 24.4%;
+  height: 64.5%;
+}
+.cc-node-group-left {
+  left: 16.4%;
+}
+.cc-node-group-right {
+  right: 16.4%;
+  transform: scaleX(-1);
+}
+.cc-link {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  left: 0;
+  overflow: visible;
+}
+.cc-link-upper {
+  top: 0;
+}
+.cc-link-lower {
+  top: 50%;
+  transform: scaleY(-1);
+}
+.cc-link-base {
+  stroke: var(--cc-line);
+  stroke-width: 1.5;
+  fill: none;
+}
+.cc-link-flow {
+  stroke: #fff;
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0.72;
+}
+.cc-flow-mask {
+  stroke: #fff;
+  stroke-width: 48;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-dasharray: 0.37 0.99;
+  animation: cc-flow var(--cc-flow-duration) linear infinite;
+}
+.cc-link-lower .cc-flow-mask {
+  animation-delay: -0.46s;
+}
+.cc-node-group-right .cc-flow-mask {
+  animation-direction: reverse;
+  animation-delay: -0.67s;
+}
+.cc-node-group-right .cc-link-lower .cc-flow-mask {
+  animation-delay: -1.13s;
+}
+.cc-empty-node {
+  position: absolute;
+  width: 25%;
+  height: 50%;
+  border: 2px solid var(--cc-node-border);
+  border-radius: 2.3cqw;
+  background: linear-gradient(170deg, #2d2525, #262626 65%);
+}
+.cc-empty-left {
+  left: -8.5%;
+}
+.cc-empty-right {
+  right: -8.5%;
+}
+.cc-empty-upper {
+  bottom: 67%;
+}
+.cc-empty-lower {
+  top: 59%;
+  background: linear-gradient(150deg, #353535, #292929);
+}
+.create-canvas-card[data-theme="light"] .cc-empty-node {
+  background: linear-gradient(160deg, #f3f6f7, #e9eff1);
+}
+.cc-plus-tile {
+  position: absolute;
+  left: 50%;
+  top: 40.7%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18.2%;
+  height: 27%;
+  border-radius: 3.1cqw;
+  background: linear-gradient(180deg, #fff 24%, #e2e2e2);
+  box-shadow:
+    0 3px 0 #14141480,
+    0 0 40px #ffffff0a;
+  color: #050505;
+  transition:
+    box-shadow 0.2s,
+    scale 0.2s;
+}
+.cc-plus-tile svg {
+  width: 20%;
+  aspect-ratio: 1;
+}
+.cc-label {
+  position: absolute;
+  top: 62%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 3.06cqw;
+  font-weight: 600;
+  line-height: 1.5;
+  transition: scale 0.2s ease-out;
+}
+@media (hover: hover) {
+  .create-canvas-card:hover:not(:disabled) .cc-dot-spotlight {
+    opacity: 1;
+  }
+  .create-canvas-card:hover:not(:disabled) .cc-dot-ripple {
+    opacity: 0.8;
+  }
+  .create-canvas-card:hover:not(:disabled) .cc-plus-tile,
+  .create-canvas-card:hover:not(:disabled) .cc-label {
+    scale: 1.05;
+  }
+  .create-canvas-card:hover:not(:disabled) .cc-plus-tile {
+    box-shadow:
+      0 3px 0 #14141480,
+      0 0 40px #ffffff14;
+  }
+}
+.create-canvas-card:focus-visible:not(:disabled) .cc-plus-tile,
+.create-canvas-card:focus-visible:not(:disabled) .cc-label {
+  scale: 1.05;
+}
+.create-canvas-card:active:not(:disabled) .cc-plus-tile {
+  scale: 0.98;
+}
+.create-canvas-card:disabled * {
+  animation-play-state: paused !important;
+}
+@keyframes cc-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1.36;
+  }
+}
+@keyframes cc-ripple {
+  from {
+    --cc-radius: 0px;
+  }
+  to {
+    --cc-radius: 78cqw;
+  }
+}
+@media (max-width: 600px) {
+  .create-canvas-card {
+    border-radius: 12px;
+  }
+  .cc-empty-node {
+    border-width: 1px;
+  }
+  .cc-dot-grid > .cc-dot-base {
+    background-image: radial-gradient(
+      circle,
+      var(--cc-grid) 0.75px,
+      transparent 1.1px
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .create-canvas-card * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .cc-link-flow,
+  .cc-dot-grid .cc-dot-ripple {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,627 @@
+.ppt-skill {
+  container-type: size;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #262724;
+  background: #f2f2ed;
+  text-align: left;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  transition: background 0.6s;
+}
+.ppt-skill[data-scene="result"] {
+  background: #f8f8f4;
+}
+.ps-heading {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 4%;
+  height: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  z-index: 4;
+}
+.ps-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqw;
+  font-size: 2.6cqw;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ps-title b {
+  font-weight: 400;
+  font-size: 0.8em;
+  color: #d65f50;
+}
+.ps-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+}
+.ps-heading-actions small {
+  font-size: 1.25cqw;
+  color: #8b8c86;
+}
+.ps-restart {
+  font-size: 1.4cqw;
+  color: #72736d;
+  min-height: 26px;
+}
+.ps-invitation {
+  position: absolute;
+  top: 21%;
+  left: 8%;
+  right: 8%;
+  transition:
+    opacity 0.2s,
+    transform 0.5s;
+}
+.ps-invitation h3 {
+  font-size: 3.4cqw;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.ps-invitation p {
+  margin-top: 1.5cqh;
+  font-size: 1.6cqw;
+  color: #82837b;
+}
+.ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"])
+  .ps-invitation {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+.ps-composer {
+  position: absolute;
+  z-index: 3;
+  left: 8%;
+  top: 37%;
+  width: 84%;
+  height: 35%;
+  padding: 2.5cqh 2.8cqw;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 1cqh;
+  border: 1px solid #ddded7;
+  border-radius: 2cqw;
+  background: #fdfdfa;
+  box-shadow: 0 2cqw 5cqw #2627240a;
+  transition:
+    top 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.6s,
+    border-radius 0.6s,
+    background 0.6s;
+}
+.ps-prompt {
+  font-size: 2.7cqw;
+  line-height: 1.65;
+  align-self: start;
+  overflow: hidden;
+  transition: font-size 0.6s;
+}
+.ps-typing-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1.05em;
+  vertical-align: -0.15em;
+  margin-left: 3px;
+  background: #262724;
+  animation: ps-blink 0.85s steps(1) infinite;
+}
+.ps-composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6cqw;
+}
+.ps-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6cqw;
+  padding: 0.8cqh 1.1cqw;
+  border: 1px solid #e2e2db;
+  background: #f1f1ec;
+  border-radius: 0.7cqw;
+  color: #b95447;
+  font-size: 1.65cqw;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.ps-skill-tag b {
+  font-weight: 500;
+}
+.ps-skill-tag[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ps-send {
+  position: relative;
+  width: max(30px, 5.6cqw);
+  height: max(30px, 5.6cqw);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #242523;
+  color: #fff;
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    width 0.6s,
+    height 0.6s;
+}
+.ps-send > svg {
+  width: 54%;
+  height: 54%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ps-send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #40413c;
+}
+.ps-composer[data-ready="true"] .ps-send:not(:disabled) {
+  box-shadow: 0 0 0 3px #26272410;
+}
+.ps-send-hint {
+  position: absolute;
+  top: 77%;
+  left: 8%;
+  width: 84%;
+  text-align: right;
+  font-size: 1.55cqw;
+  color: #777870;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.ps-send-hint[data-visible="true"] {
+  opacity: 1;
+}
+.ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"]) .ps-composer {
+  top: 90%;
+  left: 4%;
+  width: 92%;
+  height: 7%;
+  padding: 1cqh 1.5cqw;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 1fr;
+  align-items: center;
+  border-radius: 1cqw;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #ddded7;
+  border-radius: 0;
+  box-shadow: none;
+}
+.ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"]) .ps-prompt {
+  font-size: 1.55cqw;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  align-self: center;
+}
+.ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"])
+  .ps-skill-tag {
+  font-size: 1.4cqw;
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+}
+.ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"]) .ps-send {
+  width: max(20px, 3cqw);
+  height: max(20px, 3cqw);
+  background: transparent;
+  color: #81827a;
+}
+.ps-report-stage {
+  position: absolute;
+  top: 11%;
+  bottom: 12%;
+  left: 3%;
+  right: 3%;
+}
+.ps-workspace {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.5cqh;
+  animation: ps-report-enter 0.45s ease-out both;
+}
+.ps-preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+.ps-sheet,
+.ps-slide {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.ps-expand {
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  padding: 0.5cqw 0.7cqw;
+  font-size: 1.3cqw;
+  color: #fff;
+  background: #262724;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ps-preview:hover .ps-expand,
+.ps-preview:focus-visible .ps-expand {
+  opacity: 1;
+}
+.ps-report-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2cqw;
+  padding: 0 1cqw;
+}
+.ps-thumbnails {
+  padding: 0 1cqw;
+  display: flex;
+  align-items: center;
+  gap: 2.4cqw;
+}
+.ps-thumbnails button {
+  display: flex;
+  align-items: center;
+  gap: 0.5cqw;
+  padding: 0.6cqh 0;
+  border-bottom: 2px solid transparent;
+  color: #878880;
+  font-size: 1.5cqw;
+}
+.ps-thumbnails button > span {
+  font-size: 0.8em;
+}
+.ps-thumbnails button[aria-pressed="true"] {
+  color: #262724;
+  border-color: #d65f50;
+}
+.ps-playback-controls {
+  display: flex;
+  gap: 1.4cqw;
+}
+.ps-replay,
+.ps-autoplay {
+  font-size: 1.25cqw;
+  color: #777870;
+  min-height: 24px;
+  white-space: nowrap;
+}
+.ps-autoplay[aria-pressed="false"] {
+  color: #b95447;
+}
+.ppt-skill button:focus-visible {
+  outline: 2px solid #d96755;
+  outline-offset: 3px;
+}
+.ppt-skill button:disabled {
+  cursor: default;
+}
+.ppt-skill[data-active="false"] * {
+  animation-play-state: paused;
+}
+.ch-art-card.skill-art-card {
+  cursor: default;
+}
+.ch-art-card.skill-art-card.selected,
+.ch-art-card.skill-art-card.selected:hover {
+  transform: rotateZ(-3deg);
+}
+.modal-root.ps-modal {
+  z-index: 100;
+  background: #20211fe8;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.ps-lightbox {
+  width: min(1080px, 94vw);
+  color: #f8f8f4;
+}
+.ps-lightbox > header,
+.ps-lightbox > footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  font-size: 13px;
+}
+.ps-large-sheet {
+  width: 100%;
+  aspect-ratio: 16/9;
+  max-height: 72svh;
+}
+.ps-lightbox button {
+  min-width: 44px;
+  min-height: 36px;
+  text-align: center;
+  color: #f8f8f4;
+}
+.ps-lightbox nav {
+  display: flex;
+  gap: 12px;
+}
+.ps-lightbox .ps-replay {
+  font-size: 13px;
+  padding: 0 10px;
+}
+.ps-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #c3c4bc;
+  font-size: 11px;
+  padding-bottom: 10px;
+}
+.ps-sources a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@keyframes ps-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes ps-report-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@container (max-width:380px) {
+  .ps-title {
+    font-size: 13px;
+  }
+  .ps-heading-actions small,
+  .ps-restart {
+    font-size: 8px;
+  }
+  .ps-invitation h3 {
+    font-size: 14px;
+  }
+  .ps-invitation p {
+    font-size: 9px;
+  }
+  .ps-prompt {
+    font-size: 12px;
+  }
+  .ps-composer {
+    top: 36%;
+    height: 40%;
+  }
+  .ps-skill-tag {
+    font-size: 9px;
+  }
+  .ps-send-hint {
+    top: 80%;
+    font-size: 9px;
+  }
+  .ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"]) .ps-prompt {
+    font-size: 8px;
+  }
+  .ppt-skill:not([data-scene="intro"]):not([data-scene="pressing"])
+    .ps-skill-tag {
+    font-size: 8px;
+    padding: 3px 4px;
+  }
+  .ps-thumbnails button {
+    font-size: 8px;
+  }
+  .ps-thumbnails button > span {
+    display: none;
+  }
+  .ps-thumbnails {
+    gap: 2cqw;
+  }
+  .ps-replay,
+  .ps-autoplay {
+    font-size: 7px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ppt-skill * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Press before moving the composer, so the send reads as one deliberate action. */
+.ppt-skill[data-scene="pressing"] .ps-send {
+  animation: ps-send-press 320ms ease-in-out both;
+}
+@keyframes ps-send-press {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.84);
+    background: #55564e;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ppt-skill[data-scene="pressing"] .ps-send {
+    animation: none;
+  }
+}
+
+.ps-slide-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  --page-in-x: 20px;
+  --page-out-x: -12px;
+}
+.ps-slide-stage[data-direction="backward"] {
+  --page-in-x: -20px;
+  --page-out-x: 12px;
+}
+.ps-sheet-outgoing {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: ps-page-out 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.ps-sheet-entering {
+  animation: ps-page-in 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes ps-page-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--page-in-x));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes ps-page-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--page-out-x));
+  }
+}
+.ps-report-stage {
+  transition:
+    opacity 450ms ease,
+    transform 450ms ease;
+}
+.ppt-skill[data-scene="resetting"] .ps-report-stage {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.ps-demo-cursor {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  left: 48%;
+  top: 45%;
+  width: clamp(18px, 3cqw, 32px);
+  height: auto;
+  transform-origin: 2px 2px;
+  filter: drop-shadow(0 1px 1.5px #0005);
+  animation: ps-cursor-arrive 700ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+.ps-demo-cursor svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: #161616;
+  stroke: white;
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+}
+.ps-demo-cursor[data-clicking="true"] {
+  animation: ps-cursor-click 320ms ease-in-out both;
+}
+.ps-demo-cursor[data-clicking="true"]::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: -8px;
+  left: -8px;
+  border: 1px solid #ffffffa0;
+  border-radius: 50%;
+  animation: ps-click-ring 320ms ease-out both;
+}
+@keyframes ps-cursor-arrive {
+  from {
+    opacity: 0;
+    transform: translate(38px, 28px);
+  }
+  22% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes ps-cursor-click {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.86);
+  }
+}
+@keyframes ps-click-ring {
+  from {
+    opacity: 0.8;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ps-slide-stage * {
+    animation: none !important;
+  }
+}
+
+.ps-playback-controls button {
+  display: grid;
+  place-items: center;
+  width: max(24px, 3cqw);
+  height: max(24px, 3cqw);
+  border-radius: 50%;
+  opacity: 0.65;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+.ps-playback-controls button:hover,
+.ps-playback-controls button:focus-visible {
+  opacity: 1;
+  background: #26272408;
+}
+.ps-playback-controls svg {
+  width: max(12px, 1.6cqw);
+  height: max(12px, 1.6cqw);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

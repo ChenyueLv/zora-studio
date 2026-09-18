@@ -1,0 +1,89 @@
+.canvas-card-preview {
+  min-height: 100svh;
+  background: #f7f8fa;
+  color: #30343a;
+  font:
+    13px/1.5 Arial,
+    "PingFang SC",
+    sans-serif;
+  letter-spacing: 0;
+  font-weight: 400;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 32px 40px;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.canvas-card-preview[data-theme="dark"] {
+  background: #141414;
+  color: #ebedef;
+}
+.canvas-card-preview > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.canvas-card-preview > header > span {
+  color: #88909a;
+}
+.canvas-card-preview > header button {
+  border: 1px solid #89919a40;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+}
+.cc-preview-stage {
+  width: min(1044px, 100%);
+  margin: auto;
+  position: relative;
+}
+.cc-preview-helper {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #899099;
+  gap: 20px;
+}
+.cc-preview-helper label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cc-preview-helper input {
+  accent-color: #08b6dd;
+  width: 12px;
+  height: 12px;
+}
+.cc-click-status {
+  position: absolute;
+  top: calc(100% + 24px);
+  font-size: 11px;
+  color: #08a8cd;
+  text-align: center;
+  left: 0;
+  right: 0;
+}
+.canvas-card-preview > footer {
+  font-size: 10px;
+  color: #9a9fa5;
+  text-align: center;
+  padding-top: 50px;
+}
+@media (max-width: 520px) {
+  .canvas-card-preview {
+    padding: 24px 20px;
+  }
+  .cc-preview-helper {
+    font-size: 10px;
+    gap: 10px;
+  }
+  .canvas-card-preview > footer {
+    font-size: 9px;
+  }
+}

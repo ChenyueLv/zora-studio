@@ -1,0 +1,84 @@
+.course-next-step {
+  background: var(--ch-bg, #ececeb);
+  color: #20201f;
+  font:
+    14px/1.7 Arial,
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  padding: 0 clamp(20px, 5vw, 72px) 70px;
+}
+.cn-inner {
+  max-width: 1256px;
+  margin: auto;
+  border-top: 1px solid #20201f;
+  padding-top: 48px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 64px;
+}
+.cn-invitation > span {
+  color: #737578;
+  font-size: 12px;
+}
+.cn-invitation h2 {
+  margin: 20px 0 24px;
+  font:
+    500 clamp(32px, 3.5vw, 50px)/1.35 "Marcellus",
+    "Noto Serif SC",
+    "Songti SC",
+    serif;
+}
+.cn-invitation p {
+  margin: 0;
+  color: #666863;
+}
+.cn-details dl {
+  margin: 0 0 28px;
+}
+.cn-details dl > div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid #20201f24;
+}
+.cn-details dt {
+  color: #737578;
+  font-size: 12px;
+}
+.cn-details dd {
+  margin: 0;
+}
+.cn-primary {
+  background: #20201f;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+}
+.cn-primary:hover {
+  background: #393a36;
+}
+.cn-secondary {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.cn-details a:focus-visible {
+  outline: 2px solid #20201f;
+  outline-offset: 5px;
+}
+@media (max-width: 700px) {
+  .cn-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 32px;
+  }
+  .cn-details dl > div {
+    gap: 12px;
+  }
+}

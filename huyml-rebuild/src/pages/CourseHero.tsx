@@ -1,0 +1,366 @@
+import { useEffect, useRef, useState } from "react";
+import { useVisibleActivity } from "../lib/useVisibleActivity";
+import { VibeCodingCard } from "../components/VibeCodingCard";
+import { PptSkillCard } from "../components/PptSkillCard";
+import { CvAgentCard } from "../components/CvAgentCard";
+import { StoryCanvasCard } from "../components/StoryCanvasCard";
+import { MusicCard } from "../components/MusicCard";
+import { FacultySection } from "../components/FacultySection";
+import { CourseAudience } from "../components/CourseAudience";
+import { CourseNextStep } from "../components/CourseNextStep";
+import { StudentWorks } from "../components/StudentWorks";
+import { CourseSyllabus } from "../components/CourseSyllabus";
+import { Modal } from "../components/Modal";
+import "./course-hero.css";
+const scenes = [
+  {
+    name: "把调研资料，做成有图表、有动画的 PPT。",
+    output: "动态 PPT",
+    short: "工作提效",
+    kind: "office",
+    tag: "PPT 设计 Skill",
+    skills: "你将练习：整理内容、选择图表，把制作方法写成可复用的 Skill。",
+    result:
+      "通过 Skill 复用内容组织与视觉设计方法，把需求转化为风格统一的演示文稿。",
+  },
+  {
+    name: "用自然语言，把需求搭成可操作的网页。",
+    output: "网页工具",
+    short: "Vibe Coding",
+    kind: "visual",
+    tag: "一句话，做出一个应用",
+    skills: "你将练习：描述需求、生成页面、测试交互，再逐步修改。",
+    result:
+      "教务系统是应用展示示例。课堂从报名表、计算器等小工具入手，练习需求描述、生成与迭代。",
+  },
+  {
+    name: "从角色、分镜到成片，做出自己的 AI 短片。",
+    output: "AI 短片",
+    short: "AI 漫剧",
+    kind: "story",
+    tag: "从角色到成片",
+    skills: "你将练习：拆分镜头、保持角色一致，用图生视频串成故事。",
+    result: "从一段故事出发，探索角色、场景与分镜之间的连续性。",
+  },
+  {
+    name: "把情绪写成歌词，创作一首自己的歌。",
+    output: "原创音乐",
+    short: "音乐探索",
+    kind: "music",
+    tag: "从情绪到旋律",
+    skills: "你将练习：歌词结构、曲风描述与人声效果的选择。",
+    result: "学习描述情绪、曲风和结构，探索音乐与图像结合的表达方式。",
+  },
+  {
+    name: "把重复任务拆成步骤，搭建自己的智能助手。",
+    output: "智能助手",
+    short: "智能助手",
+    kind: "agent",
+    tag: "CV Agent 面试助手",
+    skills: "你将练习：定义任务、连接工具，并为输出设置人工审核。",
+    result: "拆解任务、定义步骤、组织可复用的能力，逐步搭建自己的 AI 工作流。",
+  },
+];
+const art = [
+  PptSkillCard,
+  VibeCodingCard,
+  StoryCanvasCard,
+  MusicCard,
+  CvAgentCard,
+];
+export function CourseHero() {
+  const heroActivity = useVisibleActivity<HTMLDivElement>();
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const descriptionsRef = useRef<HTMLElement>(null);
+  const [position, setPosition] = useState(
+      Math.max(
+        0,
+        scenes.findIndex(
+          (scene) =>
+            scene.kind ===
+            new URLSearchParams(window.location.search).get("scene"),
+        ),
+      ),
+    ),
+    [panel, setPanel] = useState<"scene" | null>(null);
+  const drag = useRef<number | null>(null),
+    wheelAt = useRef(0);
+  const active = ((position % scenes.length) + scenes.length) % scenes.length;
+  const select = (i: number) => {
+    const delta = ((i - active + 7) % scenes.length) - 2;
+    setPosition((value) => value + delta);
+  };
+  useEffect(() => {
+    const scrollScenes = (event: WheelEvent) => {
+      if (
+        panel ||
+        window.innerWidth <= 1000 ||
+        Math.abs(event.deltaY) <= Math.abs(event.deltaX)
+      )
+        return;
+      event.preventDefault();
+      if (Date.now() - wheelAt.current < 850 || Math.abs(event.deltaY) < 8)
+        return;
+      wheelAt.current = Date.now();
+      setPosition((value) => value + (event.deltaY > 0 ? 1 : -1));
+    };
+    const surfaces = [galleryRef.current, descriptionsRef.current];
+    surfaces.forEach((surface) =>
+      surface?.addEventListener("wheel", scrollScenes, { passive: false }),
+    );
+    return () =>
+      surfaces.forEach((surface) =>
+        surface?.removeEventListener("wheel", scrollScenes),
+      );
+  }, [panel]);
+  useEffect(() => {
+    document.title = "AI 应用体系实战课 · 3 天 18 小时 — 系统学会 AI";
+    document.documentElement.lang = "zh-CN";
+    return () => {
+      document.documentElement.lang = "en";
+    };
+  }, []);
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (
+        panel ||
+        /INPUT|TEXTAREA|BUTTON/.test((e.target as HTMLElement).tagName)
+      )
+        return;
+      if (e.key === "ArrowRight" && window.scrollY < window.innerHeight / 2) {
+        e.preventDefault();
+        setPosition((v) => v + 1);
+      }
+      if (e.key === "ArrowLeft" && window.scrollY < window.innerHeight / 2) {
+        e.preventDefault();
+        setPosition((v) => v - 1);
+      }
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [panel]);
+  return (
+    <main className="course-page">
+      <div
+        className="course-hero"
+        ref={heroActivity.ref}
+        data-visible={heroActivity.active}
+        data-scene={scenes[active].kind}
+      >
+        <header className="ch-header">
+          <a
+            className="ch-brand"
+            href="/ai-course/hero"
+            aria-label="AI 实战课首页"
+          >
+            <b>
+              ai<span>✳</span>
+            </b>
+            <span>
+              把好奇心
+              <br />
+              变成创造力
+            </span>
+          </a>
+          <span className="ch-header-note">零基础入门 / AI 应用进阶</span>
+          <a className="ch-header-course" href="#schedule">
+            了解课程 <span>↗</span>
+          </a>
+        </header>
+        <section className="ch-intro">
+          <div className="ch-kicker">
+            <i aria-hidden="true" /> <strong>系统学习 · 动手实战</strong>
+          </div>
+          <h1>AI应用实战课</h1>
+          <p className="ch-subtitle">学AI · 懂方法 · 做作品</p>
+          <p className="ch-for-whom">
+            <span>学生</span> · <span>求职者</span> · <span>职场人</span> ·{" "}
+            <span>AI 爱好者</span> · <span>商业应用探索者</span>
+          </p>
+          <div className="ch-actions">
+            <a className="ch-primary" href="#schedule">
+              查看课程安排 <span>↗</span>
+            </a>
+            <button className="ch-secondary" onClick={() => setPanel("scene")}>
+              <i aria-hidden="true">▶</i> 体验课堂作品
+            </button>
+          </div>
+        </section>
+        <div
+          className="ch-gallery"
+          aria-label="课程成果展厅"
+          ref={galleryRef}
+          onPointerDown={(e) => {
+            drag.current = e.clientY;
+          }}
+          onPointerUp={(e) => {
+            if (
+              drag.current !== null &&
+              Math.abs(e.clientY - drag.current) > 40
+            ) {
+              select(active + (e.clientY < drag.current ? 1 : -1));
+            }
+            drag.current = null;
+          }}
+          onPointerCancel={() => (drag.current = null)}
+        >
+          <div className="ch-gallery-grid" />
+          <div className="ch-floating-note">
+            <span>先看作品，再看怎么学</span>
+            <i>✳</i>
+          </div>
+          <div className="ch-stage">
+            {scenes.map((scene, i) => {
+              let offset = (i - active + 5) % 5;
+              if (offset > 2) offset -= 5;
+              const Art = art[i];
+              return (
+                <div
+                  key={scene.kind}
+                  role="group"
+                  inert={offset !== 0 ? true : undefined}
+                  aria-label={"探索" + scene.short}
+                  className={
+                    "ch-art-card " +
+                    (i === 3
+                      ? "music-art-card "
+                      : i === 4
+                        ? "agent-art-card "
+                        : i === 2
+                          ? "story-art-card "
+                          : i === 0
+                            ? "skill-art-card "
+                            : "vibe-art-card ") +
+                    (offset === 0 ? "selected" : "")
+                  }
+                  style={
+                    {
+                      "--offset": offset,
+                      "--depth": Math.abs(offset),
+                      zIndex: 5 - Math.abs(offset),
+                    } as React.CSSProperties
+                  }
+                >
+                  <Art active={active === i && !panel && heroActivity.active} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <aside
+          className="ch-scene-details"
+          aria-label="作品与学习内容，可滚动切换"
+          ref={descriptionsRef}
+          onKeyDown={(e) => {
+            if (
+              ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(
+                e.key,
+              )
+            ) {
+              e.preventDefault();
+              e.stopPropagation();
+              setPosition(
+                (value) =>
+                  value + (["ArrowUp", "ArrowLeft"].includes(e.key) ? -1 : 1),
+              );
+            }
+          }}
+        >
+          {Array.from({ length: 7 }, (_, slot) => {
+            const itemPosition = position + slot - 3;
+            const offset = itemPosition - position;
+            const index =
+              ((itemPosition % scenes.length) + scenes.length) % scenes.length;
+            const scene = scenes[index];
+            return (
+              <article
+                className="ch-scene-caption"
+                key={itemPosition}
+                data-current={offset === 0}
+                aria-hidden={Math.abs(offset) > 1 ? true : undefined}
+                inert={Math.abs(offset) > 1 ? true : undefined}
+                style={
+                  {
+                    "--caption-offset": offset,
+                    "--caption-opacity": [1, 0.24, 0.09, 0][Math.abs(offset)],
+                  } as React.CSSProperties
+                }
+              >
+                <span>{scene.tag} · 课程演示</span>
+                <h2>
+                  <button
+                    type="button"
+                    onClick={() => select(index)}
+                    aria-current={offset === 0 ? "true" : undefined}
+                  >
+                    {scene.name}
+                  </button>
+                </h2>
+              </article>
+            );
+          })}
+        </aside>
+        <footer className="ch-footer">
+          <a className="ch-proof-note" href="#audience">
+            适合谁 · 学习收获 · 课程边界 ↓
+          </a>
+        </footer>
+      </div>
+      <CourseAudience />
+      <CourseSyllabus />
+      <FacultySection />
+      <StudentWorks />
+      <CourseNextStep />
+      {panel && (
+        <Modal
+          onClose={() => setPanel(null)}
+          label={scenes[active].short + "课程演示"}
+          className="ch-modal"
+        >
+          <section className="ch-panel">
+            <button
+              className="ch-close"
+              onClick={() => setPanel(null)}
+              aria-label="关闭"
+            >
+              关闭 ×
+            </button>
+
+            <>
+              <span className="ch-panel-eyebrow">
+                {scenes[active].tag} / 课程演示
+              </span>
+              <h2>{scenes[active].name}</h2>
+              <div className="ch-detail-art">
+                {(() => {
+                  const Art = art[active];
+                  return <Art />;
+                })()}
+              </div>
+              <p className="ch-panel-lead">{scenes[active].result}</p>
+              <div className="ch-detail-skills">{scenes[active].skills}</div>
+              <button
+                className="ch-primary"
+                onClick={() => {
+                  setPanel(null);
+                  // Scroll after the dialog restores focus to its trigger.
+                  requestAnimationFrame(() => {
+                    document.getElementById("schedule")?.scrollIntoView({
+                      behavior: window.matchMedia(
+                        "(prefers-reduced-motion: reduce)",
+                      ).matches
+                        ? "instant"
+                        : "smooth",
+                    });
+                  });
+                }}
+              >
+                查看课程安排 <span>↗</span>
+              </button>
+            </>
+          </section>
+        </Modal>
+      )}
+    </main>
+  );
+}
