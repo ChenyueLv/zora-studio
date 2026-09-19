@@ -312,7 +312,7 @@
 }
 .ft-chat {
   width: 94%;
-  height: 230px;
+  height: 200px;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
