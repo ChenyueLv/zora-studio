@@ -1,3 +1,4 @@
+import { AudienceRoutes } from "./AudienceRoutes";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
 import { CourseSectionHeading } from "./CourseSectionHeading";
 import "./course-audience.css";
@@ -19,29 +20,6 @@ const people = [
   "AI 爱好者",
   "商业应用探索者",
 ] as const;
-
-const audiences = [
-  {
-    label: "STARTER",
-    title: "0 基础，从这里入门",
-    points: [
-      "不要求专业或岗位背景，从认识模型与工具开始",
-      "把简单提问升级为清楚的目标、背景与输出要求",
-      "通过跟练，完成自己的第一个 AI 工作流与作品",
-      "建立整体认知，知道不同任务该用什么方法",
-    ],
-  },
-  {
-    label: "ADVANCED",
-    title: "想进阶的 AI 使用者",
-    points: [
-      "已经使用 AI，希望把零散技巧串成完整体系",
-      "组合提示词、Skill 与 Agent，形成自己的 SOP",
-      "拓展网站、智能体、AI 视频与数字人的制作能力",
-      "学会检查、调试和迭代，让作品更接近真实需求",
-    ],
-  },
-];
 
 export function CourseAudience() {
   const activity = useVisibleActivity<HTMLDivElement>();
@@ -80,22 +58,7 @@ export function CourseAudience() {
             </div>
           </div>
         </div>
-        <div className="ca-grid">
-          {audiences.map((audience) => (
-            <article className="ca-group" key={audience.label}>
-              <span className="ca-label">{audience.label}</span>
-              <h3>{audience.title}</h3>
-              <ul>
-                {audience.points.map((point) => (
-                  <li key={point}>
-                    <span aria-hidden="true">→</span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
+        <AudienceRoutes />
         <div className="ca-takeaways" aria-labelledby="takeaways-title">
           <div className="ca-subheading">
             <h3 id="takeaways-title">会用、会做，再把它做好。</h3>

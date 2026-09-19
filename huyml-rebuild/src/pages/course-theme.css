@@ -135,27 +135,22 @@
 .course-page :is(.ch-primary, .ca-next > a, .cn-primary):hover {
   background: #393a36;
 }
-.course-page :is(.ca-group h3, .ca-subheading h3) {
+.course-page .ca-subheading h3 {
   font-family: var(--course-text);
   font-size: clamp(22px, 1.9vw, 28px);
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0.01em;
 }
-.course-page :is(.ca-group li, .ca-boundaries dd, .ca-takeaway-grid p) {
+.course-page :is(.ca-boundaries dd, .ca-takeaway-grid p) {
   font-size: clamp(15px, 1vw, 17px);
   line-height: 1.85;
 }
-.course-page
-  :is(.ca-label, .ca-method span, .ca-method-summary, .ca-boundaries dt) {
+.course-page :is(.ca-method span, .ca-method-summary, .ca-boundaries dt) {
   color: var(--course-muted);
 }
-.course-page
-  :is(.ca-group, .ca-boundaries, .ca-takeaway-grid article, .ca-method li) {
+.course-page :is(.ca-boundaries, .ca-takeaway-grid article, .ca-method li) {
   border-color: var(--course-line);
-}
-.course-page .ca-group li > span {
-  color: var(--course-accent);
 }
 .course-page .ca-takeaway-grid h4 {
   font-size: 20px;
@@ -242,7 +237,6 @@
 }
 .course-page
   :is(
-    .ca-label,
     .course-syllabus .lv i,
     .course-syllabus .fmt,
     .course-syllabus .tl i,
