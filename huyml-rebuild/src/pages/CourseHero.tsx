@@ -139,7 +139,7 @@ export function CourseHero() {
         <header className="ch-header">
           <a
             className="ch-brand"
-            href="/ai-course/hero"
+            href="/"
             aria-label="AI 实战课首页"
           >
             <b>

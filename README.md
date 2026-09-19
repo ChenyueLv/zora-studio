@@ -12,7 +12,7 @@ npm ci
 npm run dev -- --port 5173
 ```
 
-课程页面：<http://127.0.0.1:5173/ai-course/hero?scene=office>
+课程页面：<http://127.0.0.1:5173/>（可用 `?scene=office|visual|story|music|agent` 等参数指定首屏场景）
 
 ## 页面内容
 

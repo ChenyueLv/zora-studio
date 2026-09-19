@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/((?!assets/).*)","destination":"/index.html"}]}
+{"redirects":[{"source":"/ai-course/hero/:path*","destination":"/","permanent":true}]}
