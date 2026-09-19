@@ -17,8 +17,7 @@ The `frontend-design` skill used in the workflow was installed from https://gith
 
 ## Course website Chinese typography
 
-The course website uses **MiSans** by Xiaomi (Light, Regular and Medium) for headings, body and UI text, and **Smiley Sans / 得意黑** by atelierAnchor for the hero and closing display headings. Their original publisher-supplied WOFF2 files are self-hosted, unmodified, in `public/fonts/`, together with the MiSans Font Intellectual Property License Agreement and the Smiley Sans SIL OFL 1.1 license. The faculty quote uses a web subset derived from **LXGW WenKai Lite / 霞鹜文楷轻便版** v1.522, renamed **Zora Faculty Hand**, distributed with its SIL OFL 1.1 license and preserved copyright records. Sources, versions and the subset rebuilding procedure are documented in `public/fonts/README.md`.
+The course website uses **MiSans** by Xiaomi (Light, Regular and Medium) for headings, body and UI text, and **Smiley Sans / 得意黑** by atelierAnchor for the hero, closing display headings and faculty quote. Their original publisher-supplied WOFF2 files are self-hosted, unmodified, in `public/fonts/`, together with the MiSans Font Intellectual Property License Agreement and the Smiley Sans SIL OFL 1.1 license. Sources and version information are documented in `public/fonts/README.md`.
 
 - MiSans: https://hyperos.mi.com/font/en/download/
 - Smiley Sans v2.0.1: https://github.com/atelier-anchor/smiley-sans/releases/tag/v2.0.1
-- LXGW WenKai Lite v1.522: https://github.com/lxgw/LxgwWenKai-Lite/releases/tag/v1.522
