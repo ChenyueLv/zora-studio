@@ -30,6 +30,21 @@ const routes = [
     ],
   },
 ];
+// Particle Wave Field settings from the supplied particle-wave.html.
+const particleWave = {
+  color: 0xffffff,
+  opacity: 0.55,
+  size: 1.1,
+  cols: 110,
+  rows: 60,
+  width: 240,
+  height: 130,
+  waveAmp: 3,
+  rippleAmp: 9,
+  rippleRadius: 900,
+  speed: 0.012,
+};
+
 const mouthShapes = [
   "M120 40 C180 95 240 128 310 145 C380 160 440 160 500 160 C560 160 620 160 690 145 C760 128 820 95 880 40",
   "M120 40 C230 96 330 118 500 118 C580 118 640 112 690 100 C740 150 720 205 650 205 C590 205 570 150 600 115",
@@ -125,16 +140,16 @@ export function AudienceRoutes() {
     let scene: THREE.Scene | undefined;
     let camera: THREE.PerspectiveCamera | undefined;
     let positions: Float32Array | undefined;
-    const cols = 70,
-      rows = 40,
-      count = cols * rows;
+    const { cols, rows, width, height } = particleWave;
+    const count = cols * rows;
+    const waveMouse = { x: 0, y: 0 };
     try {
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: false,
+        antialias: true,
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
       camera.position.set(0, 42, 95);
@@ -143,8 +158,8 @@ export function AudienceRoutes() {
       for (let i = 0; i < cols; i++)
         for (let j = 0; j < rows; j++) {
           const offset = (i * rows + j) * 3;
-          positions[offset] = (i / (cols - 1) - 0.5) * 240;
-          positions[offset + 2] = (j / (rows - 1) - 0.5) * 130;
+          positions[offset] = (i / (cols - 1) - 0.5) * width;
+          positions[offset + 2] = (j / (rows - 1) - 0.5) * height;
         }
       geometry = new THREE.BufferGeometry();
       geometry.setAttribute(
@@ -152,21 +167,23 @@ export function AudienceRoutes() {
         new THREE.BufferAttribute(positions, 3),
       );
       const dot = document.createElement("canvas");
-      dot.width = dot.height = 32;
+      dot.width = dot.height = 64;
       const paint = dot.getContext("2d")!;
-      const gradient = paint.createRadialGradient(16, 16, 0, 16, 16, 16);
+      const gradient = paint.createRadialGradient(32, 32, 0, 32, 32, 32);
       gradient.addColorStop(0, "#fff");
       gradient.addColorStop(0.5, "rgba(255,255,255,.6)");
       gradient.addColorStop(1, "rgba(255,255,255,0)");
       paint.fillStyle = gradient;
-      paint.fillRect(0, 0, 32, 32);
+      paint.fillRect(0, 0, 64, 64);
       sprite = new THREE.CanvasTexture(dot);
       material = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 1.1,
+        color: particleWave.color,
+        size: particleWave.size,
+        sizeAttenuation: true,
         map: sprite,
+        alphaMap: sprite,
         transparent: true,
-        opacity: 0.55,
+        opacity: particleWave.opacity,
         depthWrite: false,
       });
       scene.add(new THREE.Points(geometry, material));
@@ -206,20 +223,30 @@ export function AudienceRoutes() {
       });
       path.setAttribute("d", mouthPath(values));
       if (renderer && scene && camera && geometry && positions) {
+        // Match the source's 60 Hz timing while rendering only visible frames.
+        const phase = elapsed * particleWave.speed * 60;
+        const pointerEase = 1 - Math.pow(0.95, delta * 60);
+        waveMouse.x += (mouse.targetX - waveMouse.x) * pointerEase;
+        waveMouse.y += (mouse.targetY - waveMouse.y) * pointerEase;
         for (let k = 0; k < count; k++) {
           const x = positions[k * 3],
             z = positions[k * 3 + 2];
-          const distance = Math.hypot(x - mouse.x * 120, z - mouse.y * 65);
+          const distance = Math.hypot(
+            x - waveMouse.x * width * 0.5,
+            z - waveMouse.y * height * 0.5,
+          );
           positions[k * 3 + 1] =
-            Math.sin(x * 0.06 + elapsed * 0.7) *
-              Math.cos(z * 0.09 + elapsed * 0.5) *
-              3 +
-            Math.exp((-distance * distance) / 900) *
-              9 *
-              Math.sin(elapsed * 1.4 - distance * 0.12);
+            Math.sin(x * 0.06 + phase) *
+              Math.cos(z * 0.09 + phase * 0.7) *
+              particleWave.waveAmp +
+            Math.exp((-distance * distance) / particleWave.rippleRadius) *
+              particleWave.rippleAmp *
+              Math.sin(phase * 2 - distance * 0.12);
         }
         geometry.attributes.position.needsUpdate = true;
-        camera.position.x = mouse.x * 6;
+        camera.position.x +=
+          (waveMouse.x * 6 - camera.position.x) *
+          (1 - Math.pow(0.96, delta * 60));
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
