@@ -35,6 +35,14 @@ npm run preview
 
 生产输出为 `huyml-rebuild/dist/`。部署平台的项目根目录设为 `huyml-rebuild`，构建命令为 `npm run build`，输出目录为 `dist`。非资源路径需要回退到 `index.html`；工程中已包含 Vercel 和 Netlify 的路由配置。
 
+## 旧内核浏览器兼容
+
+不少国产安卓浏览器内核停留在 Chromium 100 左右，不支持作品卡片所依赖的容器查询单位（`cqw`/`cqh`）和 `@container`，卡片内的文字和图标会错乱重叠。样式源码照常书写，构建时由 `huyml-rebuild/scripts/legacy-css-fallbacks.ts` 自动补上降级声明（同时处理 `svh` 与 `mask-image`），运行时由 `src/lib/containerFallback.ts` 只在不支持的浏览器里提供容器尺寸；支持的浏览器仍使用原始声明，渲染不变。
+
+- 新增 `container-type` 的选择器或新的 `@container (max-width: …)` 阈值时，需要登记到 `containerFallback.ts` 的 `CONTAINERS` / `CONTAINER_BREAKPOINTS`，否则构建会报错提示。
+- 用现代浏览器预览旧内核的渲染结果：`VITE_LEGACY_CSS=only npm run dev -- --port 5174`，此时页面只使用降级声明，可与正常模式逐项对比。
+- `build.target` 设为 Chrome 87 / Safari 14，避免产物包含旧内核无法解析的语法。
+
 ## 主要文件
 
 - `huyml-rebuild/src/pages/CourseHero.tsx`：课程首屏与作品切换。

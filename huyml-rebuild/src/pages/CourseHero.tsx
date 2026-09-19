@@ -286,7 +286,10 @@ export function CourseHero() {
                     onClick={() => select(index)}
                     aria-current={offset === 0 ? "true" : undefined}
                   >
-                    {scene.name}
+                    {/* One span per clause: the swipe layout wraps between them. */}
+                    {scene.name.match(/[^，]+，?/g)?.map((clause) => (
+                      <span key={clause}>{clause}</span>
+                    ))}
                   </button>
                 </h2>
               </article>

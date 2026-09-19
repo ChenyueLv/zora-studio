@@ -1615,6 +1615,10 @@
     margin: 8px 0 0;
     text-wrap: balance;
   }
+  /* Break at the comma rather than mid-clause, also without text-wrap support. */
+  .ch-scene-caption h2 span {
+    display: inline-block;
+  }
   .ch-scene-tabs {
     display: flex;
     justify-content: center;
