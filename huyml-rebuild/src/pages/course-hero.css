@@ -33,22 +33,27 @@
   gap: 20px;
 }
 .ch-brand > b {
-  font-family: Grotesk, sans-serif;
-  font-size: 66px;
-  font-weight: 700;
-  letter-spacing: -6px;
-  line-height: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
-.ch-brand > b > span {
-  display: inline-block;
-  font-size: 22px;
-  letter-spacing: 0;
-  vertical-align: top;
-  margin: 2px 0 0 8px;
-  color: var(--ch-red);
+.ch-brand > b > img {
+  display: block;
+  width: 52px;
+  height: 52px;
+}
+.ch-brand > b > small {
+  font-family: Grotesk, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  color: #20201f;
+  white-space: nowrap;
 }
 .ch-brand > span {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
   color: #686866;
   border-left: 1px solid #c6c6c4;
@@ -773,11 +778,12 @@
   .ch-header-note {
     display: none;
   }
-  .ch-brand > b {
-    font-size: 50px;
+  .ch-brand > b > img {
+    width: 44px;
+    height: 44px;
   }
   .ch-brand > span {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .ch-gallery {
@@ -840,14 +846,17 @@
     gap: 12px;
   }
   .ch-brand > b {
-    font-size: 45px;
+    gap: 4px;
   }
-  .ch-brand > b > span {
-    font-size: 16px;
-    margin-left: 5px;
+  .ch-brand > b > img {
+    width: 38px;
+    height: 38px;
+  }
+  .ch-brand > b > small {
+    font-size: 8px;
   }
   .ch-brand > span {
-    font-size: 8px;
+    font-size: 10px;
     padding-left: 12px;
   }
   .ch-header-course {

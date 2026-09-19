@@ -139,7 +139,8 @@ export function CourseHero() {
             aria-label="AI 实战课首页"
           >
             <b>
-              ai<span>✳</span>
+              <img src="/zora-tv-icon.svg" alt="" width="52" height="52" />
+              <small>ZORA AI</small>
             </b>
             <span>
               把好奇心
