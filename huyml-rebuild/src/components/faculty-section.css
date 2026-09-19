@@ -342,6 +342,19 @@
   }
 }
 
+@media (min-width: 1101px) {
+  /* 首行左右对称：专业领域与红字同顶同底，红字句间均分留白 */
+  .ft-expertise,
+  .ft-statement {
+    align-self: stretch;
+  }
+  .ft-statement {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+  }
+}
 @media (max-width: 1100px) {
   .ft-composition {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
