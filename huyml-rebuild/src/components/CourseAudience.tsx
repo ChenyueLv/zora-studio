@@ -93,28 +93,29 @@ export function CourseAudience() {
                 把提示词、Skill、Agent
                 与创作工具连接起来，练习从目标到交付的完整流程。
               </p>
-              <span>提示词库 / 可复用 Skill / 个人 SOP</span>
+              <span>AI 工作台 / 自己的 Skill / 个人 SOP</span>
             </article>
             <article>
               <h4>自己的产品与智能体</h4>
               <p>
-                从描述需求开始，搭建网站、网页小工具或智能体原型，并学习测试与修改。
+                从描述需求开始，做出并上线自己的作品站，再把个人知识做成能对话的
+                Agent。
               </p>
-              <span>网页工具 / 竞品分析 Agent</span>
+              <span>个人作品站 / 个人知识 Agent</span>
             </article>
             <article>
               <h4>AI 内容创作能力</h4>
               <p>
                 练习图像、音乐与视频的制作，串起脚本、角色、分镜和剪辑，持续打磨效果。
               </p>
-              <span>主题海报 / 原创歌曲 / AI 短片</span>
+              <span>主题海报 / 角色设定 / AI 短片</span>
             </article>
             <article>
               <h4>数字人制作方法</h4>
               <p>
-                了解形象、声音与驱动的关系，练习数字人口播，并认识实时对话的接入方式。
+                了解形象、声音与驱动的关系，让角色开口说话，并拆解实时对话数字人的做法。
               </p>
-              <span>数字人形象 / 口播视频 / 应用思路</span>
+              <span>数字人形象 / 配音与口型 / 实时对话拆解</span>
             </article>
           </div>
         </div>

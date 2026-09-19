@@ -6,11 +6,7 @@ const slots = syllabus.flatMap((day) => [...day.slots]);
 const stats = [
   [slots.length, "", "节课 · 每节 3 小时"],
   [slots.reduce((sum, slot) => sum + slot.topics.length, 0), "", "个知识点"],
-  [
-    new Set(slots.flatMap((slot) => [...slot.tools])).size,
-    "+",
-    "款 AI 工具实操",
-  ],
+  [new Set(slots.flatMap((slot) => [...slot.tech])).size, "", "个技术关键词"],
   [frontier.length, "", "个前沿话题"],
 ] as const;
 
@@ -93,9 +89,9 @@ export function CourseSyllabus() {
                     })}
                   </ol>
                   <div className="fmt">讲解 90′ · 跟练 60′ · 点评答疑 30′</div>
-                  <div className="tl">
-                    {slot.tools.map((tool) => (
-                      <i key={tool}>{tool}</i>
+                  <div className="tl" aria-label="技术关键词">
+                    {slot.tech.map((term) => (
+                      <i key={term}>{term}</i>
                     ))}
                   </div>
                   <div className="out">
