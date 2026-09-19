@@ -27,7 +27,7 @@ assert.equal(new Set([...courseWorks, ...experiments].map(p => p.id)).size, cour
 for (const w of courseWorks) {
   assert(w.title && w.width > 0 && w.height > 0, `Invalid course work: ${w.id}`);
   asset(w.src);
-  if (w.type === 'video') { assert.match(w.src, /\.mp4$/); asset(w.poster); asset(w.previewVideo); }
+  if (w.type === 'video') { assert.match(w.src, /\.mp4$/); asset(w.poster); if (w.previewVideo) asset(w.previewVideo); }
 }
 for (const h of hobbies) { assert(h.title && h.description.length > 200); asset(h.image); }
 const root = new URL('../src/', import.meta.url);

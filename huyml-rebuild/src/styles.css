@@ -836,7 +836,7 @@ canvas:focus-visible {
   position: static;
   display: block;
   height: auto;
-  max-height: 88vh;
+  max-height: min(88vh, var(--media-max-height, 88vh));
   object-fit: contain;
 }
 .lightbox-close {
@@ -1514,9 +1514,11 @@ canvas:focus-visible {
     max-height: 80svh;
   }
   .lightbox-media .media,
-  .lightbox-media img,
-  .lightbox-media .media > video {
+  .lightbox-media img {
     max-height: 78svh;
+  }
+  .lightbox-media .media > video {
+    max-height: min(78svh, var(--media-max-height, 78svh));
   }
   .lightbox-prev,
   .lightbox-next {

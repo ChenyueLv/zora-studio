@@ -141,3 +141,30 @@ it("plays the full local video with controls in the enlarged preview", async () 
   expect(video.hasAttribute("controls")).toBe(true);
   expect(host.querySelector("iframe")).toBeNull();
 });
+it("uses the card ratio in the grid and caps low-resolution videos when enlarged", async () => {
+  const song = {
+    ...clip,
+    previewVideo: undefined,
+    cardRatio: "4 / 3",
+    maxHeight: 640,
+  };
+  await act(async () =>
+    root.render(<Media item={song} preview previewOnHover unloadOffscreen />),
+  );
+  await intersect(true);
+  const card = host.querySelector<HTMLElement>(".media")!;
+  expect(card.style.aspectRatio).toBe("4 / 3");
+  await act(async () => {
+    card.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+  });
+  expect(host.querySelector("video")?.getAttribute("src")).toBe("/clip.mp4");
+  await act(async () => root.render(<Media item={song} />));
+  expect(host.querySelector<HTMLElement>(".media")!.style.aspectRatio).toBe(
+    "1080 / 1920",
+  );
+  expect(
+    host
+      .querySelector<HTMLElement>("video")!
+      .style.getPropertyValue("--media-max-height"),
+  ).toBe("640px");
+});

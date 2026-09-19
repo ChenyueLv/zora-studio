@@ -7,14 +7,19 @@ import { Media, Lightbox } from "./Media";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import "./student-works.css";
 
-// 课程作品排在最前；两个视频中间隔开，桌面端首行分居最左和最右
-const [portrait, castle, makeup] = courseWorks;
+// 课程作品都放在默认展示的前 8 件里；桌面端 4 列时视频按棋盘格交错，
+// 任意两个视频既不左右相邻也不上下相邻
+const [portrait, castle, makeup, story, song] = courseWorks;
 const works = [
   portrait,
   castle,
-  referenceWorks[0],
   makeup,
-  ...referenceWorks.slice(1),
+  referenceWorks[0],
+  referenceWorks[1],
+  story,
+  referenceWorks[2],
+  song,
+  ...referenceWorks.slice(3),
 ];
 
 export function StudentWorks() {

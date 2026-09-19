@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Media as MediaItem } from "../lib/types";
 import { Modal } from "./Modal";
 import { useSound } from "../lib/Sound";
@@ -50,7 +50,12 @@ export function Media({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={"media " + (isVideo ? "video-media" : "")}
-      style={{ aspectRatio: `${item.width} / ${item.height}` }}
+      style={{
+        aspectRatio:
+          preview && item.cardRatio
+            ? item.cardRatio
+            : `${item.width} / ${item.height}`,
+      }}
     >
       {preview && unloadOffscreen && !visible ? null : isLocalVideo ? (
         <>
@@ -79,6 +84,13 @@ export function Media({
               key={String(enabled)}
               src={item.src}
               poster={item.poster}
+              style={
+                item.maxHeight
+                  ? ({
+                      "--media-max-height": `${item.maxHeight}px`,
+                    } as CSSProperties)
+                  : undefined
+              }
               aria-label={item.title || "Project video"}
               autoPlay
               muted={!enabled}

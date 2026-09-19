@@ -6,8 +6,9 @@
     "src": "/assets/course-works/zora-portrait.mp4",
     "previewVideo": "/assets/course-works/zora-portrait-preview.mp4",
     "poster": "/assets/course-works/zora-portrait-cover.webp",
-    "width": 1080,
-    "height": 1920
+    "width": 720,
+    "height": 1280,
+    "cardRatio": "4 / 5"
   },
   {
     "id": "zora-castle",
@@ -24,7 +25,29 @@
     "src": "/assets/course-works/zora-makeup.mp4",
     "previewVideo": "/assets/course-works/zora-makeup-preview.mp4",
     "poster": "/assets/course-works/zora-makeup-cover.webp",
-    "width": 1080,
-    "height": 1906
+    "width": 720,
+    "height": 1270,
+    "cardRatio": "4 / 5"
+  },
+  {
+    "id": "zora-story",
+    "title": "AI 儿童短片",
+    "type": "video",
+    "src": "/assets/course-works/zora-story.mp4",
+    "previewVideo": "/assets/course-works/zora-story-preview.mp4",
+    "poster": "/assets/course-works/zora-story-cover.webp",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "id": "zora-song",
+    "title": "AI 音乐 MV",
+    "type": "video",
+    "src": "/assets/course-works/zora-song.mp4",
+    "poster": "/assets/course-works/zora-song-cover.webp",
+    "width": 720,
+    "height": 1280,
+    "cardRatio": "4 / 3",
+    "maxHeight": 640
   }
 ]
