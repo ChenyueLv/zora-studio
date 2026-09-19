@@ -311,7 +311,11 @@ export function FacultySection() {
                   } as CSSProperties;
                   return (
                     <div className="ft-chat-turn" key={turn.id}>
-                      <div className="ft-message ft-message-user" style={style}>
+                      <div
+                        className="ft-message ft-message-user"
+                        data-latest={index === turns.length - 1}
+                        style={style}
+                      >
                         <span className="ft-sr-only">你：</span>
                         <p>{turn.question}</p>
                       </div>
