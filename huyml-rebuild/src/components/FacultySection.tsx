@@ -9,6 +9,13 @@ type Answer = {
   modules?: number[];
   link?: "schedule" | "student-works";
 };
+type ChatTurn = {
+  id: number;
+  question: string;
+  answer: Answer;
+  text: string;
+  complete: boolean;
+};
 type SpeechResult = { results: ArrayLike<ArrayLike<{ transcript: string }>> };
 type Recognition = {
   lang: string;
@@ -101,8 +108,10 @@ export function FacultySection() {
     [muted, setMuted] = useState(false);
   const [busy, setBusy] = useState(false),
     [listening, setListening] = useState(false);
-  const [text, setText] = useState("");
-  const [answer, setAnswer] = useState<Answer | null>(null);
+  const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [voiceNotice, setVoiceNotice] = useState("");
+  const activeTurn = useRef(0);
+  const followLatest = useRef(true);
   const response = useRef<HTMLDivElement>(null);
   const field = useRef<HTMLInputElement>(null),
     timer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -120,9 +129,9 @@ export function FacultySection() {
     [],
   );
   useEffect(() => {
-    if (response.current && busy)
+    if (response.current && followLatest.current)
       response.current.scrollTop = response.current.scrollHeight;
-  }, [text, busy]);
+  }, [turns]);
   useEffect(() => {
     if (activity.active) return;
     setOpen(false);
@@ -135,8 +144,12 @@ export function FacultySection() {
     if (timer.current) clearInterval(timer.current);
     timer.current = null;
     pending.current = null;
-    setText(a.text);
-    setAnswer(a);
+    const id = activeTurn.current;
+    setTurns((previous) =>
+      previous.map((turn) =>
+        turn.id === id ? { ...turn, text: a.text, complete: true } : turn,
+      ),
+    );
     setBusy(false);
   }
   function ask(question: string) {
@@ -147,10 +160,15 @@ export function FacultySection() {
     stopSpeech();
     setOpen(false);
     setInput("");
-    setAnswer(null);
+    setVoiceNotice("");
     const a = answerFor(q);
+    const id = ++activeTurn.current;
     pending.current = a;
-    setText("");
+    followLatest.current = true;
+    setTurns((previous) => [
+      ...previous,
+      { id, question: q, answer: a, text: "", complete: false },
+    ]);
     setBusy(true);
     if (!muted && "speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(a.text);
@@ -165,7 +183,11 @@ export function FacultySection() {
     let length = 0;
     timer.current = setInterval(() => {
       length += 2;
-      setText(a.text.slice(0, length));
+      setTurns((previous) =>
+        previous.map((turn) =>
+          turn.id === id ? { ...turn, text: a.text.slice(0, length) } : turn,
+        ),
+      );
       if (length >= a.text.length) finish(a);
     }, 45);
   }
@@ -180,7 +202,7 @@ export function FacultySection() {
     };
     const SR = browser.SpeechRecognition ?? browser.webkitSpeechRecognition;
     if (!SR) {
-      setText("当前浏览器不支持语音识别，请在下方输入问题。");
+      setVoiceNotice("当前浏览器不支持语音识别，请在下方输入问题。");
       field.current?.focus();
       return;
     }
@@ -202,13 +224,13 @@ export function FacultySection() {
     };
     rec.onerror = () => {
       setListening(false);
-      setText("未能识别语音，请检查麦克风权限，或直接输入问题。");
+      setVoiceNotice("未能识别语音，请检查麦克风权限，或直接输入问题。");
     };
     try {
       rec.start();
       setListening(true);
     } catch {
-      setText("语音暂不可用，请直接输入问题。");
+      setVoiceNotice("语音暂不可用，请直接输入问题。");
     }
   }
   const suggestions = (
@@ -256,6 +278,78 @@ export function FacultySection() {
             <p>{instructor.stats[0][2]}</p>
           </div>
           <div className="ft-person">
+            <div
+              className="ft-chat"
+              ref={response}
+              role="log"
+              aria-label="与数字人讲师的对话"
+              aria-live="polite"
+              aria-relevant="additions text"
+              aria-busy={busy}
+              tabIndex={0}
+              onScroll={(event) => {
+                const el = event.currentTarget;
+                followLatest.current =
+                  el.scrollHeight - el.scrollTop - el.clientHeight < 32;
+              }}
+            >
+              <div className="ft-chat-messages">
+                {turns.length === 0 && (
+                  <div className="ft-message ft-message-assistant">
+                    <p>Hi，关于课程，想先了解什么？</p>
+                  </div>
+                )}
+                {turns.map((turn, index) => {
+                  const style = {
+                    "--message-opacity": Math.max(
+                      0.18,
+                      0.58 ** (turns.length - 1 - index),
+                    ),
+                  } as CSSProperties;
+                  return (
+                    <div className="ft-chat-turn" key={turn.id}>
+                      <div className="ft-message ft-message-user" style={style}>
+                        <span className="ft-sr-only">你：</span>
+                        <p>{turn.question}</p>
+                      </div>
+                      <div
+                        className="ft-message ft-message-assistant ft-answer"
+                        style={style}
+                      >
+                        <span className="ft-sr-only">数字人讲师：</span>
+                        <p>
+                          {turn.text || "正在组织回答…"}
+                          {!turn.complete && (
+                            <span className="ft-caret" aria-hidden="true" />
+                          )}
+                        </p>
+                        <div className="ft-answer-actions">
+                          {turn.complete && turn.answer.link && (
+                            <a href={`#${turn.answer.link}`}>
+                              {turn.answer.link === "schedule"
+                                ? "查看课程大纲"
+                                : "查看学员作品"}{" "}
+                              ↗
+                            </a>
+                          )}
+                          {!turn.complete && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                stopSpeech();
+                                if (pending.current) finish(pending.current);
+                              }}
+                            >
+                              显示完整回答
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
             <div className="ft-avatar">
               <div
                 className="ft-stage"
@@ -385,39 +479,10 @@ export function FacultySection() {
                 </button>
               </form>
               {suggestions}
-              {(text || busy) && (
-                <div
-                  className="ft-answer"
-                  ref={response}
-                  aria-live="polite"
-                  aria-busy={busy}
-                >
-                  <p>
-                    {text}
-                    {busy && <span className="ft-caret" aria-hidden="true" />}
-                  </p>
-                  <div className="ft-answer-actions">
-                    {answer?.link && (
-                      <a href={`#${answer.link}`}>
-                        {answer.link === "schedule"
-                          ? "查看课程大纲"
-                          : "查看学员作品"}{" "}
-                        ↗
-                      </a>
-                    )}
-                    {busy && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          stopSpeech();
-                          if (pending.current) finish(pending.current);
-                        }}
-                      >
-                        显示完整回答
-                      </button>
-                    )}
-                  </div>
-                </div>
+              {voiceNotice && (
+                <p className="ft-voice-notice" role="status">
+                  {voiceNotice}
+                </p>
               )}
             </div>
           </div>
