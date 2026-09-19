@@ -59,11 +59,6 @@
   border-left: 1px solid #c6c6c4;
   padding-left: 18px;
 }
-.ch-header-note {
-  font-size: 11px;
-  color: #777772;
-  margin-left: 6%;
-}
 .ch-header-course {
   font-size: 12px;
   border-bottom: 1px solid #777;
@@ -760,9 +755,6 @@
     left: 24px;
     right: 24px;
     top: 25px;
-  }
-  .ch-header-note {
-    display: none;
   }
   .ch-brand > b > img {
     width: 44px;

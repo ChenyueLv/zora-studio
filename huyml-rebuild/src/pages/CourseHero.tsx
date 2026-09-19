@@ -151,7 +151,6 @@ export function CourseHero() {
               变成创造力
             </span>
           </a>
-          <span className="ch-header-note">零基础入门 / AI 应用进阶</span>
           <a className="ch-header-course" href="#schedule">
             了解课程 <span>↗</span>
           </a>
