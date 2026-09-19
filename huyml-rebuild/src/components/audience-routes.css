@@ -79,7 +79,7 @@
 .car-mouth {
   position: relative;
   z-index: 1;
-  width: clamp(250px, 30vw, 540px);
+  width: clamp(210px, 25vw, 450px);
   max-width: 100%;
   height: 130px;
   margin: 6px auto 0;

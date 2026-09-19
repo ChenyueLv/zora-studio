@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { startTypedHeader } from "../lib/typedHeader";
+import { observeTypedHeaderGroup } from "../lib/typedHeader";
 import { audienceMouthPath, restingMouthPath } from "../lib/audienceMouth";
 import * as THREE from "three";
 import { useMediaQuery } from "../lib/useMediaQuery";
@@ -34,8 +34,8 @@ const routes = [
 // Particle Wave Field settings from the supplied particle-wave.html.
 const particleWave = {
   color: 0xffffff,
-  opacity: 0.55,
-  size: 1.1,
+  opacity: 0.9,
+  size: 1.35,
   cols: 110,
   rows: 60,
   width: 240,
@@ -50,6 +50,14 @@ export function AudienceRoutes() {
   const { ref, active } = useVisibleActivity<HTMLDivElement>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
+
+  useEffect(() => {
+    if (reduced || !ref.current) return;
+    const stops = [
+      ...ref.current.querySelectorAll<HTMLElement>(".car-lines"),
+    ].map(observeTypedHeaderGroup);
+    return () => stops.forEach((stop) => stop());
+  }, [reduced, ref]);
 
   useEffect(() => {
     const root = ref.current;
@@ -107,16 +115,6 @@ export function AudienceRoutes() {
         },
       );
     }, root);
-
-    const stopTyping = [
-      ...root.querySelectorAll<HTMLElement>(".car-typed"),
-    ].map((element, index) =>
-      startTypedHeader(
-        element,
-        element.textContent || "",
-        300 + (index % 3) * 500,
-      ),
-    );
 
     // The text and SVG remain usable even if this browser cannot create WebGL.
     let renderer: THREE.WebGLRenderer | undefined;
@@ -248,7 +246,6 @@ export function AudienceRoutes() {
     return () => {
       gsap.ticker.remove(tick);
       context.revert();
-      stopTyping.forEach((stop) => stop());
       root.removeEventListener("pointermove", move);
       root.removeEventListener("pointerleave", leave);
       observer.disconnect();
