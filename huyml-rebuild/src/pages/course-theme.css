@@ -137,29 +137,16 @@
   line-height: 1.5;
   letter-spacing: 0.01em;
 }
-.course-page
-  :is(.ca-group li, .ca-people dd, .ca-boundaries dd, .ca-takeaway-grid p) {
+.course-page :is(.ca-group li, .ca-boundaries dd, .ca-takeaway-grid p) {
   font-size: clamp(15px, 1vw, 17px);
   line-height: 1.85;
 }
 .course-page
-  :is(
-    .ca-label,
-    .ca-people dd,
-    .ca-method span,
-    .ca-method-summary,
-    .ca-boundaries dt
-  ) {
+  :is(.ca-label, .ca-method span, .ca-method-summary, .ca-boundaries dt) {
   color: var(--course-muted);
 }
 .course-page
-  :is(
-    .ca-group,
-    .ca-boundaries,
-    .ca-people dl > div,
-    .ca-takeaway-grid article,
-    .ca-method li
-  ) {
+  :is(.ca-group, .ca-boundaries, .ca-takeaway-grid article, .ca-method li) {
   border-color: var(--course-line);
 }
 .course-page .ca-group li > span {

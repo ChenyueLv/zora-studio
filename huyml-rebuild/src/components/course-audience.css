@@ -193,28 +193,7 @@
 }
 
 .ca-people {
-  margin: 28px 0 36px;
-}
-.ca-people-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 22px;
-  color: #656762;
-  font-size: 12px;
-}
-.ca-people-pause {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid #17181924;
-  border-radius: 50%;
-  color: #171819;
-}
-.ca-people-pause svg {
-  width: 13px;
-  height: 13px;
+  margin: 36px 0 44px;
 }
 .ca-people-marquee {
   overflow: hidden;
@@ -236,21 +215,28 @@
   display: flex;
   flex: 1 0 auto;
   justify-content: space-around;
-  gap: clamp(32px, 3vw, 48px);
-  padding: 0 clamp(32px, 3vw, 48px) 0 0;
+  align-items: center;
+  gap: clamp(40px, 4.5vw, 88px);
+  padding: 8px clamp(40px, 4.5vw, 88px) 8px 0;
+  list-style: none;
   margin: 0;
 }
-.ca-people-group > div {
-  flex: 0 0 clamp(220px, 18vw, 280px);
-  width: clamp(220px, 18vw, 280px);
+.ca-people-group > li {
+  flex: 0 0 auto;
+  color: var(--course-ink, #20201f);
+  font-family: var(--course-display, "Smiley Sans", sans-serif);
+  font-size: clamp(28px, 2.6vw, 44px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
 }
 .ca-people-marquee:hover .ca-people-track,
 .ca-people-marquee:focus-within .ca-people-track,
-.ca-people[data-paused="true"] .ca-people-track,
 .ca-people[data-active="false"] .ca-people-track {
   animation-play-state: paused;
 }
-.ca-people :is(button, [tabindex]):focus-visible {
+.ca-people-marquee:focus-visible {
   outline: 2px solid #171819;
   outline-offset: 3px;
 }
@@ -260,7 +246,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ca-people-pause,
   .ca-people-group[aria-hidden="true"] {
     display: none;
   }
@@ -273,24 +258,12 @@
     min-width: 0;
   }
   .ca-people-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    flex-wrap: wrap;
+    justify-content: flex-start;
     width: 100%;
     padding: 0;
-    gap: 24px;
+    gap: 20px 40px;
   }
-  .ca-people-group > div {
-    width: auto;
-  }
-}
-.ca-people dt {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-.ca-people dd {
-  margin: 0;
-  color: #656762;
-  font-size: 13px;
 }
 .ca-method {
   display: grid;

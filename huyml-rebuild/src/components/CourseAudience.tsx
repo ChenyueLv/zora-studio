@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
 import { CourseSectionHeading } from "./CourseSectionHeading";
 import "./course-audience.css";
 
 const people = [
-  ["学生", "不论专业，把 AI 用于学习、研究与个人项目。"],
-  ["求职者", "不论目标岗位，练习调研、表达与作品制作。"],
-  ["职场人", "职能、管理、技术、设计岗位，都可从实际任务入手。"],
-  ["AI 爱好者", "建立全局认识，动手探索不同工具与创作方式。"],
-  ["商业应用探索者", "想用 AI 开发产品、制作内容，探索副业与商业机会。"],
+  "学生",
+  "求职者",
+  "职场人",
+  "AI 爱好者",
+  "商业应用探索者",
 ] as const;
 
 const audiences = [
@@ -36,7 +35,6 @@ const audiences = [
 
 export function CourseAudience() {
   const activity = useVisibleActivity<HTMLDivElement>();
-  const [paused, setPaused] = useState(false);
   return (
     <section
       className="course-audience"
@@ -49,50 +47,25 @@ export function CourseAudience() {
           title="适合谁来学"
           description="不限专业与岗位，零基础与进阶都能找到起点"
         />
-        <div
-          className="ca-people"
-          data-active={activity.active}
-          data-paused={paused}
-        >
-          <div className="ca-people-heading">
-            <span id="audience-people-label">课程面向人群</span>
-            <button
-              type="button"
-              className="ca-people-pause"
-              aria-label={paused ? "继续滚动人群介绍" : "暂停滚动人群介绍"}
-              aria-pressed={paused}
-              onClick={() => setPaused(!paused)}
-            >
-              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                {paused ? (
-                  <path d="M5 3 12 8 5 13Z" />
-                ) : (
-                  <path d="M4 3h3v10H4zm5 0h3v10H9z" />
-                )}
-              </svg>
-            </button>
-          </div>
+        <div className="ca-people" data-active={activity.active}>
           <div
             className="ca-people-marquee"
             ref={activity.ref}
             tabIndex={0}
             role="region"
-            aria-labelledby="audience-people-label"
+            aria-label="课程面向人群"
           >
             <div className="ca-people-track">
               {[false, true].map((duplicate) => (
-                <dl
+                <ul
                   className="ca-people-group"
                   key={String(duplicate)}
                   aria-hidden={duplicate || undefined}
                 >
-                  {people.map(([name, description]) => (
-                    <div key={name}>
-                      <dt>{name}</dt>
-                      <dd>{description}</dd>
-                    </div>
+                  {people.map((name) => (
+                    <li key={name}>{name}</li>
                   ))}
-                </dl>
+                </ul>
               ))}
             </div>
           </div>
