@@ -361,13 +361,9 @@
 .ft-message-assistant {
   position: relative;
   border: 1.5px solid #20201f;
-  border-radius: 28px 32px 26px 22px / 24px 26px 24px 28px;
+  border-radius: 22px;
   padding: 10px 16px;
   line-height: 1.6;
-}
-.ft-message-assistant {
-  /* Mirror every corner of the user bubble, including the elliptical radii. */
-  border-radius: 32px 28px 22px 26px / 26px 24px 28px 24px;
 }
 .ft-message[data-latest="true"] {
   margin-bottom: 18px;
