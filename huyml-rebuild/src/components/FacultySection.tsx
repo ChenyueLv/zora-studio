@@ -404,6 +404,7 @@ export function FacultySection() {
     setBusy(true);
     watch(current.turn, current.id, current.question);
   }
+  const speaking = busy || playing || listening;
   const suggestions = (
     <div className="ft-suggestions">
       {questions.map((q) => (
@@ -551,14 +552,14 @@ export function FacultySection() {
             <div className="ft-avatar">
               <div
                 className="ft-stage"
-                data-open={open}
-                data-speaking={busy || playing || listening}
+                data-open={open && !speaking}
+                data-speaking={speaking}
                 tabIndex={0}
                 role="img"
                 aria-label={`${instructor.name}的互动头像`}
-                onMouseEnter={() => !busy && !listening && setOpen(true)}
+                onMouseEnter={() => !speaking && setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
-                onFocus={() => !busy && !listening && setOpen(true)}
+                onFocus={() => !speaking && setOpen(true)}
                 onBlur={() => setOpen(false)}
               >
                 <div className="ft-head">
