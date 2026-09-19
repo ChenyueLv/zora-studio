@@ -161,7 +161,6 @@ export function CourseAudience() {
           </dl>
         </aside>
         <div className="ca-next">
-          <span>适合自己，再看看三天怎么学。</span>
           <a href="#schedule">
             查看完整课程安排 <span aria-hidden="true">↗</span>
           </a>

@@ -225,20 +225,6 @@
   opacity: 1;
 }
 
-.ch-footer {
-  position: absolute;
-  left: 40px;
-  right: 40px;
-  bottom: 22px;
-  z-index: 11;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.ch-proof-note {
-  color: #92928d;
-  font-size: 9px;
-}
 .ch-gallery-controls {
   display: flex;
   align-items: center;
@@ -811,13 +797,6 @@
     opacity: calc(1 - var(--depth) * 0.4);
   }
 
-  .ch-footer {
-    left: 24px;
-    right: 24px;
-  }
-  .ch-proof-note {
-    display: none;
-  }
   .ch-gallery-controls {
     margin: 0;
     gap: 10px;
@@ -943,11 +922,6 @@
     font-size: 7px;
   }
 
-  .ch-footer {
-    left: 16px;
-    right: 18px;
-    bottom: 22px;
-  }
   .ch-gallery-controls {
     gap: 6px;
   }
@@ -1069,8 +1043,7 @@
 .ch-audience a span {
   margin-left: 6px;
 }
-.course-page
-  :is(.ch-outcomes button, .ch-audience a, .ch-proof-note):focus-visible {
+.course-page :is(.ch-outcomes button, .ch-audience a):focus-visible {
   outline: 2px solid #20201f;
   outline-offset: 5px;
 }
@@ -1093,14 +1066,6 @@
     bottom: auto;
     height: 385px;
     width: 100%;
-  }
-
-  .ch-footer {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    margin: 0 16px;
   }
 }
 
@@ -1249,13 +1214,6 @@
     width: 100%;
     flex: none;
   }
-  .ch-footer {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    margin: 0 24px;
-  }
 }
 @media (max-width: 600px) {
   .ch-intro {
@@ -1308,9 +1266,6 @@
   }
   .ch-gallery {
     height: 385px;
-  }
-  .ch-footer {
-    margin: 0 16px;
   }
 }
 

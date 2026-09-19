@@ -306,11 +306,6 @@ export function CourseHero() {
             </button>
           ))}
         </nav>
-        <footer className="ch-footer">
-          <a className="ch-proof-note" href="#audience">
-            适合谁 · 学习收获 · 课程边界 ↓
-          </a>
-        </footer>
       </div>
       <CourseAudience />
       <CourseSyllabus />

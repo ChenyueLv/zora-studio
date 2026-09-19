@@ -147,14 +147,10 @@
 .ca-next {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 16px;
   padding-top: 28px;
-}
-.ca-next > span {
-  color: #656762;
-  font-size: 13px;
 }
 .ca-next a {
   background: #20201f;
