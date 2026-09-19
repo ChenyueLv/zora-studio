@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { startTypedHeader } from "../lib/typedHeader";
+import { audienceMouthPath, restingMouthPath } from "../lib/audienceMouth";
 import * as THREE from "three";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
@@ -44,21 +45,6 @@ const particleWave = {
   rippleRadius: 900,
   speed: 0.012,
 };
-
-const mouthShapes = [
-  "M120 40 C180 95 240 128 310 145 C380 160 440 160 500 160 C560 160 620 160 690 145 C760 128 820 95 880 40",
-  "M120 40 C230 96 330 118 500 118 C580 118 640 112 690 100 C740 150 720 205 650 205 C590 205 570 150 600 115",
-  "M180 118 C230 118 280 118 340 118 C400 118 450 118 500 118 C550 118 600 118 660 118 C720 118 770 118 820 118",
-];
-const shapes = mouthShapes.map((shape) =>
-  shape.match(/-?\d+(\.\d+)?/g)!.map(Number),
-);
-const mouthPath = (values: number[]) =>
-  `M${values[0]} ${values[1]} ` +
-  Array.from(
-    { length: 4 },
-    (_, i) => `C${values.slice(2 + i * 6, 8 + i * 6).join(" ")}`,
-  ).join(" ");
 
 export function AudienceRoutes() {
   const { ref, active } = useVisibleActivity<HTMLDivElement>();
@@ -201,12 +187,12 @@ export function AudienceRoutes() {
     const observer = new ResizeObserver(resize);
     observer.observe(root);
     resize();
-    const values = [...shapes[0]];
     let elapsed = 0,
-      lastFrame = 0;
+      lastFrame = 0,
+      lastParticleFrame = 0;
+    let previousMouth = restingMouthPath;
     const tick = (time: number) => {
-      if (time - lastFrame < 1 / 30) return;
-      const delta = lastFrame ? Math.min(time - lastFrame, 0.1) : 1 / 30;
+      const delta = lastFrame ? Math.min(time - lastFrame, 0.1) : 1 / 60;
       lastFrame = time;
       elapsed += delta;
       const ease = 1 - Math.exp(-delta * 6);
@@ -215,17 +201,24 @@ export function AudienceRoutes() {
       eyeWraps.forEach((eye) => {
         eye.style.transform = `translate(${mouse.x * 18}px, ${mouse.y * 12}px)`;
       });
-      const cycle = elapsed % 13;
-      const target = shapes[cycle < 4 ? 0 : cycle < 6 ? 1 : cycle < 10 ? 0 : 2];
-      values.forEach((value, i) => {
-        values[i] =
-          value + (target[i] + Math.sin(elapsed + i * 0.45) * 2 - value) * ease;
-      });
-      path.setAttribute("d", mouthPath(values));
-      if (renderer && scene && camera && geometry && positions) {
+      const mouth = audienceMouthPath(elapsed);
+      if (mouth !== previousMouth) {
+        path.setAttribute("d", mouth);
+        previousMouth = mouth;
+      }
+      if (
+        renderer &&
+        scene &&
+        camera &&
+        geometry &&
+        positions &&
+        elapsed - lastParticleFrame >= 1 / 30
+      ) {
+        const particleDelta = elapsed - lastParticleFrame;
+        lastParticleFrame = elapsed;
         // Match the source's 60 Hz timing while rendering only visible frames.
         const phase = elapsed * particleWave.speed * 60;
-        const pointerEase = 1 - Math.pow(0.95, delta * 60);
+        const pointerEase = 1 - Math.pow(0.95, particleDelta * 60);
         waveMouse.x += (mouse.targetX - waveMouse.x) * pointerEase;
         waveMouse.y += (mouse.targetY - waveMouse.y) * pointerEase;
         for (let k = 0; k < count; k++) {
@@ -246,7 +239,7 @@ export function AudienceRoutes() {
         geometry.attributes.position.needsUpdate = true;
         camera.position.x +=
           (waveMouse.x * 6 - camera.position.x) *
-          (1 - Math.pow(0.96, delta * 60));
+          (1 - Math.pow(0.96, particleDelta * 60));
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
@@ -262,7 +255,7 @@ export function AudienceRoutes() {
       eyeWraps.forEach((eye) => {
         eye.style.transform = "";
       });
-      path.setAttribute("d", mouthShapes[0]);
+      path.setAttribute("d", restingMouthPath);
       geometry?.dispose();
       material?.dispose();
       sprite?.dispose();
@@ -302,7 +295,7 @@ export function AudienceRoutes() {
       </div>
       <div className="car-mouth" aria-hidden="true">
         <svg viewBox="0 0 1000 220" preserveAspectRatio="none">
-          <path d={mouthShapes[0]} />
+          <path d={restingMouthPath} />
         </svg>
       </div>
     </div>
