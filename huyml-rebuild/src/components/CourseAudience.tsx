@@ -32,7 +32,7 @@ export function CourseAudience() {
       <div className="ca-inner">
         <CourseSectionHeading
           id="audience-title"
-          title="适合谁来学"
+          title="面向人群"
           description="不限专业与岗位，零基础与进阶都能找到起点"
         />
         <div className="ca-people" data-active={activity.active}>
