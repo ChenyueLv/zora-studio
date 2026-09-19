@@ -67,6 +67,9 @@
   width: 100%;
   isolation: isolate;
 }
+.ft-chat + .ft-avatar {
+  margin-top: -28px;
+}
 .ft-stage {
   position: relative;
   width: 100%;
@@ -308,17 +311,15 @@
   outline-offset: 5px;
 }
 .ft-chat {
-  width: 100%;
+  width: 88%;
   height: 230px;
   overflow-y: auto;
   overscroll-behavior-y: contain;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  padding: 8px 8px 8px 2px;
+  scrollbar-width: none;
+  padding: 8px 2px;
 }
-.ft-chat:hover,
-.ft-chat:focus-within {
-  scrollbar-color: #20201f40 transparent;
+.ft-chat::-webkit-scrollbar {
+  display: none;
 }
 .ft-chat-messages {
   display: flex;
