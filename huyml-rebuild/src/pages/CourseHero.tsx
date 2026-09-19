@@ -16,6 +16,8 @@ import { Modal } from "../components/Modal";
 import { zoraTv } from "../data/zora-tv";
 import "./course-hero.css";
 import "./course-theme.css";
+// Scenes made on our own canvas name it in their caption and panel, linking to it.
+const ownCanvas = "课上用的是我们自研的 AI 画布";
 const scenes = [
   {
     name: "把调研资料，做成有图表、有动画的 PPT。",
@@ -47,8 +49,7 @@ const scenes = [
     skills: "你将练习：拆分镜头、保持角色一致，用图生视频串成故事。",
     result:
       "课上直接用我们自研的 AI 画布 Zora TV：角色、场景、分镜到成片，在同一张画布里完成。工具出自我们自己的团队，每一步怎么用、为什么这样设计，都能讲清楚。",
-    // The demo canvas is our own product: its caption and panel link to it.
-    platform: "课上用的是我们自研的 AI 画布",
+    platform: ownCanvas,
   },
   {
     name: "把情绪写成歌词，创作一首自己的歌。",
@@ -57,7 +58,9 @@ const scenes = [
     kind: "music",
     tag: "从情绪到旋律",
     skills: "你将练习：描述情绪、曲风与结构，为自己的短片写一首主题曲。",
-    result: "学习描述情绪、曲风和结构，探索音乐与图像结合的表达方式。",
+    result:
+      "课上直接用我们自研的 AI 画布 Zora TV：描述情绪、曲风和结构，探索音乐与图像结合的表达方式。",
+    platform: ownCanvas,
   },
   {
     name: "把重复任务拆成步骤，搭建自己的智能助手。",
