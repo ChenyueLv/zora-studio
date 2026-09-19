@@ -234,101 +234,39 @@ export function FacultySection() {
           title="师资团队"
           description="Zora Studio"
         />
-        <div className="ft-intro">
-          <div className="ft-identity">
-            <span className="ft-eyebrow">{instructor.en}</span>
-            <h3>{instructor.name}</h3>
-            <p>{instructor.role}</p>
-          </div>
-          <blockquote className="ft-statement">
-            不讲概念，
-            <br />
-            只讲明天上班
-            <br />
-            就能用的东西。
-          </blockquote>
-        </div>
-        <div className="ft-portrait">
-          <span className="ft-letter ft-letter-a" aria-hidden="true">
-            A
-          </span>
-          <div
-            className="ft-stage"
-            data-open={open}
-            data-speaking={busy}
-            tabIndex={0}
-            role="img"
-            aria-label={`${instructor.name}的互动头像`}
-            onMouseEnter={() => !busy && setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-            onFocus={() => !busy && setOpen(true)}
-            onBlur={() => setOpen(false)}
-          >
-            <div className="ft-head">
-              <div className="ft-head-inner">
-                <img className="ft-head-top" src={instructor.avatar} alt="" />
-                <img
-                  className="ft-head-bottom"
-                  src={instructor.avatar}
-                  alt=""
-                />
-              </div>
-            </div>
-            <div className="ft-kit" aria-hidden="true">
-              {facultyKit.map((item, i) => (
-                <img
-                  key={item.id}
-                  src={item.src}
-                  alt=""
-                  style={
-                    {
-                      "--x": `${item.x}%`,
-                      "--y": `${item.y}%`,
-                      "--w": `${item.w}%`,
-                      "--rotation": `${item.r}deg`,
-                      "--spin": `${item.spin}deg`,
-                      "--duration": `${item.dur}s`,
-                      "--delay": `${i * 45}ms`,
-                      zIndex: 10 - i,
-                    } as CSSProperties
-                  }
-                />
+        <div className="ft-composition">
+          <div className="ft-expertise">
+            <h3>掌握技术</h3>
+            <div className="ft-modules">
+              {instructor.modules.map((i) => (
+                <button
+                  key={i}
+                  type="button"
+                  disabled={busy}
+                  data-highlight={answer?.modules?.includes(i)}
+                  onClick={() => ask(facultyModules[i].name)}
+                >
+                  {facultyModules[i].name}
+                </button>
               ))}
             </div>
+            <p>
+              结构化提问与上下文
+              <br />
+              工具调用与工作流
+              <br />
+              经验封装与团队复用
+            </p>
           </div>
-          <span className="ft-letter ft-letter-i" aria-hidden="true">
-            I
-          </span>
-          <span className="ft-portrait-caption">
-            与 AI 一起，把想法做出来。
-          </span>
-        </div>
-        <div className="ft-details">
-          <div className="ft-modules">
-            <h4>主讲方向</h4>
-            {instructor.modules.map((i) => (
-              <button
-                key={i}
-                type="button"
-                disabled={busy}
-                data-highlight={answer?.modules?.includes(i)}
-                onClick={() => ask(facultyModules[i].name)}
-              >
-                <span>{facultyModules[i].name}</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  aria-hidden="true"
-                >
-                  <path d="M5 19 19 5M5 5h14v14" />
-                </svg>
-              </button>
-            ))}
+          <div className="ft-stat ft-stat-duration">
+            <div className="ft-stat-value" aria-hidden="true">
+              <span>3</span>
+              <small>天</small>
+            </div>
+            <p>3 天实战课程 · 从方法到作品</p>
           </div>
           <div className="ft-outcomes">
-            <h4>一起完成的作品</h4>
+            <h3>一起完成的作品</h3>
             <ul>
               {instructor.modules.map((i) => (
                 <li key={i}>{facultyModules[i].out}</li>
@@ -338,119 +276,199 @@ export function FacultySection() {
               查看完整课程大纲 <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <div className="ft-conversation">
-            <h4>关于课程，想了解什么？</h4>
-            {suggestions}
-            <form
-              className="ft-input"
-              onSubmit={(event) => {
-                event.preventDefault();
-                ask(input);
-              }}
-            >
-              <button
-                className="ft-mic"
-                type="button"
-                disabled={busy}
-                aria-label={listening ? "结束语音输入" : "语音输入"}
-                aria-pressed={listening}
-                onClick={startVoice}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
-                >
-                  <rect x="9" y="3" width="6" height="12" rx="3" />
-                  <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" />
-                </svg>
-              </button>
-              <input
-                ref={field}
-                value={input}
-                maxLength={200}
-                aria-label="向讲师提问"
-                placeholder="输入你的问题…"
-                onChange={(event) => setInput(event.target.value)}
-              />
-              <button
-                className="ft-mute"
-                type="button"
-                aria-label={muted ? "开启朗读" : "静音"}
-                aria-pressed={muted}
-                onClick={() => {
-                  setMuted(!muted);
-                  if (!muted) stopSpeech();
-                }}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
-                >
-                  <path d="M3 9v6h4l5 4V5L7 9H3Z" />
-                  {muted ? (
-                    <path d="m16 9 6 6m0-6-6 6" />
-                  ) : (
-                    <path d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12" />
-                  )}
-                </svg>
-              </button>
-              <button
-                type="submit"
-                disabled={!input.trim() || busy}
-                aria-label="发送问题"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
-                >
-                  <path d="M12 19V5m-6 6 6-6 6 6" />
-                </svg>
-              </button>
-            </form>
-            {(text || busy) && (
+          <div className="ft-person">
+            <div className="ft-identity">
+              <span className="ft-eyebrow">{instructor.en}</span>
+              <h3>{instructor.name}</h3>
+              <p>{instructor.role}</p>
+            </div>
+            <div className="ft-avatar-orbit">
               <div
-                className="ft-answer"
-                ref={response}
-                aria-live="polite"
-                aria-busy={busy}
+                className="ft-stage"
+                data-open={open}
+                data-speaking={busy}
+                tabIndex={0}
+                role="img"
+                aria-label={`${instructor.name}的互动头像`}
+                onMouseEnter={() => !busy && setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+                onFocus={() => !busy && setOpen(true)}
+                onBlur={() => setOpen(false)}
               >
-                <p>
-                  {text}
-                  {busy && <span className="ft-caret" aria-hidden="true" />}
-                </p>
-                <div className="ft-answer-actions">
-                  {answer?.link && (
-                    <a href={`#${answer.link}`}>
-                      {answer.link === "schedule"
-                        ? "查看课程大纲"
-                        : "查看学员作品"}{" "}
-                      ↗
-                    </a>
-                  )}
-                  {busy && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        stopSpeech();
-                        if (pending.current) finish(pending.current);
-                      }}
-                    >
-                      显示完整回答
-                    </button>
-                  )}
+                <div className="ft-head">
+                  <div className="ft-head-inner">
+                    <img
+                      className="ft-head-top"
+                      src={instructor.avatar}
+                      alt=""
+                    />
+                    <img
+                      className="ft-head-bottom"
+                      src={instructor.avatar}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="ft-kit" aria-hidden="true">
+                  {facultyKit.map((item, i) => (
+                    <img
+                      key={item.id}
+                      src={item.src}
+                      alt=""
+                      style={
+                        {
+                          "--x": `${item.x}%`,
+                          "--y": `${item.y}%`,
+                          "--w": `${item.w}%`,
+                          "--rotation": `${item.r}deg`,
+                          "--spin": `${item.spin}deg`,
+                          "--duration": `${item.dur}s`,
+                          "--delay": `${i * 45}ms`,
+                          zIndex: 10 - i,
+                        } as CSSProperties
+                      }
+                    />
+                  ))}
                 </div>
               </div>
-            )}
+            </div>
+            <div className="ft-conversation">
+              <form
+                className="ft-input"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  ask(input);
+                }}
+              >
+                <button
+                  className="ft-mic"
+                  type="button"
+                  disabled={busy}
+                  aria-label={listening ? "结束语音输入" : "语音输入"}
+                  aria-pressed={listening}
+                  onClick={startVoice}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <rect x="9" y="3" width="6" height="12" rx="3" />
+                    <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" />
+                  </svg>
+                </button>
+                <input
+                  ref={field}
+                  value={input}
+                  maxLength={200}
+                  aria-label="向讲师提问"
+                  placeholder={
+                    listening ? "正在听，请说话…" : "直接向讲师提问…"
+                  }
+                  onChange={(event) => setInput(event.target.value)}
+                />
+                <button
+                  className="ft-mute"
+                  type="button"
+                  aria-label={muted ? "开启朗读" : "静音"}
+                  aria-pressed={muted}
+                  onClick={() => {
+                    setMuted(!muted);
+                    if (!muted) stopSpeech();
+                  }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 9v6h4l5 4V5L7 9H3Z" />
+                    {muted ? (
+                      <path d="m16 9 6 6m0-6-6 6" />
+                    ) : (
+                      <path d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12" />
+                    )}
+                  </svg>
+                </button>
+                <button
+                  type="submit"
+                  disabled={!input.trim() || busy}
+                  aria-label="发送问题"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 19V5m-6 6 6-6 6 6" />
+                  </svg>
+                </button>
+              </form>
+              {suggestions}
+              {(text || busy) && (
+                <div
+                  className="ft-answer"
+                  ref={response}
+                  aria-live="polite"
+                  aria-busy={busy}
+                >
+                  <p>
+                    {text}
+                    {busy && <span className="ft-caret" aria-hidden="true" />}
+                  </p>
+                  <div className="ft-answer-actions">
+                    {answer?.link && (
+                      <a href={`#${answer.link}`}>
+                        {answer.link === "schedule"
+                          ? "查看课程大纲"
+                          : "查看学员作品"}{" "}
+                        ↗
+                      </a>
+                    )}
+                    {busy && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          stopSpeech();
+                          if (pending.current) finish(pending.current);
+                        }}
+                      >
+                        显示完整回答
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+          <blockquote className="ft-statement">
+            不讲概念，
+            <br />
+            只讲明天上班
+            <br />
+            就能用的东西。
+          </blockquote>
+          <div className="ft-stat ft-stat-hours">
+            <span className="ft-and">以及</span>
+            <div>
+              <div className="ft-stat-value" aria-hidden="true">
+                <span>18</span>
+                <small>h</small>
+              </div>
+              <p>18 小时 · 讲解、跟练与点评</p>
+            </div>
+          </div>
+          <p className="ft-closing">
+            与 AI 一起，
+            <br />
+            把想法做出来。
+          </p>
         </div>
       </div>
     </section>

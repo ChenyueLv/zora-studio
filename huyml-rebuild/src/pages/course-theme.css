@@ -213,16 +213,8 @@
   --ft-display: var(--course-text);
 }
 .course-page .ft-statement {
-  max-width: 540px;
-  font: 400 clamp(30px, 3.2vw, 50px)/1.4 var(--course-display);
+  font: 400 clamp(24px, 2vw, 36px)/1.5 var(--course-display);
   letter-spacing: 0;
-}
-.course-page .ft-intro {
-  padding-top: 0;
-}
-.course-page .ft-letter {
-  font-family: var(--course-text);
-  font-weight: 300;
 }
 .course-page .sw-count strong {
   font-family: var(--course-text);
@@ -305,9 +297,6 @@
   }
   .course-page .ft-statement {
     font-size: 32px;
-  }
-  .course-page .ft-statement br:first-of-type {
-    display: initial;
   }
   .course-page .cn-invitation h2 {
     font-size: 34px;
