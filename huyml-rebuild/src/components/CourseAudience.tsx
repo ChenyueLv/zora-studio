@@ -56,11 +56,11 @@ export function CourseAudience() {
             aria-label="课程面向人群"
           >
             <div className="ca-people-track">
-              {[false, true].map((duplicate) => (
+              {[0, 1, 2, 3].map((copy) => (
                 <ul
                   className="ca-people-group"
-                  key={String(duplicate)}
-                  aria-hidden={duplicate || undefined}
+                  key={copy}
+                  aria-hidden={copy > 0 || undefined}
                 >
                   {people.map((name) => (
                     <li key={name}>{name}</li>

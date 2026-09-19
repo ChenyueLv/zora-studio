@@ -22,7 +22,7 @@
 .ca-group {
   min-width: 0;
   padding-top: 14px;
-  border-top: 1px solid #171819;
+  border-top: 0;
 }
 .ca-label {
   display: block;
@@ -193,7 +193,9 @@
 }
 
 .ca-people {
-  margin: 36px 0 44px;
+  margin: 0 0 24px;
+  padding: 24px 0;
+  border-block: 1px solid var(--course-line, #20201f26);
 }
 .ca-people-marquee {
   overflow: hidden;
@@ -208,16 +210,14 @@
 .ca-people-track {
   display: flex;
   width: max-content;
-  min-width: 200%;
   animation: ca-people-drift 42s linear infinite;
 }
 .ca-people-group {
   display: flex;
-  flex: 1 0 auto;
-  justify-content: space-around;
+  flex: 0 0 auto;
   align-items: center;
-  gap: clamp(40px, 4.5vw, 88px);
-  padding: 8px clamp(40px, 4.5vw, 88px) 8px 0;
+  gap: clamp(28px, 3vw, 48px);
+  padding: 8px clamp(28px, 3vw, 48px) 8px 0;
   list-style: none;
   margin: 0;
 }
@@ -242,7 +242,7 @@
 }
 @keyframes ca-people-drift {
   to {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
