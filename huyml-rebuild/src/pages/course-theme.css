@@ -237,7 +237,6 @@
 }
 .course-page
   :is(
-    .course-syllabus .lv i,
     .course-syllabus .fmt,
     .course-syllabus .tl i,
     .course-syllabus .fr-tag,

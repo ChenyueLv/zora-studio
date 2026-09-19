@@ -60,13 +60,6 @@ export function CourseSyllabus() {
                   </div>
                   <div className="ttl">
                     <h4 className="what">{slot.title}</h4>
-                    <span className="lv">
-                      {["认识", "使用", "制作"].map((label) => (
-                        <i className="on" key={label}>
-                          {label}
-                        </i>
-                      ))}
-                    </span>
                   </div>
                   <ol className="topics">
                     {slot.topics.map((topic, index) => {

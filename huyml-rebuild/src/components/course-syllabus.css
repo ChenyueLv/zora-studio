@@ -87,22 +87,6 @@
   color: var(--muted);
   text-transform: uppercase;
 }
-.course-syllabus .lv {
-  display: flex;
-  gap: 4px;
-}
-.course-syllabus .lv i {
-  font-style: normal;
-  font-size: 11px;
-  border-radius: 99px;
-  padding: 1px 8px;
-  border: 1px solid var(--line);
-  color: var(--muted);
-}
-.course-syllabus .lv i.on {
-  border-color: var(--ink);
-  color: var(--ink);
-}
 .course-syllabus .topics {
   list-style: none;
   margin: 4px 0 2px;
