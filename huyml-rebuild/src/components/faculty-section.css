@@ -311,7 +311,7 @@
   outline-offset: 5px;
 }
 .ft-chat {
-  width: 94%;
+  width: 100%;
   height: 200px;
   overflow-y: auto;
   overscroll-behavior-y: contain;
@@ -429,6 +429,13 @@
 }
 
 @media (min-width: 1101px) {
+  .ft-chat {
+    width: calc(100% + 24px);
+  }
+  .ft-statement,
+  .ft-closing {
+    margin-left: clamp(16px, 1.5vw, 24px);
+  }
   /* 首行左右对称：专业领域与红字同顶同底，红字句间均分留白 */
   .ft-expertise,
   .ft-statement {
