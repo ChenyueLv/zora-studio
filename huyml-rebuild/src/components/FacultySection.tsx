@@ -3,6 +3,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { instructor, facultyModules, facultyKit } from "./faculty-data";
 import "./faculty-section.css";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
+import { AvatarVoice } from "../lib/avatarVoice";
+import { AvatarFace } from "../lib/avatarFace";
 
 type Answer = {
   text: string;
@@ -15,17 +17,10 @@ type ChatTurn = {
   answer: Answer;
   text: string;
   complete: boolean;
-};
-type SpeechResult = { results: ArrayLike<ArrayLike<{ transcript: string }>> };
-type Recognition = {
-  lang: string;
-  interimResults: boolean;
-  onresult: ((event: SpeechResult) => void) | null;
-  onend: (() => void) | null;
-  onerror: (() => void) | null;
-  start: () => void;
-  stop: () => void;
-  abort: () => void;
+  /** Answered by the realtime model rather than the preset script. */
+  live?: boolean;
+  /** Voice question whose transcript has not arrived yet. */
+  hearing?: boolean;
 };
 const questions = [
   "我 0 基础能学吗？",
@@ -101,13 +96,18 @@ function answerFor(question: string): Answer {
   };
 }
 
+// No first reply within this window: fall back to the preset answer.
+const LIVE_TIMEOUT = 10000;
+const HOLD_MS = 450;
+
 export function FacultySection() {
   const activity = useVisibleActivity<HTMLElement>();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState(""),
     [muted, setMuted] = useState(false);
   const [busy, setBusy] = useState(false),
-    [listening, setListening] = useState(false);
+    [listening, setListening] = useState(false),
+    [playing, setPlaying] = useState(false);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [voiceNotice, setVoiceNotice] = useState("");
   const activeTurn = useRef(0);
@@ -115,19 +115,114 @@ export function FacultySection() {
   const response = useRef<HTMLDivElement>(null);
   const field = useRef<HTMLInputElement>(null),
     timer = useRef<ReturnType<typeof setInterval> | null>(null);
-  const recognition = useRef<Recognition | null>(null);
   const pending = useRef<Answer | null>(null);
+  const voice = useRef<AvatarVoice | null>(null);
+  const live = useRef<{
+    turn: string;
+    id: number;
+    question: string;
+    replied: boolean;
+    timeout?: ReturnType<typeof setTimeout>;
+  } | null>(null);
+  const press = useRef(0);
+  const faceCanvas = useRef<HTMLCanvasElement>(null);
+  const face = useRef<AvatarFace | null>(null);
   const reduced = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const stopSpeech = () => window.speechSynthesis?.cancel();
+  const update = (id: number, change: (turn: ChatTurn) => ChatTurn) =>
+    setTurns((previous) =>
+      previous.map((turn) => (turn.id === id ? change(turn) : turn)),
+    );
+  function endLive() {
+    if (live.current?.timeout) clearTimeout(live.current.timeout);
+    live.current = null;
+  }
+  function getVoice() {
+    if (!AvatarVoice.supported()) return null;
+    if (!voice.current)
+      voice.current = new AvatarVoice({
+        onUserText(turn, text, final) {
+          const current = live.current;
+          if (current?.turn !== turn) return;
+          current.question = text;
+          update(current.id, (t) => ({
+            ...t,
+            question: text,
+            hearing: !final && !text,
+            answer: final
+              ? { ...t.answer, link: answerFor(text).link }
+              : t.answer,
+          }));
+        },
+        onDelta(turn, text) {
+          const current = live.current;
+          if (current?.turn !== turn) return;
+          current.replied = true;
+          if (current.timeout) clearTimeout(current.timeout);
+          update(current.id, (t) => ({
+            ...t,
+            text: t.text + text,
+            hearing: false,
+          }));
+        },
+        onDone(turn) {
+          const current = live.current;
+          if (current?.turn !== turn) return;
+          update(current.id, (t) => ({ ...t, complete: true }));
+          endLive();
+          setBusy(false);
+        },
+        onEmpty(turn) {
+          const current = live.current;
+          if (current?.turn !== turn) return;
+          setTurns((previous) => previous.filter((t) => t.id !== current.id));
+          endLive();
+          setBusy(false);
+          setListening(false);
+          setVoiceNotice("没有听清，请再说一次，或直接输入问题。");
+        },
+        onError(message) {
+          const current = live.current;
+          setListening(false);
+          if (!current) return;
+          endLive();
+          if (current.replied) {
+            update(current.id, (t) => ({ ...t, complete: true }));
+            setBusy(false);
+          } else if (current.question) fallback(current.id, current.question);
+          else {
+            setTurns((previous) => previous.filter((t) => t.id !== current.id));
+            setBusy(false);
+            setVoiceNotice(message);
+          }
+        },
+        onLevel: (level) => face.current?.setSpeech(level),
+        onPlaying: setPlaying,
+      });
+    return voice.current;
+  }
   useEffect(
     () => () => {
       if (timer.current) clearInterval(timer.current);
-      recognition.current?.abort();
+      endLive();
+      voice.current?.close();
+      face.current?.destroy();
       window.speechSynthesis?.cancel();
     },
     [],
   );
+  useEffect(() => voice.current?.setMuted(muted), [muted]);
+  useEffect(() => {
+    if (!activity.active || !faceCanvas.current) return;
+    if (!face.current) {
+      face.current = new AvatarFace(faceCanvas.current);
+      face.current.ready.catch(() => undefined);
+    }
+    face.current.motion = !reduced();
+    face.current.start();
+    return () => face.current?.stop();
+  }, [activity.active]);
   useEffect(() => {
     if (response.current && followLatest.current)
       response.current.scrollTop = response.current.scrollHeight;
@@ -136,8 +231,7 @@ export function FacultySection() {
     if (activity.active) return;
     setOpen(false);
     stopSpeech();
-    recognition.current?.abort();
-    setListening(false);
+    stopLive();
     if (pending.current) finish(pending.current);
   }, [activity.active]);
   function finish(a: Answer) {
@@ -145,30 +239,34 @@ export function FacultySection() {
     timer.current = null;
     pending.current = null;
     const id = activeTurn.current;
-    setTurns((previous) =>
-      previous.map((turn) =>
-        turn.id === id ? { ...turn, text: a.text, complete: true } : turn,
-      ),
-    );
+    update(id, (turn) => ({ ...turn, text: a.text, complete: true }));
     setBusy(false);
   }
-  function ask(question: string) {
-    const q = question.trim();
-    if (!q || busy) return;
-    recognition.current?.abort();
+  /** Stop listening and the current live answer, keeping what was said. */
+  function stopLive() {
+    const current = live.current;
+    voice.current?.stopRecording(false);
+    voice.current?.interrupt();
     setListening(false);
-    stopSpeech();
-    setOpen(false);
-    setInput("");
-    setVoiceNotice("");
-    const a = answerFor(q);
-    const id = ++activeTurn.current;
+    if (!current) return;
+    endLive();
+    if (current.replied)
+      update(current.id, (t) => ({ ...t, complete: true, hearing: false }));
+    else setTurns((previous) => previous.filter((t) => t.id !== current.id));
+    setBusy(false);
+  }
+  /** Preset answer, typed out (used offline or when the live service fails). */
+  function fallback(id: number, question: string) {
+    const a = answerFor(question);
     pending.current = a;
-    followLatest.current = true;
-    setTurns((previous) => [
-      ...previous,
-      { id, question: q, answer: a, text: "", complete: false },
-    ]);
+    activeTurn.current = id;
+    update(id, (turn) => ({
+      ...turn,
+      question,
+      answer: a,
+      live: false,
+      hearing: false,
+    }));
     setBusy(true);
     if (!muted && "speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(a.text);
@@ -183,55 +281,113 @@ export function FacultySection() {
     let length = 0;
     timer.current = setInterval(() => {
       length += 2;
-      setTurns((previous) =>
-        previous.map((turn) =>
-          turn.id === id ? { ...turn, text: a.text.slice(0, length) } : turn,
-        ),
-      );
+      update(id, (turn) => ({ ...turn, text: a.text.slice(0, length) }));
       if (length >= a.text.length) finish(a);
     }, 45);
   }
-  function startVoice() {
-    if (listening) {
-      recognition.current?.stop();
+  function watch(turn: string, id: number, question: string) {
+    const current = { turn, id, question, replied: false } as NonNullable<
+      typeof live.current
+    >;
+    current.timeout = setTimeout(() => {
+      if (live.current !== current || current.replied) return;
+      voice.current?.interrupt();
+      endLive();
+      if (current.question) fallback(id, current.question);
+      else stopLive();
+    }, LIVE_TIMEOUT);
+    live.current = current;
+  }
+  function ask(question: string) {
+    const q = question.trim();
+    if (!q || busy) return;
+    stopSpeech();
+    setOpen(false);
+    setInput("");
+    setVoiceNotice("");
+    const id = ++activeTurn.current;
+    followLatest.current = true;
+    setTurns((previous) => [
+      ...previous,
+      {
+        id,
+        question: q,
+        answer: { text: "", link: answerFor(q).link },
+        text: "",
+        complete: false,
+        live: true,
+      },
+    ]);
+    setBusy(true);
+    const client = getVoice();
+    if (!client) {
+      fallback(id, q);
       return;
     }
-    const browser = window as unknown as {
-      SpeechRecognition?: new () => Recognition;
-      webkitSpeechRecognition?: new () => Recognition;
-    };
-    const SR = browser.SpeechRecognition ?? browser.webkitSpeechRecognition;
-    if (!SR) {
-      setVoiceNotice("当前浏览器不支持语音识别，请在下方输入问题。");
+    // askText creates the AudioContext synchronously inside this click.
+    client
+      .askText(q)
+      .then((turn) => {
+        if (activeTurn.current === id) watch(turn, id, q);
+      })
+      .catch(() => {
+        if (activeTurn.current === id) fallback(id, q);
+      });
+  }
+  async function startVoice() {
+    if (listening || busy) return;
+    const client = getVoice();
+    if (!client || !AvatarVoice.canRecord()) {
+      setVoiceNotice("当前浏览器不支持语音，请在下方输入问题。");
       field.current?.focus();
       return;
     }
     stopSpeech();
     setOpen(false);
-    const rec = new SR();
-    recognition.current = rec;
-    rec.lang = "zh-CN";
-    rec.interimResults = true;
-    rec.onresult = (event) =>
-      setInput(
-        Array.from(event.results)
-          .map((result) => result[0].transcript)
-          .join(""),
-      );
-    rec.onend = () => {
-      setListening(false);
-      recognition.current = null;
-    };
-    rec.onerror = () => {
-      setListening(false);
-      setVoiceNotice("未能识别语音，请检查麦克风权限，或直接输入问题。");
-    };
+    setVoiceNotice("");
+    setListening(true);
+    press.current = performance.now();
     try {
-      rec.start();
-      setListening(true);
-    } catch {
-      setVoiceNotice("语音暂不可用，请直接输入问题。");
+      const turn = await client.startRecording();
+      if (!press.current) {
+        // Released before the microphone was ready: discard quietly.
+        client.stopRecording(false);
+        setListening(false);
+        return;
+      }
+      const id = ++activeTurn.current;
+      followLatest.current = true;
+      setTurns((previous) => [
+        ...previous,
+        {
+          id,
+          question: "",
+          answer: { text: "" },
+          text: "",
+          complete: false,
+          live: true,
+          hearing: true,
+        },
+      ]);
+      watch(turn, id, "");
+      if (live.current?.timeout) clearTimeout(live.current.timeout);
+    } catch (error) {
+      setListening(false);
+      setVoiceNotice(
+        error instanceof Error
+          ? error.message
+          : "语音暂不可用，请直接输入问题。",
+      );
     }
+  }
+  function sendVoice() {
+    const current = live.current;
+    press.current = 0;
+    if (!voice.current?.listening || !current) return;
+    voice.current.stopRecording(true);
+    setListening(false);
+    setBusy(true);
+    watch(current.turn, current.id, current.question);
   }
   const suggestions = (
     <div className="ft-suggestions">
@@ -317,42 +473,61 @@ export function FacultySection() {
                         style={style}
                       >
                         <span className="ft-sr-only">你：</span>
-                        <p>{turn.question}</p>
-                      </div>
-                      <div
-                        className="ft-message ft-message-assistant ft-answer"
-                        data-latest={index === turns.length - 1}
-                        style={style}
-                      >
-                        <span className="ft-sr-only">数字人讲师：</span>
                         <p>
-                          {turn.text || "正在组织回答…"}
-                          {!turn.complete && (
-                            <span className="ft-caret" aria-hidden="true" />
-                          )}
+                          {turn.question ||
+                            (turn.hearing &&
+                            listening &&
+                            index === turns.length - 1
+                              ? "正在听…"
+                              : "正在识别…")}
                         </p>
-                        <div className="ft-answer-actions">
-                          {turn.complete && turn.answer.link && (
-                            <a href={`#${turn.answer.link}`}>
-                              {turn.answer.link === "schedule"
-                                ? "查看课程大纲"
-                                : "查看学员作品"}{" "}
-                              ↗
-                            </a>
-                          )}
-                          {!turn.complete && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                stopSpeech();
-                                if (pending.current) finish(pending.current);
-                              }}
-                            >
-                              显示完整回答
-                            </button>
-                          )}
-                        </div>
                       </div>
+                      {/* No reply bubble until the voice question is sent. */}
+                      {!(
+                        turn.hearing &&
+                        listening &&
+                        index === turns.length - 1
+                      ) && (
+                        <div
+                          className="ft-message ft-message-assistant ft-answer"
+                          data-latest={index === turns.length - 1}
+                          style={style}
+                        >
+                          <span className="ft-sr-only">数字人讲师：</span>
+                          <p>
+                            {turn.text || "正在组织回答…"}
+                            {!turn.complete && (
+                              <span className="ft-caret" aria-hidden="true" />
+                            )}
+                          </p>
+                          <div className="ft-answer-actions">
+                            {turn.complete && turn.answer.link && (
+                              <a href={`#${turn.answer.link}`}>
+                                {turn.answer.link === "schedule"
+                                  ? "查看课程大纲"
+                                  : "查看学员作品"}{" "}
+                                ↗
+                              </a>
+                            )}
+                            {!turn.complete && !turn.live && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  stopSpeech();
+                                  if (pending.current) finish(pending.current);
+                                }}
+                              >
+                                显示完整回答
+                              </button>
+                            )}
+                            {!turn.complete && turn.live && turn.text && (
+                              <button type="button" onClick={stopLive}>
+                                停止回答
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -362,13 +537,13 @@ export function FacultySection() {
               <div
                 className="ft-stage"
                 data-open={open}
-                data-speaking={busy}
+                data-speaking={busy || playing || listening}
                 tabIndex={0}
                 role="img"
                 aria-label={`${instructor.name}的互动头像`}
-                onMouseEnter={() => !busy && setOpen(true)}
+                onMouseEnter={() => !busy && !listening && setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
-                onFocus={() => !busy && setOpen(true)}
+                onFocus={() => !busy && !listening && setOpen(true)}
                 onBlur={() => setOpen(false)}
               >
                 <div className="ft-head">
@@ -382,6 +557,11 @@ export function FacultySection() {
                       className="ft-head-bottom"
                       src={instructor.avatar}
                       alt=""
+                    />
+                    <canvas
+                      className="ft-face"
+                      ref={faceCanvas}
+                      aria-hidden="true"
                     />
                   </div>
                 </div>
@@ -420,9 +600,29 @@ export function FacultySection() {
                   className="ft-mic"
                   type="button"
                   disabled={busy}
-                  aria-label={listening ? "结束语音输入" : "语音输入"}
+                  aria-label={listening ? "结束并发送语音" : "语音提问"}
                   aria-pressed={listening}
-                  onClick={startVoice}
+                  title="点一下开始说，再点一下发送；也可以按住说话"
+                  onPointerDown={(event) => {
+                    if (event.button !== 0) return;
+                    if (listening) sendVoice();
+                    else void startVoice();
+                  }}
+                  onPointerUp={() => {
+                    // Held long enough: push-to-talk, send on release.
+                    if (
+                      press.current &&
+                      performance.now() - press.current > HOLD_MS
+                    )
+                      sendVoice();
+                  }}
+                  onClick={(event) => {
+                    // Keyboard activation (detail 0) toggles.
+                    if (event.detail !== 0) return;
+                    if (listening) sendVoice();
+                    else void startVoice();
+                  }}
+                  onContextMenu={(event) => event.preventDefault()}
                 >
                   <svg
                     viewBox="0 0 24 24"

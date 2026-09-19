@@ -225,6 +225,18 @@
 .ft-head-top {
   clip-path: inset(0 0 64% 0);
 }
+/* 口型与眨眼：与原画同尺寸、同 contain 适配的透明画布，只重绘嘴和眼。 */
+.ft-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.ft-stage[data-open="true"] .ft-face {
+  opacity: 0;
+}
 .ft-head-bottom {
   /* Overlap the two image slices by one pixel to avoid a hairline at rest. */
   clip-path: inset(calc(36% - 1px) 0 0 0);

@@ -7,6 +7,19 @@ export default defineConfig({
       plugins: [legacyCssFallbacks({ only: process.env.VITE_LEGACY_CSS === 'only' })],
     },
   },
+  server: {
+    // 小Z 数字人的语音服务只在线上跑，本地开发直接代理过去。
+    proxy: {
+      '/api/avatar': {
+        target: 'https://zoratv.cn',
+        changeOrigin: true,
+        ws: true,
+        // 服务端只放行本站来源；任意本地端口都按线上来源转发。
+        configure: (proxy) =>
+          proxy.on('proxyReqWs', (request) => request.setHeader('origin', 'https://zoratv.cn')),
+      },
+    },
+  },
   build: {
     // Android vendor browsers trail Chrome by years; Vite's default (Chrome 107) is too new.
     target: ['chrome87', 'edge88', 'firefox78', 'safari14'],
