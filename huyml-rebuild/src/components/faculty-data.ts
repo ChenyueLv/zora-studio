@@ -28,14 +28,14 @@ export const facultyModules = [
     name: "认识 AI · 环境搭建",
     day: "第 1 天 · 上午",
     hours: "3 小时",
-    learn: "装好 AI 工作台，看懂大模型的能力与边界。",
-    out: "跑通的 AI 工作台",
+    learn: "装好 AI 工作台，看懂大模型，让 AI 替你完成第一个自动化任务。",
+    out: "AI 工作台 + 首个自动化任务",
   },
   {
     name: "提示词 · Skill",
     day: "第 1 天 · 下午",
     hours: "3 小时",
-    learn: "调好提示词，再把自己的经验写成可复用的 Skill。",
+    learn: "减少 AI 幻觉，再把自己的经验写成可复用的 Skill。",
     out: "一个自己的 Skill",
   },
   {
