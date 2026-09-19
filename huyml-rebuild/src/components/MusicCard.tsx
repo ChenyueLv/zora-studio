@@ -7,6 +7,7 @@ import {
   type CSSProperties,
 } from "react";
 import track from "../data/music-demo.json";
+import { ZoraTvBadge } from "./ZoraTvBadge";
 import "./music-card.css";
 
 const formatTime = (value: number) =>
@@ -249,6 +250,8 @@ export function MusicCard({ active = true }: { active?: boolean }) {
         </div>
       </div>
       <small className="music-credit">AI 音乐 / 原创作品</small>
+      {/* The song was made on our own canvas; the badge opens it. */}
+      <ZoraTvBadge active={active} />
       {error && (
         <p className="music-error" role="status">
           {error}

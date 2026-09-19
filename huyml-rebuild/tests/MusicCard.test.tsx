@@ -221,3 +221,15 @@ describe("music card playback", () => {
     expect(host.querySelector("audio")!.paused).toBe(true);
   });
 });
+
+describe("Zora TV badge", () => {
+  it("opens our own canvas in a new tab and leaves the tab order while inactive", async () => {
+    await render();
+    const badge = host.querySelector<HTMLAnchorElement>(".zora-tv-badge")!;
+    expect(badge.href).toBe("https://zoraai.tv/");
+    expect(badge.target).toBe("_blank");
+    expect(badge.tabIndex).toBe(0);
+    await render(false);
+    expect(badge.tabIndex).toBe(-1);
+  });
+});

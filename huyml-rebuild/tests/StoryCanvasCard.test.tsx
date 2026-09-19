@@ -117,7 +117,7 @@ describe("story canvas playback", () => {
 describe("Zora TV badge", () => {
   it("opens our own canvas in a new tab and leaves the tab order while inactive", async () => {
     await render();
-    const badge = host.querySelector<HTMLAnchorElement>(".story-canvas-brand")!;
+    const badge = host.querySelector<HTMLAnchorElement>(".zora-tv-badge")!;
     expect(badge.href).toBe("https://zoraai.tv/");
     expect(badge.target).toBe("_blank");
     expect(badge.rel).toBe("noopener");

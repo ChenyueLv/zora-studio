@@ -1,0 +1,60 @@
+/* Sized by the card's container units; the card sets top/right/bottom/left. */
+.zora-tv-badge {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: max(5px, 0.8cqw);
+  padding: max(3px, 0.5cqw) max(8px, 1.2cqw) max(3px, 0.5cqw) max(3px, 0.5cqw);
+  border: 1px solid #ffffff24;
+  border-radius: max(6px, 1.2cqw);
+  color: #eceeed;
+  background: #1b1d1de6;
+  box-shadow: 0 0.6cqw 1.8cqw #0004;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease;
+}
+.zora-tv-badge img {
+  display: block;
+  width: max(16px, 2.8cqw);
+  height: max(16px, 2.8cqw);
+  border-radius: max(3px, 0.6cqw);
+}
+/* The same wordmark treatment as ZORA STUDIO in the page header. */
+.zora-tv-badge span {
+  font-family: Grotesk, Arial, sans-serif;
+  font-size: clamp(9px, 1.35cqw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.zora-tv-badge i {
+  color: #b7bdba;
+  font-size: clamp(10px, 1.7cqw, 15px);
+  font-style: normal;
+  line-height: 1;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+.zora-tv-badge:hover {
+  border-color: #ffffff5c;
+  background: #2d302f;
+}
+.zora-tv-badge:hover i {
+  color: #fff;
+  transform: translate(1px, -1px);
+}
+.zora-tv-badge:focus-visible {
+  outline: 1px solid #fff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zora-tv-badge,
+  .zora-tv-badge i {
+    transition: none;
+  }
+}

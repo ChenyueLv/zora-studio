@@ -261,6 +261,12 @@
   font-size: min(1.4cqw, 2.38cqh);
   bottom: 5%;
 }
+/* The top-right corner cuts across the record's edge; the bottom-right always
+   lies on the record, like a watermark. */
+.music-player .zora-tv-badge {
+  right: max(8px, 2cqw);
+  bottom: max(8px, 2.6cqh);
+}
 .music-error {
   position: absolute;
   left: 7%;
