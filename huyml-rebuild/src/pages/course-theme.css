@@ -260,8 +260,7 @@
   ) {
   font-size: 12px;
 }
-.course-page
-  :is(.ft-identity p, .ft-outcomes li, .ft-answer, .cn-invitation p) {
+.course-page :is(.ft-answer, .cn-invitation p) {
   font-size: 15px;
   line-height: 1.8;
 }

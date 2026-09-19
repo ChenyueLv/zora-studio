@@ -1,17 +1,18 @@
 export const instructor = {
-  name: "讲师姓名 A",
-  role: "主讲 · AI 应用方向负责人",
-  en: "Lead Instructor",
+  name: "小Z",
   avatar: "/assets/faculty-avatar.png",
-  style: "comic",
-  styleName: "漫画风",
-  quote: "不讲概念，只讲明天上班就能用的东西。",
   stats: [
-    ["XX", "年", "行业经验"],
-    ["XXX+", "", "企业内训"],
-    ["XXXX+", "", "累计学员"],
+    ["10", "年", "数字产品与AI落地经验"],
+    ["40", "+", "个交付并上线的项目"],
   ],
-  bio: "曾任 XX 公司 AI 产品负责人，主导过 XX、XX 等项目；为 XX 行业客户搭建 AI 工作流。这里写 2–3 句真实履历，突出与课程相关的经历。",
+  highlights: [
+    "做过 3 个上线的 AI 产品",
+    "不写代码也能搭 Agent",
+    "每周靠 Agent 省下 6 小时",
+    "带过 2 期实战营，38 名学员",
+    "相信「用得上」才算学会",
+  ],
+  closing: ["把 AI 变成你的日常工具，", "而不是又一个要学的软件。"],
   modules: [0, 1, 2],
 } as const;
 

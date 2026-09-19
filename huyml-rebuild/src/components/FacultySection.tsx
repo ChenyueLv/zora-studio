@@ -85,7 +85,7 @@ function answerFor(question: string): Answer {
   }
   if (has("你是谁", "介绍", "老师", "讲师"))
     return {
-      text: "我是讲师 A 的数字分身演示，主讲提示词、Agent 与 Skill。可以向我了解课程内容和随堂练习。",
+      text: "我是小Z的数字分身演示，主讲提示词、Agent 与 Skill。可以向我了解课程内容和随堂练习。",
       modules: [0, 1, 2],
     };
   return {
@@ -259,30 +259,17 @@ export function FacultySection() {
             </p>
           </div>
           <div className="ft-stat ft-stat-duration">
-            <div className="ft-stat-value" aria-hidden="true">
-              <span>3</span>
-              <small>天</small>
+            <div className="ft-stat-value">
+              <span>{instructor.stats[0][0]}</span>
+              <small>{instructor.stats[0][1]}</small>
             </div>
-            <p>3 天实战课程 · 从方法到作品</p>
-          </div>
-          <div className="ft-outcomes">
-            <h3>一起完成的作品</h3>
-            <ul>
-              {instructor.modules.map((i) => (
-                <li key={i}>{facultyModules[i].out}</li>
-              ))}
-            </ul>
-            <a href="#schedule">
-              查看完整课程大纲 <span aria-hidden="true">↗</span>
-            </a>
+            <p>{instructor.stats[0][2]}</p>
           </div>
           <div className="ft-person">
             <div className="ft-identity">
-              <span className="ft-eyebrow">{instructor.en}</span>
               <h3>{instructor.name}</h3>
-              <p>{instructor.role}</p>
             </div>
-            <div className="ft-avatar-orbit">
+            <div className="ft-avatar">
               <div
                 className="ft-stage"
                 data-open={open}
@@ -448,26 +435,24 @@ export function FacultySection() {
             </div>
           </div>
           <blockquote className="ft-statement">
-            不讲概念，
-            <br />
-            只讲明天上班
-            <br />
-            就能用的东西。
+            {instructor.highlights.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
           </blockquote>
           <div className="ft-stat ft-stat-hours">
             <span className="ft-and">以及</span>
             <div>
-              <div className="ft-stat-value" aria-hidden="true">
-                <span>18</span>
-                <small>h</small>
+              <div className="ft-stat-value">
+                <span>{instructor.stats[1][0]}</span>
+                <small>{instructor.stats[1][1]}</small>
               </div>
-              <p>18 小时 · 讲解、跟练与点评</p>
+              <p>{instructor.stats[1][2]}</p>
             </div>
           </div>
           <p className="ft-closing">
-            与 AI 一起，
-            <br />
-            把想法做出来。
+            {instructor.closing.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
           </p>
         </div>
       </div>

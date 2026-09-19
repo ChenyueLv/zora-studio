@@ -15,7 +15,7 @@
 .ft-composition {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px) minmax(0, 1fr);
-  grid-template-areas: "expertise person statement" "duration person hours" "outcomes person closing";
+  grid-template-areas: "expertise person statement" "duration person hours" ". person closing";
   gap: 36px clamp(24px, 3vw, 48px);
   align-items: center;
   padding: 24px 0 56px;
@@ -24,8 +24,7 @@
   grid-area: expertise;
   align-self: end;
 }
-.ft-expertise h3,
-.ft-outcomes h3 {
+.ft-expertise h3 {
   margin: 0 0 12px;
   font-size: 14px;
   font-weight: 500;
@@ -51,24 +50,6 @@
 .ft-modules button[data-highlight="true"] {
   color: var(--ft-red);
 }
-.ft-outcomes {
-  grid-area: outcomes;
-  align-self: start;
-}
-.ft-outcomes ul {
-  list-style: none;
-  margin: 0 0 18px;
-  padding: 0;
-  color: var(--ft-muted);
-}
-.ft-outcomes li {
-  padding: 3px 0;
-}
-.ft-outcomes > a {
-  font-size: 12px;
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
 .ft-person {
   grid-area: person;
   min-width: 0;
@@ -80,34 +61,13 @@
 .ft-identity {
   text-align: center;
 }
-.ft-eyebrow {
-  color: var(--ft-muted);
-  font-size: 12px;
-}
 .ft-identity h3 {
   margin: 8px 0 6px;
 }
-.ft-identity p {
-  margin: 0;
-}
-.ft-avatar-orbit {
+.ft-avatar {
   position: relative;
   width: 100%;
   isolation: isolate;
-}
-.ft-avatar-orbit::before,
-.ft-avatar-orbit::after {
-  content: "";
-  position: absolute;
-  inset: 2%;
-  border: 1px dashed var(--ft-line);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
-}
-.ft-avatar-orbit::after {
-  inset: 10%;
-  border-style: solid;
 }
 .ft-stage {
   position: relative;
@@ -144,20 +104,21 @@
 }
 .ft-stat-hours {
   grid-area: hours;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  position: relative;
 }
 .ft-stat-hours > div {
   min-width: 0;
   text-align: right;
 }
 .ft-stat-hours .ft-stat-value {
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 .ft-and {
-  flex: none;
+  position: absolute;
+  left: 0;
+  top: 58%;
+  transform: translateY(-50%);
+  z-index: 1;
   color: var(--ft-red);
   font: 400 clamp(20px, 1.8vw, 32px)/1.4 var(--course-display);
 }
@@ -166,6 +127,10 @@
   align-self: end;
   margin: 0;
   color: var(--ft-red);
+}
+.ft-statement > span,
+.ft-closing > span {
+  display: block;
 }
 .ft-closing {
   grid-area: closing;
@@ -364,7 +329,7 @@
 @media (max-width: 1100px) {
   .ft-composition {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
-    grid-template-areas: "expertise person" "duration person" "statement hours" "outcomes closing";
+    grid-template-areas: "expertise person" "duration person" "statement hours" ". closing";
     gap: 32px 40px;
   }
   .ft-stat-value {
@@ -377,7 +342,7 @@
 @media (max-width: 680px) {
   .ft-composition {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-areas: "person person" "duration hours" "statement statement" "expertise outcomes" "closing closing";
+    grid-template-areas: "person person" "duration hours" "statement statement" "expertise expertise" "closing closing";
     gap: 36px 22px;
     padding-top: 8px;
     padding-bottom: 32px;
@@ -387,7 +352,7 @@
     max-width: 380px;
     justify-self: center;
   }
-  .ft-avatar-orbit {
+  .ft-avatar {
     width: min(100%, 340px);
   }
   .ft-stat-value {
@@ -408,9 +373,6 @@
   }
   .ft-expertise p {
     font-size: 12px;
-  }
-  .ft-outcomes li {
-    overflow-wrap: anywhere;
   }
   .ft-closing {
     font-size: 28px;
