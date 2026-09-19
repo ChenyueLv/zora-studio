@@ -135,6 +135,111 @@ it("cancels a pending gesture when the gallery is disabled", async () => {
   expect(offset()).toBe(0);
 });
 
+const pointer = async (
+  type: string,
+  x: number,
+  y: number,
+  { target, pointerType = "touch", time = 0 }: PointerOptions = {},
+) => {
+  const event = Object.assign(
+    new MouseEvent(type, {
+      clientX: x,
+      clientY: y,
+      button: 0,
+      buttons: type === "pointerup" ? 0 : 1,
+      bubbles: true,
+      cancelable: true,
+    }),
+    { pointerId: 7, isPrimary: true, pointerType },
+  );
+  Object.defineProperty(event, "timeStamp", { value: time });
+  await act(async () => {
+    (target ?? host.querySelector("[data-gallery]")!).dispatchEvent(event);
+  });
+};
+type PointerOptions = { target?: Element; pointerType?: string; time?: number };
+// jsdom lays nothing out, so a phone-width card falls back to 86vw: 335px here.
+const phone = () => vi.stubGlobal("innerWidth", 390);
+
+it("follows a sideways swipe under the finger, then settles on the next card", async () => {
+  phone();
+  await pointer("pointerdown", 300, 400);
+  await pointer("pointermove", 200, 404, { time: 400 });
+  expect(offset()).toBeCloseTo(-92 / 335.4, 2);
+  expect(current()).toBe(0);
+  await pointer("pointerup", 200, 404, { time: 800 });
+  await wait(1800);
+  expect(current()).toBe(1);
+  expect(offset()).toBe(-1);
+});
+it("returns a short slow swipe, but lets a flick carry the card over", async () => {
+  phone();
+  await pointer("pointerdown", 300, 400);
+  await pointer("pointermove", 270, 400, { time: 400 });
+  await pointer("pointerup", 270, 400, { time: 800 });
+  await wait(1800);
+  expect(current()).toBe(0);
+  expect(offset()).toBe(0);
+  await pointer("pointerdown", 100, 400, { time: 3000 });
+  await pointer("pointermove", 120, 400, { time: 3016 });
+  await pointer("pointermove", 145, 400, { time: 3032 });
+  await pointer("pointerup", 145, 400, { time: 3040 });
+  await wait(1800);
+  expect(current()).toBe(-1);
+});
+it("leaves vertical swipes and a demo's own draggable parts alone", async () => {
+  phone();
+  await pointer("pointerdown", 300, 400);
+  await pointer("pointermove", 296, 460);
+  await pointer("pointermove", 120, 470);
+  await pointer("pointerup", 120, 470);
+  const handle = document.createElement("button");
+  host.querySelector(".ch-art-card")!.append(handle);
+  // jsdom does not compute touch-action.
+  const computed = getComputedStyle;
+  vi.stubGlobal("getComputedStyle", (element: Element) =>
+    element === handle ? { touchAction: "none" } : computed(element),
+  );
+  await pointer("pointerdown", 300, 400, { target: handle });
+  await pointer("pointermove", 120, 400, { target: handle });
+  await pointer("pointerup", 120, 400, { target: handle });
+  await wait(1800);
+  expect(current()).toBe(0);
+  expect(offset()).toBe(0);
+});
+it("swallows the click that ends a swipe, never a plain tap", async () => {
+  phone();
+  const button = document.createElement("button");
+  const pressed = vi.fn();
+  button.addEventListener("click", pressed);
+  host.querySelector(".ch-art-card")!.append(button);
+  await pointer("pointerdown", 300, 400, { target: button });
+  await pointer("pointerup", 300, 400, { target: button });
+  await act(async () => button.click());
+  expect(pressed).toHaveBeenCalledTimes(1);
+  await pointer("pointerdown", 300, 400, { target: button });
+  await pointer("pointermove", 150, 400, { target: button });
+  await pointer("pointerup", 150, 400, { target: button });
+  await act(async () => button.click());
+  expect(pressed).toHaveBeenCalledTimes(1);
+  await wait(1800);
+  expect(current()).toBe(1);
+});
+it("keeps the desktop arc to the wheel for a mouse, and drags it vertically for touch", async () => {
+  vi.stubGlobal("innerHeight", 1000);
+  await pointer("pointerdown", 700, 600, { pointerType: "mouse" });
+  await pointer("pointermove", 700, 300, { pointerType: "mouse" });
+  await pointer("pointerup", 700, 300, { pointerType: "mouse" });
+  await wait(1800);
+  expect(current()).toBe(0);
+  await pointer("pointerdown", 700, 600);
+  await pointer("pointermove", 700, 452, { time: 400 });
+  expect(offset()).toBeCloseTo(-0.5, 5);
+  await pointer("pointerup", 700, 452, { time: 800 });
+  await wait(1800);
+  expect(current()).toBe(1);
+});
+
 it("preserves scrolling inside a demo until its scroll boundary", async () => {
   const panel = document.createElement("div");
   panel.style.overflowY = "auto";

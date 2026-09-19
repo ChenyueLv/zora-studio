@@ -245,30 +245,6 @@
     opacity: 0.35;
   }
 }
-@media (max-width: 1000px) {
-  .ch-art-card.agent-art-card.selected,
-  .ch-art-card.agent-art-card.selected:hover {
-    transform: rotateY(-14deg) rotateZ(-7deg);
-  }
-}
-@media (max-width: 600px) {
-  .course-hero[data-scene="agent"] {
-    min-height: 1080px;
-  }
-  .course-hero[data-scene="agent"] .ch-gallery {
-    height: 480px;
-  }
-  .course-hero[data-scene="agent"] .ch-stage {
-    width: 88%;
-    left: 6%;
-    top: 7%;
-    height: 70%;
-  }
-  .ch-art-card.agent-art-card.selected,
-  .ch-art-card.agent-art-card.selected:hover {
-    transform: rotateZ(-3deg);
-  }
-}
 /* The paired language content is the feature demonstration itself. */
 .cv-language-switch {
   display: inline-flex;

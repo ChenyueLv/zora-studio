@@ -275,12 +275,6 @@
 .ch-art-card.music-art-card.selected:hover {
   transform: rotateZ(-6deg);
 }
-@media (max-width: 1000px) {
-  .ch-art-card.music-art-card.selected,
-  .ch-art-card.music-art-card.selected:hover {
-    transform: rotateZ(-7deg);
-  }
-}
 @container (max-width: 380px) {
   .music-lyric-line {
     font-size: 10px;

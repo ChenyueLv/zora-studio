@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useGalleryMotion } from "../lib/useGalleryMotion";
+import { useMediaQuery } from "../lib/useMediaQuery";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
 import { VibeCodingCard } from "../components/VibeCodingCard";
 import { PptSkillCard } from "../components/PptSkillCard";
@@ -93,6 +94,8 @@ export function CourseHero() {
     !panel && heroActivity.active,
   );
   const drag = useRef<number | null>(null);
+  // The swipe layout slides neighbouring captions off screen; its tabs replace them.
+  const captionReach = useMediaQuery("(max-width: 1000px)") ? 0 : 1;
   const active = ((position % scenes.length) + scenes.length) % scenes.length;
   const select = (i: number) => {
     const delta = ((i - active + 7) % scenes.length) - 2;
@@ -177,7 +180,13 @@ export function CourseHero() {
           aria-label="课程成果展厅"
           ref={galleryRef}
           onPointerDown={(e) => {
-            drag.current = e.target === e.currentTarget ? e.clientY : null;
+            // Touch and the sideways mobile arc are swiped in useGalleryMotion.
+            drag.current =
+              e.target === e.currentTarget &&
+              e.pointerType === "mouse" &&
+              window.innerWidth > 1000
+                ? e.clientY
+                : null;
           }}
           onPointerUp={(e) => {
             if (
@@ -261,8 +270,8 @@ export function CourseHero() {
                 key={itemPosition}
                 data-position={itemPosition}
                 data-current={offset === 0}
-                aria-hidden={Math.abs(offset) > 1 ? true : undefined}
-                inert={Math.abs(offset) > 1 ? true : undefined}
+                aria-hidden={Math.abs(offset) > captionReach ? true : undefined}
+                inert={Math.abs(offset) > captionReach ? true : undefined}
                 style={
                   {
                     "--caption-offset": offset,
@@ -284,6 +293,19 @@ export function CourseHero() {
             );
           })}
         </aside>
+        {/* Shown by the swipe layout only; the desktop arc lists its captions. */}
+        <nav className="ch-scene-tabs" aria-label="切换课程作品">
+          {scenes.map((scene, i) => (
+            <button
+              key={scene.kind}
+              type="button"
+              aria-current={i === active ? "true" : undefined}
+              onClick={() => select(i)}
+            >
+              {scene.short}
+            </button>
+          ))}
+        </nav>
         <footer className="ch-footer">
           <a className="ch-proof-note" href="#audience">
             适合谁 · 学习收获 · 课程边界 ↓

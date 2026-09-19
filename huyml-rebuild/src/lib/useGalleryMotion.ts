@@ -16,6 +16,21 @@ const captionOpacity = (distance: number) => {
     ? 0
     : stops[index] + (stops[index + 1] - stops[index]) * (distance - index);
 };
+/** Below this width the arc lies sideways and is swiped instead of wheeled. */
+const SWIPE_LAYOUT = 1000;
+const DRAG_SLOP = 8;
+type Drag = {
+  id: number;
+  surface: HTMLElement;
+  horizontal: boolean;
+  step: number;
+  x: number;
+  y: number;
+  origin: number;
+  start: number;
+  moved: boolean;
+  samples: { time: number; along: number }[];
+};
 
 /** Update only transforms while moving; React switches demos at the center. */
 export function useGalleryMotion(
@@ -153,15 +168,159 @@ export function useGalleryMotion(
       // Reduced-motion users get a single static step when the gesture ends.
       if (!reduced.matches) animate();
     };
-    surfaces.forEach((surface) =>
-      surface?.addEventListener("wheel", wheel, { passive: false }),
-    );
+    // Touch has no wheel: a swipe along the arc moves it under the finger, while
+    // the cross axis is left to the browser (see touch-action) for page scrolling.
+    let drag: Drag | null = null;
+    let suppressClick = false;
+    const stage = () =>
+      gallery.current?.querySelector<HTMLElement>(".ch-stage") ?? null;
+    const pointerDown = (event: PointerEvent) => {
+      suppressClick = false;
+      if (drag || !event.isPrimary || event.button !== 0) return;
+      const horizontal = window.innerWidth <= SWIPE_LAYOUT;
+      // The desktop arc keeps its wheel and caption clicks for the mouse.
+      if (!horizontal && event.pointerType === "mouse") return;
+      const surface = event.currentTarget as HTMLElement;
+      let element = event.target instanceof Element ? event.target : null;
+      if (element?.closest("input, textarea, select")) return;
+      // Draggable parts of a demo (touch-action: none) keep their own gesture.
+      while (element && element !== surface) {
+        if (getComputedStyle(element).touchAction === "none") return;
+        element = element.parentElement;
+      }
+      const card = stage();
+      const ratio = card
+        ? parseFloat(getComputedStyle(card).getPropertyValue("--ch-step-ratio"))
+        : NaN;
+      drag = {
+        id: event.pointerId,
+        surface,
+        horizontal,
+        step: horizontal
+          ? (card?.offsetWidth || window.innerWidth * 0.86) * (ratio || 1)
+          : window.innerHeight * 0.28,
+        x: event.clientX,
+        y: event.clientY,
+        origin: 0,
+        start: progress.current,
+        moved: false,
+        samples: [],
+      };
+    };
+    const pointerMove = (event: PointerEvent) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      // A mouse released outside the surface never reported its pointerup.
+      if (!event.buttons) {
+        if (drag.moved) pointerEnd(event);
+        drag = null;
+        return;
+      }
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      const along = drag.horizontal ? dx : dy;
+      const across = drag.horizontal ? dy : dx;
+      if (!drag.moved) {
+        if (Math.abs(across) > DRAG_SLOP && Math.abs(across) >= Math.abs(along))
+          drag = null;
+        if (!drag || Math.abs(along) < DRAG_SLOP) return;
+        // Take hold of the arc wherever it currently is, even mid-animation.
+        window.clearTimeout(settleTimer);
+        settleTimer = 0;
+        cancelAnimationFrame(frame);
+        frame = 0;
+        previousTime = 0;
+        drag.moved = true;
+        // Only the slop is forgiven, so coarse pointer samples still count.
+        drag.origin = Math.sign(along) * DRAG_SLOP;
+        drag.start = progress.current;
+        try {
+          drag.surface.setPointerCapture(event.pointerId);
+        } catch {
+          // Already released (or no capture support): its events still bubble here.
+        }
+      }
+      drag.samples.push({ time: event.timeStamp, along });
+      if (drag.samples.length > 6) drag.samples.shift();
+      target = drag.start - (along - drag.origin) / drag.step;
+      if (reduced.matches) return;
+      progress.current = target;
+      sync();
+    };
+    const pointerEnd = (event: PointerEvent) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      const current = drag;
+      drag = null;
+      if (!current.moved) {
+        // A tap on a neighbour peeking past the selected card brings it forward.
+        const bounds = stage()?.getBoundingClientRect();
+        if (
+          event.type === "pointerup" &&
+          current.horizontal &&
+          bounds?.width &&
+          current.surface === gallery.current &&
+          !(event.target as Element).closest?.(".ch-art-card")
+        ) {
+          if (event.clientX > bounds.right) command.current(1, true);
+          else if (event.clientX < bounds.left) command.current(-1, true);
+        }
+        return;
+      }
+      suppressClick = event.type === "pointerup";
+      if (current.surface.hasPointerCapture?.(event.pointerId))
+        current.surface.releasePointerCapture(event.pointerId);
+      const recent = current.samples.filter(
+        (sample) => event.timeStamp - sample.time <= 120,
+      );
+      const velocity =
+        event.type === "pointerup" && recent.length > 1
+          ? (recent[recent.length - 1].along - recent[0].along) /
+            Math.max(1, recent[recent.length - 1].time - recent[0].time)
+          : 0;
+      // One card per swipe: a flick, or a fifth of the way, carries it over.
+      const base = Math.round(current.start);
+      const nearest = Math.round(target);
+      const next =
+        Math.abs(velocity) > 0.3
+          ? velocity < 0
+            ? Math.ceil(target)
+            : Math.floor(target)
+          : nearest === base && Math.abs(target - base) >= 0.2
+            ? base + Math.sign(target - base)
+            : nearest;
+      target = Math.max(base - 1, Math.min(base + 1, next));
+      animate();
+    };
+    const click = (event: MouseEvent) => {
+      if (!suppressClick) return;
+      // The pointer was steering the arc, not pressing what it ended on.
+      suppressClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    const nativeDrag = (event: DragEvent) => {
+      if (window.innerWidth <= SWIPE_LAYOUT) event.preventDefault();
+    };
+    surfaces.forEach((surface) => {
+      surface?.addEventListener("wheel", wheel, { passive: false });
+      surface?.addEventListener("pointerdown", pointerDown);
+      surface?.addEventListener("pointermove", pointerMove);
+      surface?.addEventListener("pointerup", pointerEnd);
+      surface?.addEventListener("pointercancel", pointerEnd);
+      surface?.addEventListener("click", click, true);
+      surface?.addEventListener("dragstart", nativeDrag);
+    });
     return () => {
       cancelAnimationFrame(frame);
       window.clearTimeout(settleTimer);
-      surfaces.forEach((surface) =>
-        surface?.removeEventListener("wheel", wheel),
-      );
+      surfaces.forEach((surface) => {
+        surface?.removeEventListener("wheel", wheel);
+        surface?.removeEventListener("pointerdown", pointerDown);
+        surface?.removeEventListener("pointermove", pointerMove);
+        surface?.removeEventListener("pointerup", pointerEnd);
+        surface?.removeEventListener("pointercancel", pointerEnd);
+        surface?.removeEventListener("click", click, true);
+        surface?.removeEventListener("dragstart", nativeDrag);
+      });
       progress.current = Math.round(progress.current);
       command.current = () => {};
       sync();

@@ -107,6 +107,11 @@
   user-select: none;
   cursor: grab;
 }
+/* Outrank the hero's `button { touch-action: manipulation }`: touch must drag
+   this handle, and the gallery swipe leaves touch-action: none parts alone. */
+.edu-brief .edu-chat-title {
+  touch-action: none;
+}
 .edu-chat-title svg {
   position: absolute;
   right: 1.4cqw;
@@ -321,15 +326,6 @@
     height: 9px;
   }
 }
-@media (max-width: 600px) {
-  .course-hero[data-scene="visual"] .ch-stage {
-    left: 7%;
-    width: 86%;
-    height: 73%;
-    top: 8%;
-  }
-}
-
 .edu-stacked .eh-section-title {
   padding-top: 0.65cqw;
   padding-bottom: 0.65cqw;

@@ -1586,3 +1586,125 @@
 .ch-scene-caption {
   transition: none;
 }
+
+/* Swipe layout: below the desktop arc the same fractional motion lies sideways.
+   A horizontal swipe steers it (useGalleryMotion); vertical stays page scroll. */
+.ch-scene-tabs {
+  display: none;
+}
+@media (max-width: 1000px) {
+  .course-hero {
+    --ch-card-width: min(86vw, 600px);
+    --ch-card-height: calc(var(--ch-card-width) * 0.75);
+    /* Unlike hidden, clip cannot be scrolled sideways by focus or scrollIntoView. */
+    overflow: clip;
+  }
+  .ch-gallery {
+    height: calc(var(--ch-card-height) + 64px);
+    /* The hero clips the neighbours; the gallery must not crop card shadows. */
+    overflow: visible;
+    perspective: none;
+    touch-action: pan-y;
+  }
+  .ch-gallery-grid {
+    display: none;
+  }
+  .ch-stage {
+    /* Distance between neighbouring cards, in card widths; read by the swipe. */
+    --ch-step-ratio: 1.06;
+    left: 0;
+    right: 0;
+    top: 26px;
+    width: var(--ch-card-width);
+    height: var(--ch-card-height);
+    max-height: none;
+    margin: 0 auto;
+    perspective: none;
+  }
+  .ch-gallery .ch-art-card,
+  .ch-gallery .ch-art-card.selected,
+  .ch-gallery .ch-art-card.selected:hover {
+    transform: translate3d(
+        calc(var(--offset) * var(--ch-step-ratio) * 100%),
+        calc(var(--curve, 0) * 14px),
+        0
+      )
+      rotateZ(calc(-3deg + var(--offset) * 4deg));
+    box-shadow: 6px 20px 40px #24201816;
+    filter: none;
+  }
+  .ch-scene-details {
+    height: 116px;
+    margin: 0;
+    overflow: clip;
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 7%,
+      #000 93%,
+      transparent
+    );
+  }
+  .ch-scene-caption {
+    top: 0;
+    padding: 0 max(28px, 8vw);
+    transform: translate3d(calc(var(--caption-offset) * 100%), 0, 0);
+  }
+  .ch-scene-caption[data-current="false"] > span {
+    visibility: visible;
+  }
+  .ch-scene-caption h2 {
+    margin: 8px 0 0;
+    text-wrap: balance;
+  }
+  .ch-scene-tabs {
+    display: flex;
+    justify-content: center;
+    gap: clamp(6px, 3.4vw, 30px);
+    margin: 0 8px;
+  }
+  .ch-scene-tabs button {
+    position: relative;
+    min-height: 44px;
+    padding: 0 3px 8px;
+    color: #84847e;
+    font-size: clamp(11px, 3.2vw, 13px);
+    white-space: nowrap;
+    transition: color 0.25s;
+  }
+  .ch-scene-tabs button::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: var(--ch-red);
+    opacity: 0;
+    transform: scale(0.3);
+    transition:
+      opacity 0.25s,
+      transform 0.25s;
+  }
+  .ch-scene-tabs button[aria-current="true"] {
+    color: var(--ch-ink);
+  }
+  .ch-scene-tabs button[aria-current="true"]::after {
+    opacity: 1;
+    transform: none;
+  }
+  .ch-scene-tabs button:focus-visible {
+    outline: 2px solid #20201f;
+    outline-offset: -2px;
+  }
+}
+@media (max-width: 600px) {
+  .ch-scene-details {
+    height: 106px;
+  }
+}
