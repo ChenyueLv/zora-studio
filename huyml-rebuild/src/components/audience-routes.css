@@ -74,10 +74,10 @@
   transform-origin: 50% 55%;
 }
 .car-mouth {
-  width: clamp(300px, 36vw, 640px);
+  width: clamp(250px, 30vw, 540px);
   max-width: 100%;
   height: 130px;
-  margin: -14px auto 0;
+  margin: 6px auto 0;
 }
 .car-mouth svg {
   display: block;
@@ -129,12 +129,58 @@
     font-size: clamp(110px, 24vw, 150px);
   }
   .car-mouth {
-    margin-top: 8px;
+    margin-top: 18px;
     height: 90px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .car-particles {
     display: none;
+  }
+}
+
+/* Typed Header: fixed character slots keep the copy steady during the effect. */
+.car-character {
+  position: relative;
+  display: inline-block;
+  white-space: pre;
+}
+.car-character-slot {
+  visibility: hidden;
+}
+.car-character-glyph {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 180ms ease-in;
+}
+.car-character.is-visible .car-character-glyph {
+  opacity: 1;
+}
+.car-typing-caret {
+  position: absolute;
+  left: 100%;
+  top: 0.25em;
+  height: 1em;
+  border-right: 0.12em solid currentColor;
+  animation: car-caret-blink 750ms step-end infinite;
+}
+@keyframes car-caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .car-character-glyph {
+    opacity: 1;
+    transition: none;
+  }
+  .car-typing-caret {
+    display: none;
+    animation: none;
   }
 }

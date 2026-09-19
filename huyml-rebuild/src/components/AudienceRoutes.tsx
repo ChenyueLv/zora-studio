@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { startTypedHeader } from "../lib/typedHeader";
 import * as THREE from "three";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import { useVisibleActivity } from "../lib/useVisibleActivity";
@@ -30,9 +31,9 @@ const routes = [
   },
 ];
 const mouthShapes = [
-  "M120 40 C180 70 240 96 310 108 C380 118 440 118 500 118 C560 118 620 118 690 108 C760 96 820 70 880 40",
+  "M120 40 C180 95 240 128 310 145 C380 160 440 160 500 160 C560 160 620 160 690 145 C760 128 820 95 880 40",
   "M120 40 C230 96 330 118 500 118 C580 118 640 112 690 100 C740 150 720 205 650 205 C590 205 570 150 600 115",
-  "M180 100 C230 100 280 100 340 100 C400 100 450 100 500 100 C550 100 600 100 660 100 C720 100 770 100 820 100",
+  "M180 118 C230 118 280 118 340 118 C400 118 450 118 500 118 C550 118 600 118 660 118 C720 118 770 118 820 118",
 ];
 const shapes = mouthShapes.map((shape) =>
   shape.match(/-?\d+(\.\d+)?/g)!.map(Number),
@@ -91,19 +92,6 @@ export function AudienceRoutes() {
           .to(eye, { scaleY: 0.08, duration: 0.12, ease: "power2.in" })
           .to(eye, { scaleY: 1, duration: 0.12, ease: "power2.out" });
       });
-      root.querySelectorAll<HTMLElement>(".car-line").forEach((line, index) => {
-        gsap.fromTo(
-          line.querySelectorAll(".car-character"),
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.16,
-            stagger: 0.038,
-            delay: 0.3 + index * 0.24,
-            ease: "none",
-          },
-        );
-      });
       const length = path.getTotalLength();
       gsap.fromTo(
         path,
@@ -118,6 +106,16 @@ export function AudienceRoutes() {
         },
       );
     }, root);
+
+    const stopTyping = [
+      ...root.querySelectorAll<HTMLElement>(".car-typed"),
+    ].map((element, index) =>
+      startTypedHeader(
+        element,
+        element.textContent || "",
+        300 + (index % 3) * 500,
+      ),
+    );
 
     // The text and SVG remain usable even if this browser cannot create WebGL.
     let renderer: THREE.WebGLRenderer | undefined;
@@ -230,6 +228,7 @@ export function AudienceRoutes() {
     return () => {
       gsap.ticker.remove(tick);
       context.revert();
+      stopTyping.forEach((stop) => stop());
       root.removeEventListener("pointermove", move);
       root.removeEventListener("pointerleave", leave);
       observer.disconnect();
@@ -257,12 +256,12 @@ export function AudienceRoutes() {
               <ul className="car-lines">
                 {route.lines.map((line) => (
                   <li className="car-line" key={line} aria-label={line}>
-                    <span aria-hidden="true">
-                      {[...line].map((character, index) => (
-                        <span className="car-character" key={index}>
-                          {character}
-                        </span>
-                      ))}
+                    <span
+                      className="car-typed"
+                      aria-hidden="true"
+                      translate="no"
+                    >
+                      {line}
                     </span>
                   </li>
                 ))}
