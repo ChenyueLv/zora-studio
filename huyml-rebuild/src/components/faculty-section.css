@@ -29,26 +29,30 @@
   font-size: 14px;
   font-weight: 500;
 }
-.ft-expertise p {
-  margin: 12px 0 0;
+.ft-expertise h3 small {
+  margin-left: 8px;
   color: var(--ft-muted);
-  font-size: 13px;
-  line-height: 1.85;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-.ft-modules {
+.ft-fields {
   display: grid;
-  justify-items: start;
-  gap: 4px;
-}
-.ft-modules button {
-  padding: 2px 0;
-  text-align: left;
-  color: var(--ft-muted);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #4a4a48;
   font-size: 14px;
+  line-height: 1.4;
 }
-.ft-modules button:hover,
-.ft-modules button[data-highlight="true"] {
-  color: var(--ft-red);
+.ft-fields small {
+  display: block;
+  margin-top: 2px;
+  color: var(--ft-muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
 }
 .ft-person {
   grid-area: person;
@@ -383,8 +387,9 @@
   .ft-expertise {
     align-self: start;
   }
-  .ft-expertise p {
-    font-size: 12px;
+  .ft-fields {
+    gap: 10px;
+    font-size: 13px;
   }
   .ft-closing {
     font-size: 28px;

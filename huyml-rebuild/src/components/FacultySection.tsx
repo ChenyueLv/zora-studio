@@ -85,7 +85,7 @@ function answerFor(question: string): Answer {
   }
   if (has("你是谁", "介绍", "老师", "讲师"))
     return {
-      text: "我是小Z的数字分身演示，主讲提示词、Agent 与 Skill。可以向我了解课程内容和随堂练习。",
+      text: "我是小Z的数字分身演示，主讲 AI 全栈开发、Agent 系统与 AI 影视创作。可以向我了解课程内容和随堂练习。",
       modules: [0, 1, 2],
     };
   return {
@@ -236,27 +236,17 @@ export function FacultySection() {
         />
         <div className="ft-composition">
           <div className="ft-expertise">
-            <h3>掌握技术</h3>
-            <div className="ft-modules">
-              {instructor.modules.map((i) => (
-                <button
-                  key={i}
-                  type="button"
-                  disabled={busy}
-                  data-highlight={answer?.modules?.includes(i)}
-                  onClick={() => ask(facultyModules[i].name)}
-                >
-                  {facultyModules[i].name}
-                </button>
+            <h3>
+              专业领域 <small>Expertise</small>
+            </h3>
+            <ul className="ft-fields">
+              {instructor.expertise.map(([zh, en]) => (
+                <li key={zh}>
+                  {zh}
+                  <small>{en}</small>
+                </li>
               ))}
-            </div>
-            <p>
-              结构化提问与上下文
-              <br />
-              工具调用与工作流
-              <br />
-              经验封装与团队复用
-            </p>
+            </ul>
           </div>
           <div className="ft-stat ft-stat-duration">
             <div className="ft-stat-value">

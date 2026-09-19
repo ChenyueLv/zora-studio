@@ -6,14 +6,21 @@ export const instructor = {
     ["40", "+", "个交付并上线的项目"],
   ],
   highlights: [
-    "做过 3 个上线的 AI 产品",
-    "不写代码也能搭 Agent",
-    "每周靠 Agent 省下 6 小时",
-    "带过 2 期实战营，38 名学员",
+    "从代码到影像，AI 全链路",
+    "主导 AI 产品从 0 到 1 上线",
+    "构建可落地的多智能体系统",
+    "用 AI 完成电影级视觉叙事",
     "相信「用得上」才算学会",
   ],
-  closing: ["把 AI 变成你的日常工具，", "而不是又一个要学的软件。"],
-  modules: [0, 1, 2],
+  closing: ["不止学会使用 AI，", "更要用 AI 创造作品。"],
+  expertise: [
+    ["AI 全栈开发", "Full-Stack AI Engineering"],
+    ["Agent 系统架构", "Agentic Systems & MCP"],
+    ["AI 影视创作", "Generative Cinema"],
+    ["AI 剧集与分镜", "AI Series & Storyboarding"],
+    ["AI 视觉与海报设计", "Generative Visual Design"],
+    ["智能体工作流", "AI-Native Workflow"],
+  ],
 } as const;
 
 export const facultyModules = [
