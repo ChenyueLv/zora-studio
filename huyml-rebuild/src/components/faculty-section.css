@@ -78,21 +78,31 @@
 }
 .ft-stat-duration {
   grid-area: duration;
-  justify-self: start;
+  justify-self: stretch;
+  width: 100%;
+  text-align: left;
+}
+.ft-stat-duration .ft-stat-value {
+  justify-content: flex-start;
 }
 .ft-stat-value {
   display: flex;
   align-items: baseline;
   gap: 6px;
   color: #fff;
+  font-family: Grotesk, Arial, "MiSans", sans-serif;
   font-size: clamp(112px, 13.2vw, 240px);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.055em;
 }
 .ft-stat-value small {
   font-size: 0.3em;
   letter-spacing: -0.02em;
+}
+.ft-stat-duration small {
+  font-family: var(--course-text);
+  font-weight: 500;
 }
 .ft-stat p {
   margin: 14px 0 0;
