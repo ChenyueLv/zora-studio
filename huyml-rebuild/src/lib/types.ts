@@ -5,6 +5,8 @@ export type Media = {
   height: number;
   title?: string;
   poster?: string;
+  /** 本地视频在网格悬停时播放的轻量版本 */
+  previewVideo?: string;
 };
 export type Project = {
   title: string;

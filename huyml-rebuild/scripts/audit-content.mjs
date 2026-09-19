@@ -22,10 +22,17 @@ for (const p of projects) {
   asset(p.cover); p.media.forEach(media);
 }
 experiments.forEach(media);
+const courseWorks = read('course-works');
+assert.equal(new Set([...courseWorks, ...experiments].map(p => p.id)).size, courseWorks.length + experiments.length);
+for (const w of courseWorks) {
+  assert(w.title && w.width > 0 && w.height > 0, `Invalid course work: ${w.id}`);
+  asset(w.src);
+  if (w.type === 'video') { assert.match(w.src, /\.mp4$/); asset(w.poster); asset(w.previewVideo); }
+}
 for (const h of hobbies) { assert(h.title && h.description.length > 200); asset(h.image); }
 const root = new URL('../src/', import.meta.url);
 for (const f of fs.readdirSync(root, {recursive:true}).filter(f => /\.(tsx?|css)$/.test(f))) {
   const code = fs.readFileSync(new URL(f, root), 'utf8');
   for (const match of code.matchAll(/\/assets\/([A-Za-z0-9_.-]+)/g)) asset(match[0]);
 }
-console.log(`PASS: ${projects.length} projects, ${experiments.length} experiments, ${hobbies.length} actual hobby stories; ${images} image placements, ${videos} Vimeo embeds; all local asset references and next-project links valid.`);
+console.log(`PASS: ${projects.length} projects, ${experiments.length} experiments, ${courseWorks.length} course works, ${hobbies.length} actual hobby stories; ${images} image placements, ${videos} Vimeo embeds; all local asset references and next-project links valid.`);

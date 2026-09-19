@@ -93,3 +93,51 @@ it("uses the full-resolution image in the enlarged preview", async () => {
   );
   expect(host.querySelector("img")?.getAttribute("src")).toBe("/original.jpg");
 });
+const clip = {
+  type: "video",
+  title: "Clip",
+  src: "/clip.mp4",
+  previewVideo: "/clip-preview.mp4",
+  poster: "/clip-cover.webp",
+  width: 1080,
+  height: 1920,
+};
+it("plays the light local preview only while a video card is hovered", async () => {
+  await act(async () =>
+    root.render(
+      <Media
+        item={clip}
+        preview
+        previewOnHover
+        previewSrc="/clip-thumb.webp"
+        unloadOffscreen
+      />,
+    ),
+  );
+  await intersect(true);
+  const card = host.querySelector(".media")!;
+  expect(host.querySelector("img")?.getAttribute("src")).toBe(
+    "/clip-thumb.webp",
+  );
+  expect(host.querySelector("video")).toBeNull();
+  await act(async () => {
+    card.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+  });
+  const video = host.querySelector("video")!;
+  expect(video.getAttribute("src")).toBe("/clip-preview.mp4");
+  expect(video.muted).toBe(true);
+  expect(video.hasAttribute("controls")).toBe(false);
+  expect(host.querySelector("iframe")).toBeNull();
+  await act(async () => {
+    card.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+  });
+  expect(host.querySelector("video")).toBeNull();
+});
+it("plays the full local video with controls in the enlarged preview", async () => {
+  await act(async () => root.render(<Media item={clip} />));
+  const video = host.querySelector("video")!;
+  expect(video.getAttribute("src")).toBe("/clip.mp4");
+  expect(video.getAttribute("poster")).toBe("/clip-cover.webp");
+  expect(video.hasAttribute("controls")).toBe(true);
+  expect(host.querySelector("iframe")).toBeNull();
+});

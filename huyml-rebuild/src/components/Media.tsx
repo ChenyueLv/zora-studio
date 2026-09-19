@@ -43,6 +43,7 @@ export function Media({
     };
   }, [preview]);
   const isVideo = item.type === "video";
+  const isLocalVideo = isVideo && !vimeoId(item.src);
   return (
     <div
       ref={host}
@@ -51,7 +52,50 @@ export function Media({
       className={"media " + (isVideo ? "video-media" : "")}
       style={{ aspectRatio: `${item.width} / ${item.height}` }}
     >
-      {preview && unloadOffscreen && !visible ? null : isVideo ? (
+      {preview && unloadOffscreen && !visible ? null : isLocalVideo ? (
+        <>
+          {preview ? (
+            <>
+              {item.poster && (
+                <img
+                  src={previewSrc || item.poster}
+                  alt={item.title || ""}
+                  loading="lazy"
+                />
+              )}
+              {visible && (!previewOnHover || hovered) && (
+                <video
+                  src={item.previewVideo || item.src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  aria-hidden="true"
+                />
+              )}
+            </>
+          ) : (
+            <video
+              key={String(enabled)}
+              src={item.src}
+              poster={item.poster}
+              aria-label={item.title || "Project video"}
+              autoPlay
+              muted={!enabled}
+              loop
+              playsInline
+              controls
+            />
+          )}
+          {onClick && (
+            <button
+              className="media-hit"
+              onClick={onClick}
+              aria-label={"Open " + (item.title || "video")}
+            />
+          )}
+        </>
+      ) : isVideo ? (
         <>
           {item.poster && (
             <img
@@ -177,7 +221,7 @@ export function Lightbox({
       </div>
       <div className="lightbox-caption">
         {items[index].title}
-        {items[index].type === "video" && (
+        {items[index].type === "video" && vimeoId(items[index].src) && (
           <a href={items[index].src} target="_blank" rel="noreferrer">
             {chinese ? "在 Vimeo 观看 ↗" : "Watch on Vimeo ↗"}
           </a>

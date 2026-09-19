@@ -484,6 +484,13 @@ canvas:focus-visible {
   width: 100%;
   height: 100%;
 }
+.media > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .media-hit {
   position: absolute;
   inset: 0;
@@ -821,8 +828,16 @@ canvas:focus-visible {
   object-fit: contain;
   max-height: 88vh;
 }
-.lightbox-media .media:has(img) {
+.lightbox-media .media:has(img),
+.lightbox-media .media:has(> video) {
   aspect-ratio: auto !important;
+}
+.lightbox-media .media > video {
+  position: static;
+  display: block;
+  height: auto;
+  max-height: 88vh;
+  object-fit: contain;
 }
 .lightbox-close {
   position: absolute;
@@ -1499,7 +1514,8 @@ canvas:focus-visible {
     max-height: 80svh;
   }
   .lightbox-media .media,
-  .lightbox-media img {
+  .lightbox-media img,
+  .lightbox-media .media > video {
     max-height: 78svh;
   }
   .lightbox-prev,

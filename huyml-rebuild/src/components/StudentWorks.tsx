@@ -1,10 +1,21 @@
 import { CourseSectionHeading } from "./CourseSectionHeading";
 import { useState } from "react";
-import works from "../data/playground.json";
+import courseWorks from "../data/course-works.json";
+import referenceWorks from "../data/playground.json";
 import previews from "../data/student-work-previews.json";
 import { Media, Lightbox } from "./Media";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import "./student-works.css";
+
+// 课程作品排在最前；两个视频中间隔开，桌面端首行分居最左和最右
+const [portrait, castle, makeup] = courseWorks;
+const works = [
+  portrait,
+  castle,
+  referenceWorks[0],
+  makeup,
+  ...referenceWorks.slice(1),
+];
 
 export function StudentWorks() {
   const [active, setActive] = useState<number | null>(null);

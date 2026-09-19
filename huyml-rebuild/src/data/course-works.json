@@ -1,0 +1,30 @@
+[
+  {
+    "id": "zora-portrait",
+    "title": "AI 数字人",
+    "type": "video",
+    "src": "/assets/course-works/zora-portrait.mp4",
+    "previewVideo": "/assets/course-works/zora-portrait-preview.mp4",
+    "poster": "/assets/course-works/zora-portrait-cover.webp",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "zora-castle",
+    "title": "梦幻城堡",
+    "type": "image",
+    "src": "/assets/course-works/zora-castle.jpg",
+    "width": 480,
+    "height": 640
+  },
+  {
+    "id": "zora-makeup",
+    "title": "AI 美妆教程",
+    "type": "video",
+    "src": "/assets/course-works/zora-makeup.mp4",
+    "previewVideo": "/assets/course-works/zora-makeup-preview.mp4",
+    "poster": "/assets/course-works/zora-makeup-cover.webp",
+    "width": 1080,
+    "height": 1906
+  }
+]
