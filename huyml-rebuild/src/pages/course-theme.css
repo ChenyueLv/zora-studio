@@ -49,6 +49,7 @@
 .course-page
   > :is(
     .course-hero,
+    .course-advantages,
     .course-audience,
     .course-syllabus,
     .course-faculty,

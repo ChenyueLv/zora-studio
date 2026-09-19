@@ -9,6 +9,7 @@ import { StoryCanvasCard } from "../components/StoryCanvasCard";
 import { MusicCard } from "../components/MusicCard";
 import { FacultySection } from "../components/FacultySection";
 import { CourseAudience } from "../components/CourseAudience";
+import { CourseAdvantages } from "../components/CourseAdvantages";
 import { CourseNextStep } from "../components/CourseNextStep";
 import { StudentWorks } from "../components/StudentWorks";
 import { CourseSyllabus } from "../components/CourseSyllabus";
@@ -141,11 +142,7 @@ export function CourseHero() {
         data-scene={scenes[active].kind}
       >
         <header className="ch-header">
-          <a
-            className="ch-brand"
-            href="/"
-            aria-label="AI 实战课首页"
-          >
+          <a className="ch-brand" href="/" aria-label="AI 实战课首页">
             <b>
               <img src="/zora-tv-icon.svg" alt="" width="52" height="52" />
               <small>ZORA STUDIO</small>
@@ -328,6 +325,7 @@ export function CourseHero() {
           ))}
         </nav>
       </div>
+      <CourseAdvantages />
       <CourseAudience />
       <CourseSyllabus />
       <FacultySection />
