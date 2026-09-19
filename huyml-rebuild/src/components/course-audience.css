@@ -210,7 +210,7 @@
 .ca-people-track {
   display: flex;
   width: max-content;
-  animation: ca-people-drift 42s linear infinite;
+  animation: ca-people-drift 126s linear infinite;
 }
 .ca-people-group {
   display: flex;
