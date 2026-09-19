@@ -16,6 +16,9 @@ describe("小Z preset answers", () => {
     ["学员作品效果怎么样", "展示样例"],
     ["用什么大模型做视频", "AI 影视 · 短片"],
     ["用哪些 AI 工具", "不绑定具体产品"],
+    ["用哪些 AI 工具", "自研的 AI 画布 Zora TV"],
+    ["Zora TV 是什么", "zoraai.tv"],
+    ["画布是你们自己做的吗", "团队自研"],
     ["怎么写提示词", "提示词 · Skill"],
   ])("%s", (question, expected) => {
     expect(answerFor(question).text).toContain(expected);

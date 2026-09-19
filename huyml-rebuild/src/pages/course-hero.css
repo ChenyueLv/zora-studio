@@ -1524,6 +1524,51 @@
     transition: none;
   }
 }
+/* Our own canvas, named under the story caption. Unlike the paragraphs above it
+   stays visible on neighbours, which only preview it and do not take clicks. */
+.ch-scene-caption .ch-scene-platform {
+  margin: 0;
+  color: var(--course-muted);
+  font-size: clamp(12px, 0.74vw, 15px);
+  line-height: 1.7;
+}
+.ch-scene-caption[data-current] > .ch-scene-platform {
+  visibility: visible;
+}
+.ch-scene-caption[data-current="false"] .ch-scene-platform a {
+  pointer-events: none;
+}
+.ch-scene-platform a {
+  color: var(--ch-ink);
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: #20201f59;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 180ms ease;
+}
+/* Inline-block keeps the underline off the arrow. */
+.ch-scene-platform a span {
+  display: inline-block;
+  margin-left: 3px;
+}
+.ch-scene-platform a:hover {
+  text-decoration-color: var(--ch-red);
+}
+.ch-scene-platform a:focus-visible {
+  outline: 2px solid #20201f;
+  outline-offset: 4px;
+}
+.ch-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+.ch-panel-actions .ch-secondary {
+  font-size: 12px;
+}
 
 .ch-gallery .ch-art-card,
 .ch-gallery .ch-art-card:not(.selected) {
@@ -1607,6 +1652,9 @@
     margin: 8px 0 0;
     text-wrap: balance;
   }
+  .ch-scene-caption .ch-scene-platform {
+    margin-top: 4px;
+  }
   /* Break at the comma rather than mid-clause, also without text-wrap support. */
   .ch-scene-caption h2 span {
     display: inline-block;
@@ -1655,7 +1703,8 @@
   }
 }
 @media (max-width: 600px) {
+  /* Room for a two-line title plus the story caption's platform line. */
   .ch-scene-details {
-    height: 106px;
+    height: 112px;
   }
 }

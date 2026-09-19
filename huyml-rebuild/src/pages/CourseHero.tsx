@@ -13,6 +13,7 @@ import { CourseNextStep } from "../components/CourseNextStep";
 import { StudentWorks } from "../components/StudentWorks";
 import { CourseSyllabus } from "../components/CourseSyllabus";
 import { Modal } from "../components/Modal";
+import { zoraTv } from "../data/zora-tv";
 import "./course-hero.css";
 import "./course-theme.css";
 const scenes = [
@@ -44,7 +45,10 @@ const scenes = [
     kind: "story",
     tag: "从角色到成片",
     skills: "你将练习：拆分镜头、保持角色一致，用图生视频串成故事。",
-    result: "从一段故事出发，探索角色、场景与分镜之间的连续性。",
+    result:
+      "课上直接用我们自研的 AI 画布 Zora TV：角色、场景、分镜到成片，在同一张画布里完成。工具出自我们自己的团队，每一步怎么用、为什么这样设计，都能讲清楚。",
+    // The demo canvas is our own product: its caption and panel link to it.
+    platform: "课上用的是我们自研的 AI 画布",
   },
   {
     name: "把情绪写成歌词，创作一首自己的歌。",
@@ -292,6 +296,20 @@ export function CourseHero() {
                     ))}
                   </button>
                 </h2>
+                {scene.platform && (
+                  <p className="ch-scene-platform">
+                    {scene.platform}{" "}
+                    <a
+                      href={zoraTv.href}
+                      target="_blank"
+                      rel="noopener"
+                      tabIndex={offset === 0 ? undefined : -1}
+                    >
+                      {zoraTv.name}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </p>
+                )}
               </article>
             );
           })}
@@ -343,24 +361,36 @@ export function CourseHero() {
               </div>
               <p className="ch-panel-lead">{scenes[active].result}</p>
               <div className="ch-detail-skills">{scenes[active].skills}</div>
-              <button
-                className="ch-primary"
-                onClick={() => {
-                  setPanel(null);
-                  // Scroll after the dialog restores focus to its trigger.
-                  requestAnimationFrame(() => {
-                    document.getElementById("schedule")?.scrollIntoView({
-                      behavior: window.matchMedia(
-                        "(prefers-reduced-motion: reduce)",
-                      ).matches
-                        ? "instant"
-                        : "smooth",
+              <div className="ch-panel-actions">
+                <button
+                  className="ch-primary"
+                  onClick={() => {
+                    setPanel(null);
+                    // Scroll after the dialog restores focus to its trigger.
+                    requestAnimationFrame(() => {
+                      document.getElementById("schedule")?.scrollIntoView({
+                        behavior: window.matchMedia(
+                          "(prefers-reduced-motion: reduce)",
+                        ).matches
+                          ? "instant"
+                          : "smooth",
+                      });
                     });
-                  });
-                }}
-              >
-                查看课程安排 <span>↗</span>
-              </button>
+                  }}
+                >
+                  查看课程安排 <span>↗</span>
+                </button>
+                {scenes[active].platform && (
+                  <a
+                    className="ch-secondary"
+                    href={zoraTv.href}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    打开 {zoraTv.name} <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
             </>
           </section>
         </Modal>

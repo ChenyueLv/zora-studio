@@ -14,6 +14,7 @@ import {
   connectionPath,
   type CanvasPoint,
 } from "./story-canvas-geometry";
+import { zoraTv } from "../data/zora-tv";
 import "./story-canvas-card.css";
 const images = [
   {
@@ -545,6 +546,20 @@ export function StoryCanvasCard({ active = true }: { active?: boolean }) {
           </div>
         </figure>
       </div>
+      {/* The demo reproduces our own canvas; its badge opens the real one. */}
+      <a
+        className="story-canvas-brand"
+        href={zoraTv.href}
+        target="_blank"
+        rel="noopener"
+        tabIndex={active ? undefined : -1}
+        aria-label={`${zoraTv.name}：我们自研的 AI 画布（新窗口打开）`}
+        draggable={false}
+      >
+        <img src="/zora-tv-icon.svg" alt="" draggable={false} />
+        <span>{zoraTv.name}</span>
+        <i aria-hidden="true">↗</i>
+      </a>
     </div>
   );
 }

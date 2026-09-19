@@ -114,6 +114,20 @@ describe("story canvas playback", () => {
   });
 });
 
+describe("Zora TV badge", () => {
+  it("opens our own canvas in a new tab and leaves the tab order while inactive", async () => {
+    await render();
+    const badge = host.querySelector<HTMLAnchorElement>(".story-canvas-brand")!;
+    expect(badge.href).toBe("https://zoraai.tv/");
+    expect(badge.target).toBe("_blank");
+    expect(badge.rel).toBe("noopener");
+    expect(badge.getAttribute("aria-label")).toContain("Zora TV");
+    expect(badge.tabIndex).toBe(0);
+    await render(false);
+    expect(badge.tabIndex).toBe(-1);
+  });
+});
+
 describe("compact player controls", () => {
   it("keeps pause available after playback starts and synchronizes seeking", async () => {
     await render();

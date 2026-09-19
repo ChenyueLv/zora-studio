@@ -95,6 +95,12 @@ export function answerFor(question: string): Answer {
       modules: [3, 5],
       link: "schedule",
     };
+  if (has("zora tv", "zoraai", "画布", "自研"))
+    return {
+      text: "Zora TV（zoraai.tv）是我们团队自研的 AI 画布，把素材和图片、视频模型连在同一张画布里创作。课上做 AI 短片就直接用它，首屏「从角色到成片」演示的就是这种做法。",
+      modules: [3],
+      link: "schedule",
+    };
   const module = moduleWords.find(([, words]) => has(...words))?.[0];
   if (module !== undefined) {
     const m = facultyModules[module];
@@ -106,7 +112,7 @@ export function answerFor(question: string): Answer {
   }
   if (has("工具", "软件", "产品"))
     return {
-      text: "大纲只列技术，不绑定具体产品；课上会按开课时的效果选用合适的工具，第 1 天上午带大家把环境装好。具体以开课通知为准。",
+      text: "做 AI 短片用我们自研的 AI 画布 Zora TV；其余环节大纲只列技术，不绑定具体产品，课上会按开课时的效果选用工具，第 1 天上午带大家把环境装好。具体以开课通知为准。",
       modules: [0],
       link: "schedule",
     };
