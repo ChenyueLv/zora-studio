@@ -130,7 +130,7 @@
 .course-page :is(.ch-primary, .ca-next > a, .cn-primary):hover {
   background: #393a36;
 }
-.course-page :is(.ca-group h3, .ca-subheading h3, .ft-identity h3) {
+.course-page :is(.ca-group h3, .ca-subheading h3) {
   font-family: var(--course-text);
   font-size: clamp(22px, 1.9vw, 28px);
   font-weight: 500;

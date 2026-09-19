@@ -266,9 +266,6 @@ export function FacultySection() {
             <p>{instructor.stats[0][2]}</p>
           </div>
           <div className="ft-person">
-            <div className="ft-identity">
-              <h3>{instructor.name}</h3>
-            </div>
             <div className="ft-avatar">
               <div
                 className="ft-stage"
