@@ -34,7 +34,7 @@ const routes = [
 // Particle Wave Field settings from the supplied particle-wave.html.
 const particleWave = {
   color: 0xffffff,
-  opacity: 0.9,
+  opacity: 1,
   size: 1.35,
   cols: 110,
   rows: 60,

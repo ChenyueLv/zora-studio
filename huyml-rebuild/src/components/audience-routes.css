@@ -79,9 +79,9 @@
 .car-mouth {
   position: relative;
   z-index: 1;
-  width: clamp(210px, 25vw, 450px);
+  width: clamp(150px, 14vw, 240px);
   max-width: 100%;
-  height: 130px;
+  aspect-ratio: 3 / 1;
   margin: 6px auto 0;
 }
 .car-mouth svg {
@@ -135,7 +135,6 @@
   }
   .car-mouth {
     margin-top: 18px;
-    height: 90px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
