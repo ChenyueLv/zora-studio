@@ -25,7 +25,7 @@ export function CourseSyllabus() {
         <CourseSectionHeading
           id="syllabus-title"
           title="课程大纲"
-          description="3 天 · 18 小时 · 上午 09:30–12:30 · 下午 14:00–17:00"
+          description="10 月 3–5 日 · 3 天 · 18 小时 · 上午 09:30–12:30 · 下午 14:00–17:00"
         />
         <div className="syl-stats">
           {stats.map(([value, suffix, label]) => (

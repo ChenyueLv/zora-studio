@@ -2,7 +2,7 @@
 export const syllabus = [
   {
     day: "第 1 天",
-    wd: "周日",
+    wd: "10 月 3 日 周六",
     theme: "打底：会问、会用",
     slots: [
       {
@@ -49,7 +49,7 @@ export const syllabus = [
   },
   {
     day: "第 2 天",
-    wd: "周一",
+    wd: "10 月 4 日 周日",
     theme: "进阶：会造、会复用",
     slots: [
       {
@@ -105,7 +105,7 @@ export const syllabus = [
   },
   {
     day: "第 3 天",
-    wd: "周二",
+    wd: "10 月 5 日 周一",
     theme: "实战：做成作品",
     slots: [
       {

@@ -32,7 +32,7 @@ export function CourseNextStep() {
             </div>
             <div>
               <dt>开课信息</dt>
-              <dd>班期、授课地点与费用待公布</dd>
+              <dd>10 月 3–5 日（国庆）· 地点与费用待公布</dd>
             </div>
           </dl>
           <a className="cn-primary" href="#schedule">
