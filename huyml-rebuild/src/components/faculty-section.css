@@ -78,7 +78,7 @@
 }
 .ft-stat-duration {
   grid-area: duration;
-  justify-self: end;
+  justify-self: start;
 }
 .ft-stat-value {
   display: flex;
@@ -326,9 +326,6 @@
 }
 
 @media (max-width: 1100px) {
-  .ft-stat-duration {
-    justify-self: start;
-  }
   .ft-composition {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
     grid-template-areas: "expertise person" "duration person" "statement hours" ". closing";
