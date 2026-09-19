@@ -140,7 +140,7 @@ export function CourseHero() {
           >
             <b>
               <img src="/zora-tv-icon.svg" alt="" width="52" height="52" />
-              <small>ZORA AI</small>
+              <small>ZORA STUDIO</small>
             </b>
             <span>
               把好奇心
