@@ -195,11 +195,93 @@
 .ca-people {
   margin: 28px 0 36px;
 }
-.ca-people dl {
+.ca-people-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  color: #656762;
+  font-size: 12px;
+}
+.ca-people-pause {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 26px;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #17181924;
+  border-radius: 50%;
+  color: #171819;
+}
+.ca-people-pause svg {
+  width: 13px;
+  height: 13px;
+}
+.ca-people-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent
+  );
+}
+.ca-people-track {
+  display: flex;
+  width: max-content;
+  min-width: 200%;
+  animation: ca-people-drift 42s linear infinite;
+}
+.ca-people-group {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: space-around;
+  gap: clamp(32px, 3vw, 48px);
+  padding: 0 clamp(32px, 3vw, 48px) 0 0;
   margin: 0;
+}
+.ca-people-group > div {
+  flex: 0 0 clamp(220px, 18vw, 280px);
+  width: clamp(220px, 18vw, 280px);
+}
+.ca-people-marquee:hover .ca-people-track,
+.ca-people-marquee:focus-within .ca-people-track,
+.ca-people[data-paused="true"] .ca-people-track,
+.ca-people[data-active="false"] .ca-people-track {
+  animation-play-state: paused;
+}
+.ca-people :is(button, [tabindex]):focus-visible {
+  outline: 2px solid #171819;
+  outline-offset: 3px;
+}
+@keyframes ca-people-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ca-people-pause,
+  .ca-people-group[aria-hidden="true"] {
+    display: none;
+  }
+  .ca-people-marquee {
+    mask-image: none;
+  }
+  .ca-people-track {
+    animation: none;
+    width: 100%;
+    min-width: 0;
+  }
+  .ca-people-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    width: 100%;
+    padding: 0;
+    gap: 24px;
+  }
+  .ca-people-group > div {
+    width: auto;
+  }
 }
 .ca-people dt {
   font-size: 18px;
@@ -249,21 +331,11 @@
   gap: 28px;
 }
 @media (max-width: 1000px) {
-  .ca-people dl {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
   .ca-takeaway-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 700px) {
-  .ca-people dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ca-people dl > div:last-child {
-    grid-column: 1 / -1;
-  }
   .ca-method {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
