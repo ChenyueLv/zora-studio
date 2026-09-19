@@ -491,6 +491,19 @@ canvas:focus-visible {
   height: 100%;
   object-fit: cover;
 }
+/* 加框卡片：灰底，内容按原始比例缩小居中，不裁切 */
+.media-framed {
+  background: #c4c4c4;
+}
+.media-framed > img,
+.media-framed > video {
+  position: absolute;
+  top: 7%;
+  left: 7%;
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+}
 .media-hit {
   position: absolute;
   inset: 0;

@@ -141,11 +141,11 @@ it("plays the full local video with controls in the enlarged preview", async () 
   expect(video.hasAttribute("controls")).toBe(true);
   expect(host.querySelector("iframe")).toBeNull();
 });
-it("uses the card ratio in the grid and caps low-resolution videos when enlarged", async () => {
+it("frames videos at their own ratio in the grid and caps low-resolution videos when enlarged", async () => {
   const song = {
     ...clip,
     previewVideo: undefined,
-    cardRatio: "4 / 3",
+    frame: "4 / 5",
     maxHeight: 640,
   };
   await act(async () =>
@@ -153,15 +153,16 @@ it("uses the card ratio in the grid and caps low-resolution videos when enlarged
   );
   await intersect(true);
   const card = host.querySelector<HTMLElement>(".media")!;
-  expect(card.style.aspectRatio).toBe("4 / 3");
+  expect(card.style.aspectRatio).toBe("4 / 5");
+  expect(card.classList.contains("media-framed")).toBe(true);
   await act(async () => {
     card.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
   });
   expect(host.querySelector("video")?.getAttribute("src")).toBe("/clip.mp4");
   await act(async () => root.render(<Media item={song} />));
-  expect(host.querySelector<HTMLElement>(".media")!.style.aspectRatio).toBe(
-    "1080 / 1920",
-  );
+  const enlarged = host.querySelector<HTMLElement>(".media")!;
+  expect(enlarged.style.aspectRatio).toBe("1080 / 1920");
+  expect(enlarged.classList.contains("media-framed")).toBe(false);
   expect(
     host
       .querySelector<HTMLElement>("video")!

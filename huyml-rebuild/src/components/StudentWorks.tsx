@@ -1,26 +1,75 @@
 import { CourseSectionHeading } from "./CourseSectionHeading";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import courseWorks from "../data/course-works.json";
 import referenceWorks from "../data/playground.json";
 import previews from "../data/student-work-previews.json";
 import { Media, Lightbox } from "./Media";
 import { useMediaQuery } from "../lib/useMediaQuery";
+import type { Media as MediaItem } from "../lib/types";
 import "./student-works.css";
 
-// 课程作品都放在默认展示的前 8 件里；桌面端 4 列时视频按棋盘格交错，
-// 任意两个视频既不左右相邻也不上下相邻
-const [portrait, castle, makeup, story, song] = courseWorks;
-const works = [
+type Work = MediaItem & { id: string };
+
+// 首屏 8 件的顺序按桌面端 4 列排好：三个视频互不相邻，各列底部基本齐平；
+// 美妆视频排在后面，展开全部后才出现
+const [portrait, castle, makeup, story, song] = courseWorks as Work[];
+const works: Work[] = [
   portrait,
   castle,
-  makeup,
   referenceWorks[0],
   referenceWorks[1],
   story,
   referenceWorks[2],
+  referenceWorks[3],
   song,
-  ...referenceWorks.slice(3),
+  ...referenceWorks.slice(4, 7),
+  makeup,
+  ...referenceWorks.slice(7),
 ];
+const courseIds = new Set(courseWorks.map((work) => work.id));
+const HOME_COUNT = 8;
+// 列间距约为卡片宽度的 6%，高度都以卡片宽度为单位
+const GAP = 0.06;
+// 首屏补位：列底差距小于这个值就不再补，补上的作品最多比最高列高出 TOLERANCE
+const EVEN_ENOUGH = 0.3;
+const TOLERANCE = 0.12;
+
+const cardHeight = (work: Work) => {
+  const [width, height] = (work.frame ?? `${work.width} / ${work.height}`)
+    .split("/")
+    .map(Number);
+  return height / width + GAP;
+};
+
+// 瀑布流：每件作品放进当前最矮的一列。收起时展示前 8 件，
+// 再从后面的参考作品里挑能放进空缺的补上，让各列底部更齐
+function arrange(columns: number, expanded: boolean) {
+  const cols = Array.from({ length: columns }, () => ({
+    height: 0,
+    items: [] as number[],
+  }));
+  const shortest = () =>
+    cols.reduce((low, col) => (col.height < low.height ? col : low));
+  const place = (index: number) => {
+    const col = shortest();
+    col.items.push(index);
+    col.height += cardHeight(works[index]);
+  };
+  if (expanded) {
+    works.forEach((_, index) => place(index));
+    return cols;
+  }
+  for (let index = 0; index < HOME_COUNT; index++) place(index);
+  for (let index = HOME_COUNT; index < works.length; index++) {
+    const tallest = Math.max(...cols.map((col) => col.height));
+    const col = shortest();
+    if (tallest - col.height < EVEN_ENOUGH) break;
+    if (courseIds.has(works[index].id)) continue;
+    if (col.height + cardHeight(works[index]) <= tallest + TOLERANCE)
+      place(index);
+  }
+  return cols;
+}
 
 export function StudentWorks() {
   const [active, setActive] = useState<number | null>(null);
@@ -28,7 +77,7 @@ export function StudentWorks() {
   const mobile = useMediaQuery("(max-width: 600px)");
   const tablet = useMediaQuery("(max-width: 1100px)");
   const columns = mobile ? 1 : tablet ? 2 : 4;
-  const visibleWorks = expanded ? works : works.slice(0, 8);
+  const layout = useMemo(() => arrange(columns, expanded), [columns, expanded]);
 
   return (
     <section
@@ -55,10 +104,11 @@ export function StudentWorks() {
             </p>
           </aside>
           <div className="sw-grid" id="student-work-grid">
-            {Array.from({ length: columns }, (_, column) => (
+            {layout.map((col, column) => (
               <div className="sw-column" key={column}>
-                {visibleWorks.map((work, index) =>
-                  index % columns === column ? (
+                {col.items.map((index) => {
+                  const work = works[index];
+                  return (
                     <article className="experiment" key={work.id}>
                       <Media
                         item={work}
@@ -78,8 +128,8 @@ export function StudentWorks() {
                         <span aria-hidden="true">↗</span>
                       </button>
                     </article>
-                  ) : null,
-                )}
+                  );
+                })}
               </div>
             ))}
           </div>

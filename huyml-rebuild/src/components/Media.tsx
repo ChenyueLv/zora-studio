@@ -49,12 +49,14 @@ export function Media({
       ref={host}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={"media " + (isVideo ? "video-media" : "")}
+      className={
+        "media" +
+        (isVideo ? " video-media" : "") +
+        (preview && item.frame ? " media-framed" : "")
+      }
       style={{
         aspectRatio:
-          preview && item.cardRatio
-            ? item.cardRatio
-            : `${item.width} / ${item.height}`,
+          preview && item.frame ? item.frame : `${item.width} / ${item.height}`,
       }}
     >
       {preview && unloadOffscreen && !visible ? null : isLocalVideo ? (
