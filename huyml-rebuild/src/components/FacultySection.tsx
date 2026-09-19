@@ -295,7 +295,10 @@ export function FacultySection() {
             >
               <div className="ft-chat-messages">
                 {turns.length === 0 && (
-                  <div className="ft-message ft-message-assistant">
+                  <div
+                    className="ft-message ft-message-assistant"
+                    data-latest="true"
+                  >
                     <p>Hi，关于课程，想先了解什么？</p>
                   </div>
                 )}
@@ -314,6 +317,7 @@ export function FacultySection() {
                       </div>
                       <div
                         className="ft-message ft-message-assistant ft-answer"
+                        data-latest={index === turns.length - 1}
                         style={style}
                       >
                         <span className="ft-sr-only">数字人讲师：</span>
