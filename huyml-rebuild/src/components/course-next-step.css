@@ -93,45 +93,65 @@
   margin-top: 16px;
   font-weight: 400;
 }
+.cn-qr-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
 .cn-qr-title {
-  display: block;
-  font-size: 15px;
-  letter-spacing: 0.12em;
+  font-size: 14px;
 }
 .cn-qr-name {
-  display: block;
-  margin-top: 8px;
-  color: var(--course-muted, #666762);
-  font-size: 13px;
-}
-.cn-qr-contact {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   color: var(--course-muted, #666762);
   font-size: 12px;
 }
-.cn-wechat-id {
-  user-select: all;
+.cn-qr-contact {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  color: var(--course-muted, #666762);
+  font-size: 12px;
 }
 .cn-qr-contact button {
-  padding: 4px;
-  min-width: 36px;
+  padding: 0 3px;
   min-height: 32px;
   border: 0;
   background: transparent;
-  color: var(--course-ink, #20201f);
+  color: inherit;
   font: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
   cursor: pointer;
+  user-select: all;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+.cn-qr-contact button:hover,
+.cn-qr-contact button:focus-visible {
+  background: #c9defd;
+  color: #20201f;
 }
 .cn-copy-status {
-  display: block;
-  min-height: 20px;
-  color: var(--course-muted, #666762);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  background: var(--course-ink, #20201f);
+  color: #fff;
   font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.cn-copy-status:empty {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cn-qr-contact button {
+    transition: none;
+  }
 }
 .cn-qr:focus-visible,
 .cn-qr-image:focus-visible,

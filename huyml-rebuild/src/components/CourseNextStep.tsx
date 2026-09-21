@@ -1,18 +1,25 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./course-next-step.css";
 
 const WECHAT_ID = "Zora_studio9";
 
 export function CourseNextStep() {
   const [copyMessage, setCopyMessage] = useState("");
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
 
   async function copyWechatId() {
+    clearTimeout(copyTimer.current);
     try {
       await navigator.clipboard.writeText(WECHAT_ID);
-      setCopyMessage("微信号已复制");
+      setCopyMessage("已复制");
     } catch {
       setCopyMessage("请长按或选中微信号复制");
     }
+    copyTimer.current = setTimeout(() => setCopyMessage(""), 2400);
   }
 
   return (
@@ -73,22 +80,23 @@ export function CourseNextStep() {
             />
           </a>
           <figcaption>
-            <span className="cn-qr-title">了解详情</span>
-            <span className="cn-qr-name">Zora Studio</span>
+            <span className="cn-qr-heading">
+              <span className="cn-qr-title">了解详情</span>
+              <span className="cn-qr-name">· Zora Studio</span>
+            </span>
             <span className="cn-qr-contact">
-              <span>
-                微信号：<span className="cn-wechat-id">{WECHAT_ID}</span>
-              </span>
+              <span>微信号：</span>
               <button
+                className="cn-wechat-id"
                 type="button"
                 onClick={copyWechatId}
-                aria-label="复制微信号"
+                aria-label={`复制微信号 ${WECHAT_ID}`}
               >
-                复制
+                {WECHAT_ID}
               </button>
-            </span>
-            <span className="cn-copy-status" role="status">
-              {copyMessage}
+              <span className="cn-copy-status" role="status">
+                {copyMessage}
+              </span>
             </span>
           </figcaption>
         </figure>
