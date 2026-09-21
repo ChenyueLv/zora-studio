@@ -42,6 +42,24 @@ export function CourseNextStep() {
             了解适合人群与学习收获
           </a>
         </div>
+        <figure className="cn-qr" id="course-registration" tabIndex={-1}>
+          <a
+            className="cn-qr-image"
+            href="/assets/course-consultation-qr.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="放大查看课程咨询二维码"
+          >
+            <img
+              src="/assets/course-consultation-qr.png"
+              alt="课程咨询微信二维码"
+              width="696"
+              height="700"
+              loading="lazy"
+            />
+          </a>
+          <figcaption>了解详情</figcaption>
+        </figure>
       </div>
     </section>
   );

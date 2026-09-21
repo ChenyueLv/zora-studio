@@ -14,8 +14,8 @@
   border-top: 1px solid #20201f;
   padding-top: 48px;
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 64px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 232px;
+  gap: clamp(24px, 3vw, 48px);
 }
 .cn-invitation > span {
   color: #737578;
@@ -72,6 +72,43 @@
   outline: 2px solid #20201f;
   outline-offset: 5px;
 }
+.cn-qr {
+  margin: 0;
+  align-self: center;
+  width: 232px;
+  text-align: center;
+  scroll-margin-top: 96px;
+}
+.cn-qr-image {
+  display: block;
+  padding: 20px;
+  background: #fff;
+}
+.cn-qr-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cn-qr figcaption {
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+.cn-qr:focus-visible,
+.cn-qr-image:focus-visible {
+  outline: 2px solid var(--course-ink, #20201f);
+  outline-offset: 6px;
+}
+@media (max-width: 1100px) {
+  .cn-inner {
+    grid-template-columns: minmax(0, 1fr) 232px;
+    gap: 32px 48px;
+  }
+  .cn-invitation {
+    grid-column: 1 / -1;
+  }
+}
 @media (max-width: 700px) {
   .cn-inner {
     grid-template-columns: 1fr;
@@ -80,5 +117,9 @@
   }
   .cn-details dl > div {
     gap: 12px;
+  }
+  .cn-qr {
+    justify-self: center;
+    margin-top: 8px;
   }
 }

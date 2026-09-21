@@ -173,9 +173,9 @@ export function CourseHero() {
             <a className="ch-primary" href="#schedule">
               查看课程安排 <span>↗</span>
             </a>
-            <button className="ch-secondary" onClick={() => setPanel("scene")}>
-              <i aria-hidden="true">▶</i> 体验课堂作品
-            </button>
+            <a className="ch-secondary" href="#course-registration">
+              立即报名 <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </section>
         <div
