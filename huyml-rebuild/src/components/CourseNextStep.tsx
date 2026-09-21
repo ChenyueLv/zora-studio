@@ -1,6 +1,20 @@
+import { useState } from "react";
 import "./course-next-step.css";
 
+const WECHAT_ID = "Zora_studio9";
+
 export function CourseNextStep() {
+  const [copyMessage, setCopyMessage] = useState("");
+
+  async function copyWechatId() {
+    try {
+      await navigator.clipboard.writeText(WECHAT_ID);
+      setCopyMessage("微信号已复制");
+    } catch {
+      setCopyMessage("请长按或选中微信号复制");
+    }
+  }
+
   return (
     <section
       className="course-next-step"
@@ -32,7 +46,7 @@ export function CourseNextStep() {
             </div>
             <div>
               <dt>开课信息</dt>
-              <dd>10 月 3–5 日（国庆）· 地点与费用待公布</dd>
+              <dd>10 月 3–5 日（国庆）· 广东·深圳</dd>
             </div>
           </dl>
           <a className="cn-primary" href="#schedule">
@@ -58,7 +72,25 @@ export function CourseNextStep() {
               loading="lazy"
             />
           </a>
-          <figcaption>了解详情</figcaption>
+          <figcaption>
+            <span className="cn-qr-title">了解详情</span>
+            <span className="cn-qr-name">Zora Studio</span>
+            <span className="cn-qr-contact">
+              <span>
+                微信号：<span className="cn-wechat-id">{WECHAT_ID}</span>
+              </span>
+              <button
+                type="button"
+                onClick={copyWechatId}
+                aria-label="复制微信号"
+              >
+                复制
+              </button>
+            </span>
+            <span className="cn-copy-status" role="status">
+              {copyMessage}
+            </span>
+          </figcaption>
         </figure>
       </div>
     </section>

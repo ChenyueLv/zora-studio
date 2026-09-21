@@ -91,12 +91,51 @@
 }
 .cn-qr figcaption {
   margin-top: 16px;
-  font-size: 15px;
   font-weight: 400;
+}
+.cn-qr-title {
+  display: block;
+  font-size: 15px;
   letter-spacing: 0.12em;
 }
+.cn-qr-name {
+  display: block;
+  margin-top: 8px;
+  color: var(--course-muted, #666762);
+  font-size: 13px;
+}
+.cn-qr-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--course-muted, #666762);
+  font-size: 12px;
+}
+.cn-wechat-id {
+  user-select: all;
+}
+.cn-qr-contact button {
+  padding: 4px;
+  min-width: 36px;
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--course-ink, #20201f);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.cn-copy-status {
+  display: block;
+  min-height: 20px;
+  color: var(--course-muted, #666762);
+  font-size: 11px;
+}
 .cn-qr:focus-visible,
-.cn-qr-image:focus-visible {
+.cn-qr-image:focus-visible,
+.cn-qr-contact button:focus-visible {
   outline: 2px solid var(--course-ink, #20201f);
   outline-offset: 6px;
 }
