@@ -164,7 +164,7 @@ export function CourseHero() {
             <i aria-hidden="true" /> <strong>系统学习 · 动手实战</strong>
           </div>
           <h1>AI应用实战课</h1>
-          <p className="ch-subtitle">学AI · 懂方法 · 做作品</p>
+          <p className="ch-subtitle">学AI · 懂方法 · 拿 Offer</p>
           <p className="ch-for-whom">
             <span>学生</span> · <span>求职者</span> · <span>职场人</span> ·{" "}
             <span>AI 爱好者</span> · <span>商业应用探索者</span>
